@@ -1,12 +1,10 @@
-{{define "title"}}AppName{{end}} {{define "html"}}
+{{define "html"}}
 <html>
 
 <head>
-  <title id = "title">{{template "title"}}</title>
+  <title id = "title">{{.Appname}} {{.Version}}</title>
   {{template "lib"}}
   <script type="text/javascript" src="/web/lib/sand.js"></script>
-
-
   {{template "css"}}
 
   <link rel="stylesheet" href="/web/style/sand.base.css">
@@ -46,8 +44,8 @@
       $("#title").text("Extend Window")
     }
     var theme = S.initTheme();
-    var renderList = ["simple","messenger"] //Should Be Global
-    var renders = S.render;
+    var renderList = ["simple","messenger"] //Should Be Global {{.RenderList}}
+    var renders = S.render;                 //{{.Render}}
 
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
       "saveToElectron", "closeExt",

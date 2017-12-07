@@ -52,6 +52,8 @@ func (s *Sand) AddTmpl(router *mux.Router) {
 		err = tmpl.Execute(w, s) //constant
 		if err != nil {
 			log.Println("error executing template")
+		} else {
+			log.Println("parsing", s)
 		}
 	})
 }
