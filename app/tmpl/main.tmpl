@@ -1,0 +1,124 @@
+{{define "title"}}AppName{{end}} {{define "html"}}
+<html>
+
+<head>
+  <title id = "title">{{template "title"}}</title>
+  {{template "lib"}}
+  <script type="text/javascript" src="/web/lib/sand.js"></script>
+
+
+  {{template "css"}}
+
+  <link rel="stylesheet" href="/web/style/sand.base.css">
+  <!-- THEME
+  -->
+</head>
+
+<body>
+  {{template "menu"}} {{template "wrapper"}} {{ template "modal"}} {{ template "modalLoad"}} {{ template "modalSave"}} {{ template "modalPrompt"}}
+</body>
+<script>
+  var eventHub;
+  var isAstilectron = false;
+  var url = window.location.href
+  var arr = url.split("/");
+  var domain = arr[0] + "//" + arr[2];
+  var server = ""; //TODO
+  var app = {};
+  var mode
+  var win
+  window.addEventListener("dragover", function(e) {
+    e = e || event;
+    e.preventDefault();
+  }, false);
+  window.addEventListener("drop", function(e) {
+    e = e || event;
+    e.preventDefault();
+  }, false);
+
+
+  (function($, d3, S) {
+    /* init theme */
+    mode = S.toolsGetUrlPara("mode") || "web"
+    win = S.toolsGetUrlPara("win") || "main"
+    if (win=="ext") {
+      $("#myNavRight").hide() //hide session ctrl
+      $("#title").text("Extend Window")
+    }
+    var theme = S.initTheme();
+    var renderList = ["simple","messenger"] //Should Be Global
+    var renders = S.render;
+
+    var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
+      "saveToElectron", "closeExt",
+      "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet")
+    //saveToGSheet is for electron
+    var message = {}
+    var app = {}
+
+    var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
+    M();
+    var P = S.NewPanelManager()
+      .dispatch(dispatch)
+      .renders(renders)
+      .renderList(renderList)
+      .app(app)
+
+    P();
+    dispatch.on("input", function(d) {
+      //dispatch.call("update",this,N.toolsParseRegions(d)))
+      P.layout().eventHub.emit("update", N.toolsParseRegions(d)) //for coding message from socket.io.
+    })
+
+
+    var emptyCfg = {
+      "settings": {
+        "showPopoutIcon": false
+      },
+      "dimensions": {
+        "borderWidth": 2
+      },
+      "content": [{
+        "type": "row",
+        "content": []
+      }]
+    }
+
+    var cfg = S.toolsGetUrlPara("config")
+    if (S.toolsGetBrowserType() == "electron" && cfg == "continue") {
+      window.location = "/v1/main.html?mode=app&win=main"
+    }
+    if (mode == "app") {
+      $("#share").hide();
+      mode = "app"
+      var dialogE = require("electron").remote.dialog;
+      document.addEventListener('astilectron-ready', function() {
+        isAstilectron = true
+        console.log("astelectron ready")
+        var E = S.NewElectronManager().dispatch(dispatch).dialogE(dialogE).astilectron(astilectron).P(P) //.app(app)
+        E()
+      })
+    } else if (mode == "web" || true) { //any other condition
+      var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(P).win(win).config(cfg) //app(app) //init windows manager
+      W();
+    }
+
+    if (cfg && cfg != "continue") {
+      d3.json(server + cfg, function(error, config) {
+        if (config[-1] || config["states"]) { //windows format
+          dispatch.call("initWindows", this, config)
+        } else { // one window format
+          dispatch.call("initPanels", this, config)
+        }
+      })
+    } else if (!cfg) {
+      dispatch.call("initPanels", this, emptyCfg)
+    }
+
+    window.onresize = function() {
+      dispatch.call("resize", this, {})
+    }
+  })(jQuery, d3, sand)
+</script>
+<html>
+{{end}}

@@ -1,0 +1,36 @@
+<html>
+<head>
+<script type="text/javascript" src="/lib/d3.v4.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+<style type="text/css">
+@font-face {
+  font-family: "MyCustomFont";
+  src: url(/web/fonts/OpenSans-Light.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Fairies";
+  src: url(/web/fonts/FairiesGoneWild.otf) format("truetype");
+}
+p.customfont {
+  font-family: "Fairies", Verdana, Tahoma;
+}
+
+
+</style>
+</head>
+<body>
+<p class="customfont">Hello world!</p>
+  Hello,World!
+<canvas id="canvas">
+</canvas>
+</body>
+<script>
+ctx = document.getElementById("canvas").getContext("2d")
+ctx.fillStyle = "#29468e"
+ctx.font="30px 'MyCustomFont'"
+ctx.fillText("Hello World!",20,30)
+ctx.fillStyle = "green"
+ctx.font="30px 'Fairies'"
+ctx.fillText("Hello World!",20,60)
+</script>
+</html>

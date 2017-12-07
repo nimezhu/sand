@@ -1,0 +1,190 @@
+#wrapper {
+    height: calc(100% - 32px);
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+#menuContainer {
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #222;
+}
+
+#menuContainer li {
+    cursor: move;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #333;
+    cursor: pointer;
+    padding: 10px 5px;
+    color: #BBB;
+    background: #1a1a1a;
+    font: 12px Arial, sans-serif;
+}
+
+#menuContainer li:hover {
+    background: #111;
+    color: #CCC;
+}
+
+#layoutContainer {
+    width: 80%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 20%;
+    box-shadow: -3px 0px 9px 0px rgba( 0, 0, 0, 0.4);
+}
+
+
+/* PANEL BASE */
+.lm_controls .lm_cfgbtn {
+
+}
+
+
+.s_content svg {
+    padding: 0;
+    position: absolute;
+}
+
+.s_content canvas {
+    padding : 0;
+    position: absolute;
+}
+.s_content .cfg {
+    display: none;
+    background-color: #000gff;
+}
+
+/*LAYOUT BASE*/
+body .lm_content{
+  overflow: auto;
+}
+
+/* MENU BASE */
+body {
+    font-size: 13px;
+    margin: 0;
+    color: #000;
+    overflow: hidden;
+    font-family: Helvetica;
+}
+.fn-left {
+    float: left;
+}
+
+.fn-right {
+    float: right;
+}
+
+.fn-clear:before,
+.fn-clear:after {
+    display: table;
+    content: "";
+}
+
+.fn-clear:after {
+    clear: both;
+}
+
+.fn-none {
+    display: none;
+}
+
+.ft-small {
+    color: #999;
+    font-size: 12px;
+}
+
+.ft-red {
+    color: #9d0000;
+}
+
+
+/* start frame */
+.frame {
+    position: absolute;
+    width: 320px;
+    z-index: 921;
+    display: none;
+}
+
+.frame li {
+    padding: 0 5px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+.frame li.disabled,
+.frame li.disabled .font-ico,
+.frame li.disabled:hover .font-ico {
+    color: #999;
+}
+
+.frame a {
+    color: #000;
+    background-color: aliceblue;
+    text-decoration: none;
+}
+
+.frame li:hover a,
+.frame a:hover {
+    color: #FFF;
+}
+
+.frame .space {
+    display: inline-block;
+    width: 20px;
+    height: 15px;
+}
+
+.frame .font-ico {
+    margin-right: 5px;
+    width: 15px;
+    display: inline-block;
+    text-align: center;
+}
+/* end frame */
+/* start menu */
+.menu {
+    display: block !important;
+}
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.menu > ul > li {
+    float: left;
+}
+
+.menu > ul > li > span {
+    font-size: 12px;
+    line-height: 21px;
+    cursor: pointer;
+    padding: 4px 7px;
+}
+.menu > ul > li > image {
+    height: 21px;
+    width : 21px;
+    padding: 4px 7px;
+}
+
+.menu .split {
+    float: left;
+    border-left: 1px solid #919191;
+    height: 21px;
+    margin: 0 5px 0 0px
+}
+
+.menu img.gravatar {
+    float: left;
+    margin: 2px 8px;
+    height: 17px;
+    width: 17px;
+    border-radius: 9px;
+}

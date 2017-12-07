@@ -1,0 +1,93 @@
+/* MENU THEME */
+
+.menu {
+  background: #252525;
+  box-shadow: 0 1px 0 0 #353535 inset;
+  border-bottom: 1px solid #000000;
+}
+
+.menu>ul>li>span {
+  color: #cecece;
+  text-shadow: #292a2b 0px 1px 0px;
+}
+
+.menu>ul>li.selected {
+  background-color: #494949;
+  color: #d4d4d4;
+  box-shadow: 1px 0 0 0 #000000 inset, 1px 0 0 0 #000000, 0 1px 0 0 rgba(255, 255, 255, 0.15) inset;
+}
+
+.menu .split {
+  border-color: #000000;
+}
+
+.frame {
+  color: #f1f1f1;
+  border: 1px solid #00040a;
+  box-shadow: 0px 3px 15px 0px rgba(0, 0, 0, 0.65);
+  background-color: #494949;
+  text-shadow: 0px 1px 0px #2c2c2c;
+}
+
+.frame li:hover, .zeroclipboard-is-hover {
+  background-color: #3875D7;
+  color: #FFF;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.frame li.disabled:hover {
+  background-color: #494949;
+  color: #999;
+}
+
+.frame .hr {
+  font-size: 1px;
+  margin: 2px 3px;
+  border-top: 1px solid #353535;
+  border-bottom: 1px solid #565656;
+  height: 0;
+}
+
+
+/* PANEL THEME */
+.s_cfg {
+  color: #EEE;
+}
+
+.s_content {
+  color: #EEE;
+}
+
+.lm_cfgbtn {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB1ElEQVQ4T42TTatSURSGn6sVjvyYKErQ10AQQRwIJg4kf0JCSBBYPyL6ONyyS9F/iMBBchv4D2ygSCiIgjiqgRUoKigKOihRY23csdV7oT06Z+13PWe9+7z7hON1C3gC3ANu7rZ/AF+AD8BPs+XEeLkCvAKeAvJ80VoBb4E3wFoEGiAN58D9SxoPy5+BhwLRgDPgxaEqEAio0mAwuIhrAWcCEM/fzLGTyaRqarVarNdrYrEYAqvVaiboD3BHAHtfl+Zqtcpms8Fut6sGgdhsNhKJBPV63YScCuArcFdXvV4v/X6fZrNJLpdT5UKhQDQaxe/3M5lMTEBFAGLQL1UZs9vt4vF4SKVSVCoVJU6n05TLZabTKaFQiNFopCG/jgDtdhuZIpPJUCqVlDCbzVIsFhkOh0QiEcbj8R5gz4LL5VIWlssl+XxenYNlWTgcDmVhsVgcWZBQvNRVfYjz+Ry3263Ks9kMp9OpDrHRaJgASyzcAL4DV/VOPB6n0+nQ6/VYrVYEg0HC4fBh82/gtg6SRPj0MC0+n4/tdmt6NiXPgXcaID/8E/DgP6Ms2kfAxrxMAnkGSESvXQKSsV8D76XZvEym/jrweHedJeayekAZ+LjLzT/9X3FPl4PPCzBhAAAAAElFTkSuQmCC);
+}
+element {
+  --main-bg-color: -webkit-gradient(linear, 0 0, 0 100%, from(#eee), to(#aaa));
+}
+.s_cfg .lm_controls .lm_cfgbtn {
+  background-color: #3f7f41;
+}
+
+.s_content .cfg {
+  background-color: var(--main-bg-color);
+}
+
+.s_content .content {
+  background-color: var(--main-bg-color);
+}
+
+.s_cfg .cfg {
+  background-color:var(--main-bg-color);
+}
+
+.s_cfg .content {
+  display: none;
+  background-color:var(--main-bg-color);
+}
+
+
+/* LAYOUT */
+
+body .lm_content {
+  background-color: var(--main-bg-color);
+}

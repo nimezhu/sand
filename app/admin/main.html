@@ -1,0 +1,82 @@
+<html>
+<head>
+  <script type="text/javascript" src="/lib/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/lib/bootstrap-toggle.min.js"></script>
+  <script type="text/javascript" src="/lib/d3.v4.min.js"></script>
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-toggle.min.css">
+  <style>
+  .panel {
+    float: left;
+    margin: 10 5 5 10;
+    width: 600px;
+  }
+
+
+  </style>
+</head>
+<body>
+  <div class="panel panel-info">
+    <div class = "panel-heading">
+      <span class = "panel-title">Web Application Information</span>
+    </div>
+    <div class = "panel-body" id="info">
+    </div>
+  </div>
+  <div class="panel panel-info">
+    <div class = "panel-heading">
+      <span class = "panel-title">Demo Ctrl Panel</span>
+    </div>
+    <div class = "panel-body" id="info">
+      <div>
+          <label>GSheet Id for Demos</label>
+          <input type="text" style="width:400px" id="gsheetid"></input>
+          <input type="button" value="submit" id="submit"></input>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+    </div>
+    <div class="panel-body">
+      <button id="stop" class="btn btn-danger"><span class="glyphicon glyphicon-stop" title="stop application"></span></button>
+    </div>
+  </div>
+</body>
+<script>
+  (function(d3,$){
+    d3.json("/myadmin/token", function(err,d){
+      console.log(d)
+      var keys = Object.keys(d).sort()
+      d3.select(info).html(
+        JSON.stringify(keys)
+      )
+    })
+
+    $("#stop").click(function(){
+      var v = prompt("Stop this applcation? Please type stop.")
+      console.log(v)
+      if (v=="stop") {
+        //$.get("/myadmin/cmd/stop")
+      }
+    })
+    $("#submit").click(function(){
+      $.ajax({
+        type:"POST",
+        url :"/myadmin/cmd/getdemo",
+        data :{sheetid:$("#gsheetid").val()},
+        success: function(json,d,e){
+          console.log("success",json,d,e)
+        },
+        error: function(){
+
+        }
+      })
+    })
+
+  })(d3,jQuery)
+</script>
+</html>

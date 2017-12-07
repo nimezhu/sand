@@ -1,0 +1,12 @@
+ {{define "title"}} CNB{{.Version}} {{end}}
+ {{define "id"}} "cnb000"{{end}}
+ {{define "html"}}
+<html>
+<head>
+  <title>{{template "title"}}</title>
+</head>
+<body>
+  Hello, CNB {{.Version}}
+</body>
+</html>
+{{end}}

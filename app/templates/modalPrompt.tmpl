@@ -1,0 +1,33 @@
+{{define "modalPrompt"}}
+<!-- Modal Load Sessions in Google Sheets -->
+<div class="modal fade" id="modalPrompt" tabindex="-1" role="dialog" aria-labelledby="promptTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="promptTitle">GSheet ID</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table>
+        <tr>
+        <td style="vertical-align:top;padding:5px">
+          <label>Id
+          </label>
+        </td>
+        <td>
+        <input id="promptId" type="text" style="width:200px;margin:1px;padding:1px"></input>
+        </td>
+      </tr>
+    </tr>
+  </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="promptOkBtn" class="btn btn-primary">Ok</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{ end }}

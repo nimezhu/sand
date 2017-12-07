@@ -1,0 +1,12 @@
+{
+  "settings": {
+    "showPopoutIcon": false
+  },
+  "dimensions": {
+    "borderWidth": 2
+  },
+  "content": [{
+    "type": "row",
+    "content": []
+  }]
+}
