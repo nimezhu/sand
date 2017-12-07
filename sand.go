@@ -5,4 +5,7 @@ type Sand struct {
 	Root    string
 	Home    string
 	Version string
+	Libs    []string
+	Styles  []string
+	Renders string
 }

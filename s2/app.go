@@ -21,6 +21,9 @@ func CmdApp(c *cli.Context) error {
 		root,
 		"s2",
 		VERSION,
+		[]string{},
+		[]string{},
+		"S.render",
 	}
 	idxRoot := s.InitIdxRoot(root) //???
 	sand.InitCred(cred)
