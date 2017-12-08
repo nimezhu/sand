@@ -53,7 +53,8 @@
 
     var renders = eval({{.Renders}});
     var renderList = Object.keys(renders).sort()
-    var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
+    //interface for add other input
+    window.dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
       "saveToElectron", "closeExt",
       "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet")
     //saveToGSheet is for electron
@@ -62,18 +63,13 @@
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
-    var P = S.NewPanelManager()
+    window.P = S.NewPanelManager()
       .dispatch(dispatch)
       .renders(renders)
       .renderList(renderList)
       .app(app)
 
     P();
-    dispatch.on("input", function(d) {
-      //dispatch.call("update",this,N.toolsParseRegions(d)))
-      //TODO
-      //P.layout().eventHub.emit("update", N.toolsParseRegions(d)) //for coding message from socket.io.
-    })
 
 
     var emptyCfg = {
@@ -125,5 +121,8 @@
     }
   })(jQuery, d3, sand)
 </script>
+{{range .Tail}}
+<script type="text/javascript" src="{{.}}"></script>
+{{end}}
 <html>
 {{end}}

@@ -23,6 +23,7 @@ func CmdApp(c *cli.Context) error {
 		VERSION,
 		[]string{},
 		[]string{},
+		[]string{},
 		"S.render",
 	}
 	idxRoot := s.InitIdxRoot(root) //???

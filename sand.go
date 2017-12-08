@@ -6,6 +6,7 @@ type Sand struct {
 	Home    string
 	Version string
 	Libs    []string
+	Tail    []string
 	Styles  []string
 	Renders string
 }
