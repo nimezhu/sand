@@ -54,7 +54,7 @@
     var renders = eval({{.Renders}});
     var renderList = Object.keys(renders).sort()
     //interface for add other input
-    window.dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
+    var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
       "saveToElectron", "closeExt",
       "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet")
     //saveToGSheet is for electron
@@ -63,13 +63,13 @@
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
-    window.P = S.NewPanelManager()
+    window.PanelManager = S.NewPanelManager()
       .dispatch(dispatch)
       .renders(renders)
       .renderList(renderList)
       .app(app)
 
-    P();
+    PanelManager();
 
 
     var emptyCfg = {
@@ -96,11 +96,11 @@
       document.addEventListener('astilectron-ready', function() {
         isAstilectron = true
         console.log("astelectron ready")
-        var E = S.NewElectronManager().dispatch(dispatch).dialogE(dialogE).astilectron(astilectron).P(P) //.app(app)
+        var E = S.NewElectronManager().dispatch(dispatch).dialogE(dialogE).astilectron(astilectron).P(PanelManager) //.app(app)
         E()
       })
     } else if (mode == "web" || true) { //any other condition
-      var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(P).win(win).config(cfg) //app(app) //init windows manager
+      var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg) //app(app) //init windows manager
       W();
     }
 
