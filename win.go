@@ -114,23 +114,6 @@ func createNewWindow(a *astilectron.Astilectron, port int, width int, height int
 		return
 	})
 
-	w1.OnMessage(func(e *astilectron.EventMessage) interface{} {
-		var m string
-		//var m map[string]interface{}
-		e.Unmarshal(&m)
-		astilog.Infof("Received message %s", m)
-		var dat map[string]interface{}
-		if err := json.Unmarshal([]byte(m), &dat); err != nil {
-			panic(err)
-		}
-		if dat["code"] == "state" {
-			dat["sender"] = id
-			ch <- dat
-			//get ext state and return it through ch to w.
-		}
-
-		return nil
-	})
 	//TODO id increase .
 	ws[id] = w1
 
