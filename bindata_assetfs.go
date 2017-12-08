@@ -409,7 +409,7 @@ func appTmplMainTmpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "app/tmpl/main.tmpl", size: 3825, mode: os.FileMode(420), modTime: time.Unix(1512675245, 0)}
+	info := bindataFileInfo{name: "app/tmpl/main.tmpl", size: 3825, mode: os.FileMode(420), modTime: time.Unix(1512679941, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -509,7 +509,7 @@ func appWebLibSandJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "app/web/lib/sand.js", size: 34072, mode: os.FileMode(420), modTime: time.Unix(1512675270, 0)}
+	info := bindataFileInfo{name: "app/web/lib/sand.js", size: 34072, mode: os.FileMode(420), modTime: time.Unix(1512680899, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
