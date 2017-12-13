@@ -1,6 +1,6 @@
 package sand
 
-type BrowserUser struct {
+type browserUser struct {
 	Email        string `json:"email"`
 	RefreshToken string `json:"refresh_token"`
 	SheetId      string `json:"sheet_id"`

@@ -21,13 +21,13 @@ import (
 
 var store2 = sessions.NewCookieStore([]byte("secret"))
 
-type Entry struct {
+type entry struct {
 	Id   string `json:"id"`
 	Note string `json:"note"`
 	Data string `json:"data"`
 }
 
-var demo []Entry
+var demo []entry
 
 func uploadSheet(w http.ResponseWriter, req *http.Request) {
 	session, _ := store2.Get(req, sessionId)
@@ -46,9 +46,9 @@ func uploadSheet(w http.ResponseWriter, req *http.Request) {
 		log.Println(err)
 	}
 	all, _ := ioutil.ReadAll(req.Body)
-	d := Entry{}
+	d := entry{}
 	err1 := json.Unmarshal(all, &d)
-	n := RandStringRunes(32)
+	n := randStringRunes(32)
 	if err1 != nil {
 		log.Println(err1, string(all))
 		io.WriteString(w, "error in unmarsal")
@@ -230,7 +230,7 @@ func checkToken(next http.Handler) http.Handler {
 			userStr := session.Values["user"]
 			var user User
 			json.Unmarshal([]byte(userStr.(string)), &user)
-			token = RenewToken(conf, token, user.Email)
+			token = renewToken(conf, token, user.Email)
 			session.Values["token"], _ = json.Marshal(token)
 			session.Save(r, w)
 			next.ServeHTTP(w, r)
@@ -323,10 +323,10 @@ func getDemoHandler() http.Handler {
 		if err != nil {
 			log.Printf("Unable to retrieve data from sheet. %v", err)
 		}
-		demo = make([]Entry, len(resp.Values))
+		demo = make([]entry, len(resp.Values))
 		for i, v := range resp.Values {
 			log.Println(i, v[0])
-			demo[i] = Entry{v[0].(string), v[1].(string), v[2].(string)}
+			demo[i] = entry{v[0].(string), v[1].(string), v[2].(string)}
 		}
 	})
 }

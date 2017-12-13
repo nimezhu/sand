@@ -10,7 +10,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (s *Sand) AddTmpl(router *mux.Router) {
+/* For Development Only , for InitDevRouter(TODO) */
+func (s *Sand) addTmpl(router *mux.Router) {
 	router.HandleFunc("/v1/{page}.html", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Vary", "Accept-Encoding")
 		w.Header().Add("Content-Type", "text/html")

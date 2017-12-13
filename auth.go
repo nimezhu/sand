@@ -54,6 +54,11 @@ func randToken() string {
 	rand.Read(b)
 	return base64.StdEncoding.EncodeToString(b)
 }
+
+/* InitCred :
+ *   init cred json for user using google sheet to store sessions.
+ *   and adminirator to access admin pages.
+ */
 func InitCred(fn string) {
 	file, err := ioutil.ReadFile(fn) //TODO
 	if err != nil {
@@ -110,7 +115,11 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response, err := http.Get("https://www.googleapis.com/oauth2/v3/userinfo?access_token=" + token.AccessToken)
-
+	if err != nil {
+		fmt.Println("Response failed with \n", err)
+		http.Redirect(w, r, "/v1/main.html?config=continue", http.StatusTemporaryRedirect)
+		return
+	}
 	defer response.Body.Close()
 	contents, _ := ioutil.ReadAll(response.Body)
 
@@ -223,7 +232,7 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO LOGOUT RIDIRECT
 }
 
-func (s *Sand) AddAuthTo(router *mux.Router) {
+func (s *Sand) addAuthTo(router *mux.Router) {
 	router.HandleFunc("/profile", addAuth(indexHandler))
 	router.HandleFunc("/login", loginHandler)
 	router.HandleFunc("/logout", logoutHandler)

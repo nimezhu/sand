@@ -24,7 +24,9 @@ func (s *Sand) handleInterrupt() {
 	os.RemoveAll(path2)
 }
 
-/* init root directory */
+/*InitHome : init home directory
+ *            include sessions, user db
+ */
 func (s *Sand) InitHome(root string) {
 	path1 := s.Root //TODO
 	if _, err := os.Stat(path1); os.IsNotExist(err) {
@@ -45,7 +47,17 @@ func (s *Sand) InitHome(root string) {
 			}
 		}
 	}()
+	/* init boltdb for user token and sheetid */
+	err := s.initDb()
+	if err != nil {
+		log.Println(err)
+	}
 }
+
+/*InitIdxRoot
+ *   bigwig index local storage directory.
+ *   default should be HOME+"apphome"+"index"
+ */
 func (s *Sand) InitIdxRoot(root string) string {
 	if root == "" {
 		s.Root = path.Join(os.Getenv("HOME"), s.Home)
@@ -56,13 +68,13 @@ func (s *Sand) InitIdxRoot(root string) string {
 	if _, err := os.Stat(idxRoot); os.IsNotExist(err) {
 		os.Mkdir(idxRoot, os.ModePerm)
 	}
-	/* init boltdb for user token and sheetid */
-	err := s.initDb()
-	if err != nil {
-		log.Println(err)
-	}
 	return idxRoot
 }
+
+/*Start : Start an electron Application or start a web server
+ *        options :  mode {"web","desktop"}
+ * 				port :  8080-8082
+ */
 func (s *Sand) Start(mode string, port int, router *mux.Router) {
 	s._startApp(mode, port, router)
 }

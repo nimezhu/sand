@@ -17,7 +17,9 @@ func getRefreshToken(email string) string {
 	return ""
 }
 
-func RenewToken(config *oauth2.Config, tok *oauth2.Token, email string) *oauth2.Token {
+/* RenewToken:
+ */
+func renewToken(config *oauth2.Config, tok *oauth2.Token, email string) *oauth2.Token {
 	urlValue := url.Values{"client_id": {config.ClientID}, "client_secret": {config.ClientSecret}, "refresh_token": {getRefreshToken(email)}, "grant_type": {"refresh_token"}}
 	resp, err := http.PostForm("https://www.googleapis.com/oauth2/v3/token", urlValue)
 	if err != nil {
@@ -28,9 +30,9 @@ func RenewToken(config *oauth2.Config, tok *oauth2.Token, email string) *oauth2.
 	if err != nil {
 		log.Println(err)
 	}
-	var refresh_token oauth2.Token
-	json.Unmarshal([]byte(body), &refresh_token)
-	tok.AccessToken = refresh_token.AccessToken
-	tok.Expiry = refresh_token.Expiry
+	var refreshToken oauth2.Token
+	json.Unmarshal([]byte(body), &refreshToken)
+	tok.AccessToken = refreshToken.AccessToken
+	tok.Expiry = refreshToken.Expiry
 	return tok
 }

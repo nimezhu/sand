@@ -23,7 +23,7 @@ func init() {
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-func RandStringRunes(n int) string {
+func randStringRunes(n int) string {
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letterRunes[rand.Intn(len(letterRunes))]
@@ -32,7 +32,7 @@ func RandStringRunes(n int) string {
 }
 func (s *Sand) upload(w http.ResponseWriter, req *http.Request) { //should be share session.
 	all, _ := ioutil.ReadAll(req.Body)
-	n := RandStringRunes(32)
+	n := randStringRunes(32)
 	defer req.Body.Close()
 	fn := path.Join(s.Root, "sessions", n) //TODO
 	err := ioutil.WriteFile(fn, all, 0644)
@@ -52,7 +52,7 @@ func (s *Sand) upload(w http.ResponseWriter, req *http.Request) { //should be sh
 func (s *Sand) setUserSession(w http.ResponseWriter, req *http.Request) { //should be share session.
 	all, _ := ioutil.ReadAll(req.Body)
 	defer req.Body.Close()
-	n := RandStringRunes(32)
+	n := randStringRunes(32)
 	//map
 	session, _ := store2.Get(req, sessionId)
 	userStr := session.Values["user"]

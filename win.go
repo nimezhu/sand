@@ -43,7 +43,7 @@ func (s *Sand) newApp(name string) (*astilectron.Astilectron, error) {
 
 func closeAll(ws map[int]*astilectron.Window) {
 	keys := []int{}
-	for k, _ := range ws {
+	for k := range ws {
 		if k == -1 {
 			continue
 		}
@@ -212,7 +212,7 @@ func (s *Sand) startAstilectron(port int, router *mux.Router) error {
 	/** START OF CODES */
 	o := observable.New()
 	chatroom := "Scope" //TODO
-	AddSocket(chatroom, router, w, o)
+	addSocket(chatroom, router, w, o)
 
 	// window send message to server
 	w.OnMessage(func(e *astilectron.EventMessage) interface{} {
@@ -240,7 +240,7 @@ func (s *Sand) startAstilectron(port int, router *mux.Router) error {
 		log.Println("debug in getStates", dat)
 		go func() {
 			m := make(map[int]string)
-			for k, _ := range ws {
+			for k := range ws {
 				if k != 0 { //skip data manager window
 					a := <-ch
 					fmt.Println("get id", a["sender"])

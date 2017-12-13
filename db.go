@@ -10,15 +10,15 @@ import (
 var sheetIdBucket *bolt.Bucket
 var refreshTokenBucket *bolt.Bucket
 var tx *bolt.Tx
-var D *bolt.DB
+var db *bolt.DB
 
 func (s *Sand) initDb() error {
 	fn := path.Join(s.Root, "user.db")
-	D, err := bolt.Open(fn, 0600, &bolt.Options{Timeout: 1 * time.Second})
+	db, err := bolt.Open(fn, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
 		return err
 	}
-	tx, err = D.Begin(true)
+	tx, err = db.Begin(true)
 	if err != nil {
 		return err
 	}

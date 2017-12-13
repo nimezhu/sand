@@ -11,7 +11,9 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func AddSocket(chatroom string, router *mux.Router, w *astilectron.Window, o *observable.Observable) {
+/*AddSocket : add socketio inferface to astilectron app.
+ */
+func addSocket(chatroom string, router *mux.Router, w *astilectron.Window, o *observable.Observable) {
 	server, err := socketio.NewServer(nil)
 	if err != nil {
 		log.Fatal(err)
