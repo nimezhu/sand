@@ -50,6 +50,7 @@ export default function () {
         var d = localStorage.getItem(sessionId)
         if (d && config=="continue") {
           dispatch.call("initWindows", this, JSON.parse(d))
+          $(".menu .note").hide()
         }
         if (d && !config) { //TODO add config
           $("#myModal").modal("show");
@@ -58,6 +59,7 @@ export default function () {
             console.log(d)
             dispatch.call("initWindows", this, JSON.parse(d))
           })
+          $(".menu .note").hide()
         }
       }
     }

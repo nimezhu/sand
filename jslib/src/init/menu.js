@@ -29,6 +29,7 @@ export default function () {
     })
     var initMenu = function () {
       $(".menu > ul > li").click(function (event) {
+        $(".menu .note").hide()
         if ($(event.target).closest(".frame").length === 1) {
           return;
         }
