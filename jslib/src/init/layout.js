@@ -3,6 +3,9 @@ export default function(config, el, dispatch, renders, app) {
   var layout = new GoldenLayout(config, el);
   layout.registerComponent("canvas", function(container, state) {
     var r = renders[state.render] || render[state.render] //Sand
+    if (r.render) {
+      r = r.render
+    }
     r(layout, container, state, app)
     container.on("show", function() {
       var k = container.getState()
@@ -46,7 +49,7 @@ export default function(config, el, dispatch, renders, app) {
     Object.keys(d).forEach(function(k){
       app[k]=d[k]
     })
-    //app is local client window, in astilectron, need to send update app to new server when new window initialised. 
+    //app is local client window, in astilectron, need to send update app to new server when new window initialised.
   })
   dispatch.on("add", function(d) {
     if (!layout.root.contentItems[0]) {
