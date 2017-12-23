@@ -110,8 +110,12 @@ export default function () {
       d3.json("/getsheetid", function (err, d) {
         if (d.sheetid) {
           $("#sheetUi").show()
+          $("#fileUi").hide()
+          d3.select("#sessionUi").classed("glyphicon-hdd",false).classed("glyphicon-cloud",true)
         } else {
           $("#sheetUi").hide()
+          $("#fileUi").show()
+          d3.select("#sessionUi").classed("glyphicon-hdd",true).classed("glyphicon-cloud",false)
         }
       })
     }

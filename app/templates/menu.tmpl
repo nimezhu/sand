@@ -1,17 +1,21 @@
 {{define "menu"}}
 <div class="menu fn-clear">
   <ul id="myNavLeft">
+    <!--
     <li>
       <span class='glyphicon glyphicon-cog'></span>
     </li>
-    <li id="home"><span class="glyphicon glyphicon-home" title="home"></span></li>
-  <span class="split"></span>
-    <li><span id="openExt" class="glyphicon glyphicon-plus-sign" title="add window"></span></li>
+  -->
+    <li id="home"><span class="glyphicon glyphicon-home" title="home"></span>Home</li>
+    <span class="split"></span>
 
     <li id="addPanel">
-      <span class="glyphicon glyphicon-plus" title="add panel"></span>
+      <span class="glyphicon glyphicon-plus" title="add panel"></span>Panel
       <div class="frame">
         <ul id="renders">
+        </ul>
+        <ul>
+          <li id="openExt"><span class="glyphicon glyphicon-plus-sign" title="add window"></span> Extend Window</li>
         </ul>
       </div>
       <div class="note">
@@ -19,27 +23,36 @@
       </div>
     </li>
     <li><span id="fixedToggle" class="glyphicon glyphicon-pushpin" title="hide panel header"></li>
-
   </ul>
   <ul id="myNavRight">
     <span class="split"></span>
-    <li><span id="import" class="glyphicon glyphicon-import" title="import session"></span></li>
-    <li><span id="export" class="glyphicon glyphicon-export" title="export session"></span></li>
-    <li><span id="share" class="glyphicon glyphicon-share-alt" title="share session"></li>
-    <li><span id="login" class="glyphicon glyphicon-log-in" title="login with google"></li>
-    <li><span id="logout" class="glyphicon glyphicon-log-out" title="logout"></li>
+      <li id="sessions">
+        <span class="glyphicon glyphicon-hdd" title="Sessions" id="sessionUi"></span>Session
+        <div class="frame">
+          <ul>
+            <li id="share"><span class="glyphicon glyphicon-share-alt" title="share session"></span> Share Session</li>
+          </ul>
+          <ul id="sheetUi" style="display:none">
+            <li id="saveToSheet"><span class="glyphicon glyphicon-save"></span>Save Session</li>
+            <li id="loadFromSheet"><span class="glyphicon glyphicon-open"></span>Load Session</li>
+          </ul>
+          <ul id="fileUi">
+            <li id="import"><span class="glyphicon glyphicon-import" title="import session"></span> Load Session </li>
+            <li id="export"><span class="glyphicon glyphicon-export" title="export session"></span> Save Session </li>
+            </u1>
+        </div>
+      </li>
+      <li><span id="login" class="glyphicon glyphicon-log-in" title="login with google"></li>
     <li><image id="picture" style="height:18px;width:18px;margin:7px 4px"></image>
         <div class="frame">
           <ul>
-            <li id="setSheetId"><span class="glyphicon glyphicon-cog"></span>SheetId</li>
-          </ul>
-          <ul id="sheetUi">
-            <li id="saveToSheet"><span  class="glyphicon glyphicon-save"></span>Save</li>
-            <li id="loadFromSheet"><span class="glyphicon glyphicon-open"></span>Load</li>
-          </ul>
-        </div>
-    </li>
-  </ul>
+            <li id="setSheetId"><span class="glyphicon glyphicon-cog"></span> Set Session Sheet Id</li>
+      <li id="logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
+      </ul>
+
+</div>
+</li>
+</ul>
 </div>
 </nav>
 {{end}}
