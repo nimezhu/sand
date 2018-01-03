@@ -148,7 +148,7 @@ export default function () {
 
       }
     })
-    d3.select("#renders").selectAll("li").data(renderList)
+    var renderLis = d3.select("#renders").selectAll("li").data(renderList)
       .enter()
       .append("li")
       .attr("title",function(d){
@@ -166,15 +166,19 @@ export default function () {
           dispatch.call("add", this, factory(d))
         }
       })
-      .append("span")
+
+      renderLis.append("span")
+      .classed("glyphicon",true)
+      .classed("glyphicon-plus",true)
+      renderLis.append("span")
       .attr("id", function (d) {
         return d
       }).text(
         function (d) {
           if (renders[d].label) {
-            return renders[d].label
+            return " " + renders[d].label
           } else {
-            return d
+            return " " + d
           }
         }
       )
