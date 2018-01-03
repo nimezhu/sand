@@ -151,6 +151,13 @@ export default function () {
     d3.select("#renders").selectAll("li").data(renderList)
       .enter()
       .append("li")
+      .attr("title",function(d){
+        if (renders[d].tooltip) {
+          return renders[d].tooltip
+        } else {
+          return d
+        }
+      })
       .on("click", function (d) {
         console.log("click", d)
         if (renders[d].id) {
