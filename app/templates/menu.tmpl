@@ -7,50 +7,52 @@
     </li>
   -->
     <li id="home"><span class="glyphicon glyphicon-home" title="home"></span>Home</li>
+    <!--
     <span class="split"></span>
-
-    <li id="addPanel">
-      <span class="glyphicon glyphicon-plus" title="add panel"></span>Panel
+  -->
+    <li title="Add panel or window"id="addPanel">
+      <span class="glyphicon glyphicon-plus"></span>Layout
       <div class="frame">
         <ul id="renders">
         </ul>
         <ul>
-          <li id="openExt"><span class="glyphicon glyphicon-plus-sign" title="add window"></span> Extend Window</li>
+          <li id="openExt" title="Add extend window"><span class="glyphicon glyphicon-plus-sign" title="add window"></span> Extend Window</li>
         </ul>
       </div>
       <div class="note">
         Welcome! Click me to begin!
       </div>
     </li>
-    <li><span id="fixedToggle" class="glyphicon glyphicon-pushpin" title="hide panel header"></li>
+    <li style="display:none"><span id="fixedToggle" class="glyphicon glyphicon-pushpin" title="hide panel header"></li>
   </ul>
   <ul id="myNavRight">
+    <!--
     <span class="split"></span>
+  -->
       <li id="sessions">
         <span class="glyphicon glyphicon-hdd" title="Sessions" id="sessionUi"></span>Session
         <div class="frame">
           <ul>
-            <li id="share"><span class="glyphicon glyphicon-share-alt" title="share session"></span> Share Session</li>
+            <li id="share" title="Share session by generated URL"><span class="glyphicon glyphicon-share-alt" title="share session"></span> Share Session </li>
           </ul>
           <ul id="sheetUi" style="display:none">
-            <li id="saveToSheet"><span class="glyphicon glyphicon-save"></span>Save Session</li>
-            <li id="loadFromSheet"><span class="glyphicon glyphicon-open"></span>Load Session</li>
+            <li id="loadFromSheet" title="Load session from google sheet"><span class="glyphicon glyphicon-open"></span> Load Session</li>
+            <li id="saveToSheet" title="Save session to google sheet"><span class="glyphicon glyphicon-save"></span> Save Session</li>
           </ul>
           <ul id="fileUi">
-            <li id="import"><span class="glyphicon glyphicon-import" title="import session"></span> Load Session </li>
-            <li id="export"><span class="glyphicon glyphicon-export" title="export session"></span> Save Session </li>
+            <li id="import" title="Load session from local disk"><span class="glyphicon glyphicon-import"></span> Load Session </li>
+            <li id="export" title="Save session to local disk"><span class="glyphicon glyphicon-export"></span> Save Session </li>
             </u1>
         </div>
       </li>
-      <li><span id="login" class="glyphicon glyphicon-log-in" title="login with google"></li>
-    <li><image id="picture" style="height:18px;width:18px;margin:7px 4px"></image>
-        <div class="frame">
-          <ul>
-            <li id="setSheetId"><span class="glyphicon glyphicon-cog"></span> Set Session Sheet Id</li>
-      <li id="logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
+    <li style="padding-right:0px" title="Login with google"><span id="login" class="glyphicon glyphicon-log-in" ></li>
+    <li style="padding-right:0px"><image id="picture" style="height:18px;width:18px;margin:7px 4px"></image>
+    <div class="frame">
+      <ul>
+      <li id="setSheetId" title="Set a google sheet id to host sessions"><span class="glyphicon glyphicon-cog"></span> Set Session Sheet Id</li>
+      <li id="logout" title="Logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
       </ul>
-
-</div>
+    </div>
 </li>
 </ul>
 </div>

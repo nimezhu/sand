@@ -73,6 +73,9 @@ body {
     overflow: hidden;
     font-family: Helvetica;
 }
+.menu li {
+  padding-right:5px;
+}
 .fn-left {
     float: left;
 }
