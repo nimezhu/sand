@@ -31,6 +31,11 @@ var demo []entry
 
 func uploadSheet(w http.ResponseWriter, req *http.Request) {
 	session, _ := store2.Get(req, sessionId)
+	sheet := req.URL.Query().Get("sheet")
+	writeRange := "A1"
+	if sheet != "" {
+		writeRange = sheet + "!A1"
+	}
 	userStr := session.Values["user"]
 	var user User
 	if userStr != nil {
@@ -66,7 +71,6 @@ func uploadSheet(w http.ResponseWriter, req *http.Request) {
 	if !ok {
 		spreadsheetId = session.Values["sheetId"].(string)
 	}
-	writeRange := "A1"
 	var vr sheets.ValueRange
 	log.Println(d.Id, d.Note)
 	myval := []interface{}{d.Id, d.Note, d.Data} //TODO
