@@ -25,6 +25,7 @@ func (s *Sand) InitRouter(router *mux.Router) {
 	snowjs.AddHandlers(router, "")
 	s.addOpenBindata(router)
 	s.addTmplBindata(router)
+	addGSheetsHandler(router)
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/v1/main.html", http.StatusTemporaryRedirect)
 	})
