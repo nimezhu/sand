@@ -141,10 +141,7 @@ func sheetList(w http.ResponseWriter, req *http.Request) {
 	var user User
 	if userStr != nil {
 		json.Unmarshal([]byte(userStr.(string)), &user)
-		fmt.Println(user.Email)
-		fmt.Println(user.Sub)
 	} else {
-		fmt.Println("nobody")
 	}
 	token := &oauth2.Token{}
 	err := json.Unmarshal(session.Values["token"].([]byte), token)

@@ -1,6 +1,7 @@
 package sand
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -30,4 +31,13 @@ func (s *Sand) InitRouter(router *mux.Router) {
 		http.Redirect(w, r, "/v1/main.html", http.StatusTemporaryRedirect)
 	})
 	s.addAuthTo(router)
+	router.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		a, err := json.Marshal(s)
+		if err == nil {
+			w.Write(a)
+		} else {
+			w.Write([]byte("{'error':'not found'}"))
+		}
+	})
 }
