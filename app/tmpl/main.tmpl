@@ -104,8 +104,19 @@
       var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg) //app(app) //init windows manager
       W();
     }
-
-    if (cfg && cfg != "continue") {
+    /* TO USE PUBLIC GSHEET */
+    window._renderGsheet = function(d) {
+      var config = JSON.parse(d.table.rows[0].c[2].v)
+      if (config[-1] || config["states"]) { //windows format
+        dispatch.call("initWindows", this, config)
+      } else { // one window format
+        dispatch.call("initPanels", this, config)
+      }
+    }
+    if (cfg && cfg.match(/gsheet:\S+:\S+/)){
+      var a = cfg.split(":")
+      S.gsheetQuery("select * where A='"+a[2]+"'",a[1],"_renderGsheet")
+    } else if (cfg && cfg != "continue") {
       $(".menu .note").hide()
       d3.json(server + cfg, function(error, config) {
         if (config[-1] || config["states"]) { //windows format
