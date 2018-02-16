@@ -16,3 +16,5 @@ export{default as NewWindowManager} from "./src/init/windows"
 export{default as NewElectronManager} from "./src/init/electron"
 export{default as NewPanelManager} from "./src/init/panels"
 export{default as factory} from "./src/utils/factory"
+
+export{default as gsheetQuery} from "./src/utils/gsheet"
