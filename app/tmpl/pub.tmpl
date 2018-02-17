@@ -1,0 +1,79 @@
+{{define "title"}} NBrowser Home {{end}} {{define "id"}} "cnb000"{{end}} {{define "html"}}
+<html>
+
+<head>
+  <title>{{template "title"}}</title>
+  {{template "lib"}}
+  <script type="text/javascript" src="/web/lib/sand.min.js"></script>
+  {{template "css"}}
+  <link rel="stylesheet" href="/web/style/sand.base.css">
+  <style>
+    .panel {
+      width: 168px;
+      height: 200px;
+      float: left;
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  {{template "wrapper"}}
+</body>
+<!--
+<script type="text/javascript" src="/lib/dat.gui.min.js"></script>
+<link rel="stylesheet" href="/css/dat-gui-light-theme.css">
+-->
+<script>
+  (function($, d3, S) {
+    var stateId = "cnb000"
+    var links = []
+    var sheetId = "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw"
+    var apiKey = "AIzaSyBhECk4C1LpxI1mDJjSTwot-hRP2v3bwEA"
+    d3.json("https://sheets.googleapis.com/v4/spreadsheets/" + sheetId + "/values/Sheet1!A:C?key=" + apiKey, function(error, d) { //TODO sheets
+      var panels = d3.select("#layoutContainer")
+        .selectAll(".panel")
+        .data(d.values)
+        .enter()
+        .append("div")
+        .classed("panel", true)
+        .classed("panel-default", true)
+      panels.append("div")
+        .classed("panel-heading", true)
+        .append("h2")
+        .classed("panel-title", true)
+        .text(function(d) {
+          return d[0]
+        })
+        .on("click", function(d, i) {
+          window.location = "/v1/main.html?config=gsheet:" + sheetId + ":" + d[0].replace(" ", "%20")
+        })
+      var bodys = panels.append("div")
+        .classed("panel-body", true)
+      bodys.append("div").text(function(d) {
+        console.log(JSON.parse(JSON.parse(d[2])[-1]))
+        return d[1]
+      })
+      var _render = function(el) {
+        el.each(function(d) {
+          var svg = d3.select(this).append("svg").attr("width", 134).attr("height", 80)
+          console.log(d)
+          var iconRender = S.layoutIcon()
+          var dmain = JSON.parse(JSON.parse(d[2])[-1])
+          svg.datum(dmain).call(iconRender)
+        })
+      }
+      var svgdiv = bodys.append("div")
+
+
+      svgdiv.call(_render)
+
+
+
+
+    })
+  }(jQuery, d3, sand))
+</script>
+
+</html>
+{{end}}
