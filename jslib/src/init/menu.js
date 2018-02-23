@@ -27,6 +27,7 @@ export default function () {
         $("#addPanel").closest("li").show()
       }
     })
+    var sign = false
     var initMenu = function () {
       $(".menu > ul > li").click(function (event) {
         $(".menu .note").hide()
@@ -46,15 +47,28 @@ export default function () {
           }
           $(".menu .frame").hide();
           $(this).find('.frame').show();
+          $(this).find('.frame').mouseover(function(){
+            sign = true
+          })
           $(".menu > ul > li").removeClass("selected");
           $(this).addClass("selected");
-        });
+        })
+        $(".menu > ul > li").mouseout(function(){
+            //$(this).find('.frame') //TODO
+            if (!sign) {
+              $(this).removeClass("selected");
+              $(this).find('.frame').hide();
+            }
+        })
+        ;
       });
     }
     initMenu();
 
     $(".frame").mouseout(function () {
       $(this).hide();
+      $(".menu > ul > li").removeClass("selected");
+      sign=false
     })
 
     $("#home").on("click", function () {
