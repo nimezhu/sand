@@ -31,6 +31,7 @@
   var app = {};
   var mode
   var win
+  var fixedLayout 
   window.addEventListener("dragover", function(e) {
     e = e || event;
     e.preventDefault();
@@ -45,6 +46,7 @@
     /* init theme */
     mode = S.toolsGetUrlPara("mode") || "web"
     win = S.toolsGetUrlPara("win") || "main"
+    fixedLayout = S.toolsGetUrlPara("fixedLayout") || 0 //0 is false
     if (win=="ext") {
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
@@ -72,7 +74,9 @@
 
     PanelManager();
 
-
+    if (fixedLayout) {
+      document.body.className += ' ' + 'fixedLayout';
+    }
     var emptyCfg = {
       "settings": {
         "showPopoutIcon": false

@@ -201,3 +201,10 @@ ul {
     width: 17px;
     border-radius: 9px;
 }
+
+.fixedLayout #addPanel {
+    display: none;
+}
+.fixedLayout .lm_header {
+    display: none;
+}
