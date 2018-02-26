@@ -209,6 +209,9 @@ ul {
     display: none;
 }
 
+.liteVersion #menuUser {
+    display : none;
+}
 @font-face {
     font-family: "monaco";
     src: url(/web/fonts/monaco.ttf) format("truetype");

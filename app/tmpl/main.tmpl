@@ -33,6 +33,7 @@
   var win
   var fixedLayout
   var initedLayout
+  var lite = 0
   window.addEventListener("dragover", function(e) {
     e = e || event;
     e.preventDefault();
@@ -49,7 +50,7 @@
     win = S.toolsGetUrlPara("win") || "main"
     fixedLayout = S.toolsGetUrlPara("fixedLayout") || 0 //0 is false
     initedLayout = S.toolsGetUrlPara("initedLayout") || undefined //0 is false
-    
+    lite = S.toolsGetUrlPara("lite") || 0 //rm google user system is lite is 1
     if (win=="ext") {
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
@@ -80,6 +81,9 @@
     if (fixedLayout) {
       document.body.className += ' ' + 'fixedLayout';
     }
+    if (lite) {
+      document.body.className += ' ' + 'liteVersion';
+    }
     /* TODO add functions to Init Some Renders */
     var emptyCfg = {
       "settings": {
@@ -109,7 +113,7 @@
         }
       })
     }
-    
+
     if (S.toolsGetBrowserType() == "electron" && cfg == "continue") {
       //TODO : for parameters in uri passing
       window.location = "/v1/main.html?mode=app&win=main"
