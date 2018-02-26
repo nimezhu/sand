@@ -93,7 +93,8 @@
         "content": []
       }]
     }
-    if  (initedLayout) {
+    var cfg = S.toolsGetUrlPara("config")
+    if  (!cfg && initedLayout) { //config override the initedLayout
       initedLayout.split(",").forEach(function(d){
         if (renders[d]){
           emptyCfg.content[0].content.push(
@@ -108,8 +109,7 @@
         }
       })
     }
-  
-    var cfg = S.toolsGetUrlPara("config")
+    
     if (S.toolsGetBrowserType() == "electron" && cfg == "continue") {
       //TODO : for parameters in uri passing
       window.location = "/v1/main.html?mode=app&win=main"
