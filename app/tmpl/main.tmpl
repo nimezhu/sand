@@ -31,7 +31,8 @@
   var app = {};
   var mode
   var win
-  var fixedLayout 
+  var fixedLayout
+  var initedLayout
   window.addEventListener("dragover", function(e) {
     e = e || event;
     e.preventDefault();
@@ -47,6 +48,8 @@
     mode = S.toolsGetUrlPara("mode") || "web"
     win = S.toolsGetUrlPara("win") || "main"
     fixedLayout = S.toolsGetUrlPara("fixedLayout") || 0 //0 is false
+    initedLayout = S.toolsGetUrlPara("initedLayout") || undefined //0 is false
+    
     if (win=="ext") {
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
@@ -77,6 +80,7 @@
     if (fixedLayout) {
       document.body.className += ' ' + 'fixedLayout';
     }
+    /* TODO add functions to Init Some Renders */
     var emptyCfg = {
       "settings": {
         "showPopoutIcon": false
@@ -89,9 +93,21 @@
         "content": []
       }]
     }
-
+    if  (initedLayout) {
+      emptyCfg.content[0].content.push(
+       {
+          "type":"component",
+          "componentName":"canvas",
+          "componentState": {
+            "name": renders[initedLayout].label || initedLayout, 
+            "render":initedLayout,
+          }
+       }
+      )
+    }
     var cfg = S.toolsGetUrlPara("config")
     if (S.toolsGetBrowserType() == "electron" && cfg == "continue") {
+      //TODO : for parameters in uri passing
       window.location = "/v1/main.html?mode=app&win=main"
     }
     if (mode == "app") {
@@ -117,6 +133,7 @@
         dispatch.call("initPanels", this, config)
       }
     }
+    
     if (cfg && cfg.match(/gsheet:\S+:\S+/)){
       var a = cfg.split(":")
       S.gsheetQuery("select * where A='"+a[2]+"'",a[1],"_renderGsheet")
