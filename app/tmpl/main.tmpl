@@ -94,17 +94,21 @@
       }]
     }
     if  (initedLayout) {
-      emptyCfg.content[0].content.push(
-       {
+      initedLayout.split(",").forEach(function(d){
+        if (renders[d]){
+          emptyCfg.content[0].content.push(
+          {
           "type":"component",
           "componentName":"canvas",
+          "title": renders[d].label || d, 
           "componentState": {
-            "name": renders[initedLayout].label || initedLayout, 
-            "render":initedLayout,
-          }
-       }
-      )
+            "render":d,
+            }
+          }) 
+        }
+      })
     }
+  
     var cfg = S.toolsGetUrlPara("config")
     if (S.toolsGetBrowserType() == "electron" && cfg == "continue") {
       //TODO : for parameters in uri passing
