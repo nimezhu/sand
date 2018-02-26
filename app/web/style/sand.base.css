@@ -208,3 +208,8 @@ ul {
 .fixedLayout .lm_header {
     display: none;
 }
+
+@font-face {
+    font-family: "monaco";
+    src: url(/web/fonts/monaco.ttf) format("truetype");
+  }
