@@ -178,7 +178,7 @@ func (s *Sand) startAstilectron(port int, router *mux.Router) error {
 
 	a, _ := s.newApp("CNB")
 	defer a.Close()
-	if w, err = a.NewWindow(fmt.Sprintf("http://127.0.0.1:%d/v1/main.html?mode=app", port), &astilectron.WindowOptions{
+	if w, err = a.NewWindow(fmt.Sprintf("http://127.0.0.1:%d/v1/main.html?mode=app", port)+modesText(s.Mode), &astilectron.WindowOptions{
 		Center: astilectron.PtrBool(true),
 		Height: astilectron.PtrInt(618),
 		Width:  astilectron.PtrInt(1000),

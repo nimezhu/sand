@@ -572,7 +572,7 @@ func appWebLibSandMinJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "app/web/lib/sand.min.js", size: 25419, mode: os.FileMode(420), modTime: time.Unix(1519676321, 0)}
+	info := bindataFileInfo{name: "app/web/lib/sand.min.js", size: 25419, mode: os.FileMode(420), modTime: time.Unix(1519678543, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
