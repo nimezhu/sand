@@ -27,6 +27,10 @@ func (s *Sand) InitRouter(router *mux.Router) {
 	s.addOpenBindata(router)
 	s.addTmplBindata(router)
 	addGSheetsHandler(router)
+	/* TODO Add Fixed Layout Mode
+	 * config = ...
+	 * fixedLayout = 1
+	 */
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/v1/main.html", http.StatusTemporaryRedirect)
 	})

@@ -17,7 +17,7 @@ import (
 )
 
 func gsheetsAppend(w http.ResponseWriter, req *http.Request) {
-	session, _ := store2.Get(req, sessionId)
+	session, _ := store2.Get(req, sessionID)
 	sheetid := req.URL.Query().Get("sheetid")
 	sheet := req.URL.Query().Get("title")
 	writeRange := req.URL.Query().Get("range")
@@ -48,7 +48,7 @@ func gsheetsAppend(w http.ResponseWriter, req *http.Request) {
 }
 
 func gsheetsGet(w http.ResponseWriter, req *http.Request) {
-	session, _ := store2.Get(req, sessionId)
+	session, _ := store2.Get(req, sessionID)
 	sheet := req.URL.Query().Get("title")
 	readRange := req.URL.Query().Get("range")
 	if readRange == "" {

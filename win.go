@@ -159,7 +159,7 @@ func menu(a *astilectron.Astilectron) *astilectron.Menu {
 	})
 	return m
 }
-func assignId(ws map[int]*astilectron.Window) int {
+func assignID(ws map[int]*astilectron.Window) int {
 	i := 100
 	for _, ok := ws[i]; ok; i++ {
 		_, ok = ws[i+1]
@@ -293,7 +293,7 @@ func (s *Sand) startAstilectron(port int, router *mux.Router) error {
 		// app["regions"] = regions
 		app["mode"] = "app"
 		app["win"] = "ext"
-		id := assignId(ws)
+		id := assignID(ws)
 		go createNewWindow(a, port, 1000, 618, "main", ws, id, app, ch, o)
 	})
 
@@ -326,7 +326,7 @@ func (s *Sand) startAstilectron(port int, router *mux.Router) error {
 		if d, ok := dat["id"]; ok {
 			ida, _ = strconv.Atoi(d.(string))
 		} else {
-			ida = assignId(ws)
+			ida = assignID(ws)
 		}
 		go func(id int) {
 			vars := make(map[string]string)

@@ -54,9 +54,9 @@ func (s *Sand) setUserSession(w http.ResponseWriter, req *http.Request) { //shou
 	defer req.Body.Close()
 	n := randStringRunes(32)
 	//map
-	session, _ := store2.Get(req, sessionId)
+	session, _ := store2.Get(req, sessionID)
 	userStr := session.Values["user"]
-	var user User
+	var user user
 	if userStr != nil {
 		err := json.Unmarshal([]byte(userStr.(string)), &user)
 		//TODO
@@ -79,9 +79,9 @@ func (s *Sand) setUserSession(w http.ResponseWriter, req *http.Request) { //shou
 	}
 }
 func getUserSession(w http.ResponseWriter, req *http.Request) {
-	session, _ := store2.Get(req, sessionId)
+	session, _ := store2.Get(req, sessionID)
 	userStr := session.Values["user"]
-	var user User
+	var user user
 	if userStr != nil {
 		err := json.Unmarshal([]byte(userStr.(string)), &user)
 		if err == nil {

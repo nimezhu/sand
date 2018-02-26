@@ -7,7 +7,7 @@ import (
 	"github.com/boltdb/bolt"
 )
 
-var sheetIdBucket *bolt.Bucket
+var sheetIDBucket *bolt.Bucket
 var refreshTokenBucket *bolt.Bucket
 var tx *bolt.Tx
 var db *bolt.DB
@@ -22,12 +22,12 @@ func (s *Sand) initDb() error {
 	if err != nil {
 		return err
 	}
-	sheetIdBucket, err = tx.CreateBucketIfNotExists([]byte("sheetId"))
+	sheetIDBucket, err = tx.CreateBucketIfNotExists([]byte("sheetID"))
 	if err != nil {
 		return err
 	}
-	sheetIdBucket.ForEach(func(k []byte, v []byte) error {
-		userSheetIdMap[string(k)] = string(v)
+	sheetIDBucket.ForEach(func(k []byte, v []byte) error {
+		userSheetIDMap[string(k)] = string(v)
 		return nil
 	})
 	refreshTokenBucket, err = tx.CreateBucketIfNotExists([]byte("refreshToken"))

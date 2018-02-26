@@ -25,9 +25,9 @@ type Credentials struct {
 	Admin       string `json:"admin"`
 }
 
-// User is a retrieved and authentiacted user.
+// user is a retrieved and authentiacted user.
 
-type User struct {
+type user struct {
 	Sub           string `json:"sub"`
 	Name          string `json:"name"`
 	GivenName     string `json:"given_name"`
@@ -43,11 +43,11 @@ var cred Credentials
 var conf *oauth2.Config
 var state string
 var store = sessions.NewCookieStore([]byte("secret"))
-var sessionId = "cnb007"
+var sessionID = "cnb007"
 var admins = map[string]bool{}
 var refreshTokenMap = map[string]string{}
 var continueWeb = "/v1/main.html?config=continue"
-var userSheetIdMap = map[string]string{}
+var userSheetIDMap = map[string]string{}
 
 func randToken() string {
 	b := make([]byte, 32)
@@ -55,8 +55,7 @@ func randToken() string {
 	return base64.StdEncoding.EncodeToString(b)
 }
 
-/* InitCred :
- *   init cred json for user using google sheet to store sessions.
+/*InitCred init cred json for user using google sheet to store sessions.
  *   and adminirator to access admin pages.
  */
 func InitCred(fn string) {
@@ -85,7 +84,7 @@ func init() {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, sessionId)
+	session, _ := store.Get(r, sessionID)
 	fmt.Println(session.Values["state"])
 	fmt.Println(session.Values["user"])
 	v := session.Values["user"]
@@ -97,7 +96,7 @@ func getLoginURL(state string) string {
 }
 
 func authHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, sessionId)
+	session, _ := store.Get(r, sessionID)
 	state0 := r.FormValue("state")
 	if state != state0 {
 		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", state, state0)
@@ -124,7 +123,7 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 	contents, _ := ioutil.ReadAll(response.Body)
 
 	session.Values["user"] = fmt.Sprintf("%s", contents)
-	var user User
+	var user user
 	err = json.Unmarshal(contents, &user)
 	if err != nil {
 		fmt.Println(err)
@@ -155,7 +154,7 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 }
 func addAuth(next func(w http.ResponseWriter, r *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		session, _ := store.Get(r, sessionId)
+		session, _ := store.Get(r, sessionID)
 		user := session.Values["user"]
 		if user != nil {
 			next(w, r)
@@ -167,7 +166,7 @@ func addAuth(next func(w http.ResponseWriter, r *http.Request)) func(http.Respon
 func addAuthHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...
-		session, _ := store.Get(r, sessionId)
+		session, _ := store.Get(r, sessionID)
 		user := session.Values["user"]
 		if user != nil {
 			next.ServeHTTP(w, r)
@@ -180,7 +179,7 @@ func addAuthHandler(next http.Handler) http.Handler {
 func checkAuth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...
-		session, _ := store.Get(r, sessionId)
+		session, _ := store.Get(r, sessionID)
 		user := session.Values["user"]
 		if user != nil {
 			next.ServeHTTP(w, r)
@@ -191,9 +190,9 @@ func checkAuth(next http.Handler) http.Handler {
 }
 func addAdminHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		session, _ := store.Get(r, sessionId)
+		session, _ := store.Get(r, sessionID)
 		userStr := session.Values["user"]
-		var user User
+		var user user
 		if userStr != nil {
 			err := json.Unmarshal([]byte(userStr.(string)), &user)
 			if err != nil {
@@ -214,16 +213,16 @@ func addAdminHandler(next http.Handler) http.Handler {
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	state = randToken()
-	session, _ := store.Get(r, sessionId)
+	session, _ := store.Get(r, sessionID)
 	session.Values["state"] = state
 	session.Save(r, w)
 	w.Write([]byte("<html><title>Golang Google</title> <body display='none'> <a href='" + getLoginURL(state) + "'><button id='myCheck'>Login with Google!</button> </a> </body><script>(function(){document.getElementById('myCheck').click();}())</script></html>"))
 	//TODO  LOGIN BUTTON
 }
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	store.New(r, sessionId) //TODO FIX
-	session, _ := store.Get(r, sessionId)
-	for key, _ := range session.Values {
+	store.New(r, sessionID) //TODO FIX
+	session, _ := store.Get(r, sessionID)
+	for key := range session.Values {
 		delete(session.Values, key)
 	}
 	session.Save(r, w)

@@ -54,8 +54,7 @@ func (s *Sand) InitHome(root string) {
 	}
 }
 
-/*InitIdxRoot
- *   bigwig index local storage directory.
+/*InitIdxRoot : bigwig index local storage directory.
  *   default should be HOME+"apphome"+"index"
  */
 func (s *Sand) InitIdxRoot(root string) string {

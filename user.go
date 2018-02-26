@@ -3,7 +3,7 @@ package sand
 type browserUser struct {
 	Email        string `json:"email"`
 	RefreshToken string `json:"refresh_token"`
-	SheetId      string `json:"sheet_id"`
+	SheetID      string `json:"sheet_id"`
 	Session      string `json:"session"`
 }
 

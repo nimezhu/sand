@@ -22,7 +22,7 @@ import (
 var store2 = sessions.NewCookieStore([]byte("secret"))
 
 type entry struct {
-	Id   string `json:"id"`
+	ID   string `json:"id"`
 	Note string `json:"note"`
 	Data string `json:"data"`
 }
@@ -30,14 +30,14 @@ type entry struct {
 var demo []entry
 
 func uploadSheet(w http.ResponseWriter, req *http.Request) {
-	session, _ := store2.Get(req, sessionId)
+	session, _ := store2.Get(req, sessionID)
 	sheet := req.URL.Query().Get("sheet")
 	writeRange := "A1"
 	if sheet != "" {
 		writeRange = sheet + "!A1"
 	}
 	userStr := session.Values["user"]
-	var user User
+	var user user
 	if userStr != nil {
 		json.Unmarshal([]byte(userStr.(string)), &user)
 		fmt.Println(user.Email)
@@ -66,16 +66,16 @@ func uploadSheet(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Printf("Unable to retrieve Sheets Client %v", err)
 	}
-	var spreadsheetId string
-	spreadsheetId, ok := userSheetIdMap[user.Email]
+	var spreadsheetID string
+	spreadsheetID, ok := userSheetIDMap[user.Email]
 	if !ok {
-		spreadsheetId = session.Values["sheetId"].(string)
+		spreadsheetID = session.Values["sheetId"].(string)
 	}
 	var vr sheets.ValueRange
-	log.Println(d.Id, d.Note)
-	myval := []interface{}{d.Id, d.Note, d.Data} //TODO
+	log.Println(d.ID, d.Note)
+	myval := []interface{}{d.ID, d.Note, d.Data} //TODO
 	vr.Values = append(vr.Values, myval)
-	_, err = srv.Spreadsheets.Values.Append(spreadsheetId, writeRange, &vr).ValueInputOption("RAW").Do()
+	_, err = srv.Spreadsheets.Values.Append(spreadsheetID, writeRange, &vr).ValueInputOption("RAW").Do()
 	if err != nil {
 		log.Printf("Unable to append data from sheet. %v", err)
 	}
@@ -84,14 +84,14 @@ func uploadSheet(w http.ResponseWriter, req *http.Request) {
 }
 
 func sheet(w http.ResponseWriter, req *http.Request) {
-	session, _ := store2.Get(req, sessionId)
+	session, _ := store2.Get(req, sessionID)
 	userStr := session.Values["user"]
 	idx := req.URL.Query().Get("idx")
 	if idx == "" {
 		idx = "1"
 	}
 
-	var user User
+	var user user
 	if userStr != nil {
 		json.Unmarshal([]byte(userStr.(string)), &user)
 		fmt.Println(user.Email)
@@ -112,14 +112,14 @@ func sheet(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Printf("Unable to retrieve Sheets Client %v", err)
 	}
-	//spreadsheetId := "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw" //TODO USER CHANGE SHEETID
-	var spreadsheetId string
-	spreadsheetId, ok := userSheetIdMap[user.Email]
+	//spreadsheetID := "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw" //TODO USER CHANGE SHEETID
+	var spreadsheetID string
+	spreadsheetID, ok := userSheetIDMap[user.Email]
 	if !ok {
-		spreadsheetId = session.Values["sheetId"].(string)
+		spreadsheetID = session.Values["sheetId"].(string)
 	}
 	readRange := "C" + idx //TODO
-	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
+	resp, err := srv.Spreadsheets.Values.Get(spreadsheetID, readRange).Do()
 	if err != nil {
 		log.Printf("Unable to retrieve data from sheet. %v", err)
 	}
@@ -136,9 +136,9 @@ func sheet(w http.ResponseWriter, req *http.Request) {
 }
 
 func sheetList(w http.ResponseWriter, req *http.Request) {
-	session, _ := store2.Get(req, sessionId)
+	session, _ := store2.Get(req, sessionID)
 	userStr := session.Values["user"]
-	var user User
+	var user user
 	if userStr != nil {
 		json.Unmarshal([]byte(userStr.(string)), &user)
 	} else {
@@ -155,13 +155,13 @@ func sheetList(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Printf("Unable to retrieve Sheets Client %v", err)
 	}
-	//spreadsheetId := "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw" //TODO USER CHANGE SHEETID
-	spreadsheetId, ok := userSheetIdMap[user.Email]
+	//spreadsheetID := "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw" //TODO USER CHANGE SHEETID
+	spreadsheetID, ok := userSheetIDMap[user.Email]
 	if !ok {
-		spreadsheetId = session.Values["sheetId"].(string)
+		spreadsheetID = session.Values["sheetId"].(string)
 	}
 	readRange := "A:C"
-	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
+	resp, err := srv.Spreadsheets.Values.Get(spreadsheetID, readRange).Do()
 	if err != nil {
 		log.Printf("Unable to retrieve data from sheet. %v", err)
 	}
@@ -178,17 +178,17 @@ func sheetList(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func setSheetId(w http.ResponseWriter, r *http.Request) {
-	session, _ := store2.Get(r, sessionId)
+func setSheetID(w http.ResponseWriter, r *http.Request) {
+	session, _ := store2.Get(r, sessionID)
 	id := r.URL.Query().Get("id")
 	userStr := session.Values["user"]
-	var user User
+	var user user
 	if userStr != nil {
 		err := json.Unmarshal([]byte(userStr.(string)), &user)
 		//TODO Save To BoltDb and Google Sheet.
 		if err == nil {
-			userSheetIdMap[user.Email] = id
-			sheetIdBucket.Put([]byte(user.Email), []byte(id))
+			userSheetIDMap[user.Email] = id
+			sheetIDBucket.Put([]byte(user.Email), []byte(id))
 			err2 := tx.Commit()
 			if err2 != nil {
 				log.Println("error in commit sheetid", err2)
@@ -200,14 +200,14 @@ func setSheetId(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(id))
 }
 
-func getSheetId(w http.ResponseWriter, r *http.Request) {
-	session, _ := store2.Get(r, sessionId)
+func getSheetID(w http.ResponseWriter, r *http.Request) {
+	session, _ := store2.Get(r, sessionID)
 	userStr := session.Values["user"]
-	var user User
+	var user user
 	if userStr != nil {
 		err := json.Unmarshal([]byte(userStr.(string)), &user)
 		if err == nil {
-			if v, ok := userSheetIdMap[user.Email]; ok {
+			if v, ok := userSheetIDMap[user.Email]; ok {
 				w.Write([]byte("{\"sheetid\":\"" + v + "\"}"))
 			} else {
 				w.Write([]byte("{\"error\":\"sheet id not set\"}"))
@@ -219,7 +219,7 @@ func getSheetId(w http.ResponseWriter, r *http.Request) {
 func checkToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...
-		session, _ := store2.Get(r, sessionId)
+		session, _ := store2.Get(r, sessionID)
 		token := &oauth2.Token{}
 		err := json.Unmarshal(session.Values["token"].([]byte), token)
 		//n := RandStringRunes(32)
@@ -229,7 +229,7 @@ func checkToken(next http.Handler) http.Handler {
 		}
 		if token.Expiry.Before(time.Now()) {
 			userStr := session.Values["user"]
-			var user User
+			var user user
 			json.Unmarshal([]byte(userStr.(string)), &user)
 			token = renewToken(conf, token, user.Email)
 			session.Values["token"], _ = json.Marshal(token)
@@ -243,12 +243,12 @@ func checkToken(next http.Handler) http.Handler {
 func checkSheet(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...
-		session, _ := store2.Get(r, sessionId)
+		session, _ := store2.Get(r, sessionID)
 		//sheetId := session.Values["sheetId"]
 		userStr := session.Values["user"]
-		var user User
+		var user user
 		json.Unmarshal([]byte(userStr.(string)), &user)
-		if _, ok := userSheetIdMap[user.Email]; ok {
+		if _, ok := userSheetIDMap[user.Email]; ok {
 			next.ServeHTTP(w, r)
 		} else {
 			w.Write([]byte("{\"error\":\"sheet id not set\"}"))
@@ -257,8 +257,8 @@ func checkSheet(next http.Handler) http.Handler {
 }
 func addSheetTo(router *mux.Router) {
 	router.Handle("/uploadsheet", checkAuth(checkToken(checkSheet(http.HandlerFunc(uploadSheet))))) //upload to sheet
-	router.Handle("/setsheetid", checkAuth(checkToken(http.HandlerFunc(setSheetId))))
-	router.Handle("/getsheetid", checkAuth(checkToken(http.HandlerFunc(getSheetId))))
+	router.Handle("/setsheetid", checkAuth(checkToken(http.HandlerFunc(setSheetID))))
+	router.Handle("/getsheetid", checkAuth(checkToken(http.HandlerFunc(getSheetID))))
 	router.Handle("/sheet", checkAuth(checkToken(checkSheet(http.HandlerFunc(sheet)))))         //get sheet
 	router.Handle("/sheetlist", checkAuth(checkToken(checkSheet(http.HandlerFunc(sheetList))))) //get sheet list
 	router.Handle("/myadmin/token", addAdminHandler(tokenHandler()))
@@ -289,7 +289,7 @@ func tokenHandler() http.Handler {
 }
 func sheetidHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		v, _ := json.Marshal(userSheetIdMap)
+		v, _ := json.Marshal(userSheetIDMap)
 		w.Write(v)
 	})
 }
@@ -297,9 +297,9 @@ func getDemoHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		sheetid := r.FormValue("sheetid")
 		fmt.Println(sheetid)
-		session, _ := store2.Get(r, sessionId)
+		session, _ := store2.Get(r, sessionID)
 		userStr := session.Values["user"]
-		var user User
+		var user user
 		if userStr != nil {
 			json.Unmarshal([]byte(userStr.(string)), &user)
 			fmt.Println(user.Email)
