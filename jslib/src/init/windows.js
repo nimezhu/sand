@@ -56,7 +56,6 @@ export default function () {
           $("#myModal").modal("show");
           d3.select("#loadSession").on("click", function () {
             $("#myModal").modal("hide")
-            console.log(d)
             dispatch.call("initWindows", this, JSON.parse(d))
           })
           $(".menu .note").hide()
