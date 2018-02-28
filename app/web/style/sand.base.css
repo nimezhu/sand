@@ -212,7 +212,8 @@ ul {
 .liteVersion #menuUser {
     display : none;
 }
+
 @font-face {
-    font-family: "monaco";
+    font-family: "Monaco";
     src: url(/web/fonts/monaco.ttf) format("truetype");
   }

@@ -1,5 +1,10 @@
 import toolsDownload from "../tools/download"
 import toolsUpload from "../tools/upload"
+var isEmpty = function(layout) {
+  if (layout.content[0].content.length == 0) {
+    return true
+  }
+}
 export default function () {
   var sessionId = "_cnb_"
   var ws = {} //window handler
@@ -198,8 +203,11 @@ export default function () {
     })
     dispatch.on("saveSession", function () {
       var data = _getStates()
-      var d = JSON.parse(data)
+      var d = JSON.parse(data) //TODO check data empty.
       var d1 = JSON.parse(d[-1])
+      if (isEmpty(d1)) {
+        return //not override previous one if layout of main window is empty
+      }
       //console.log(d1)
       if (Object.keys(d).length > 1 || (d1.content.length > 0 && d1.content[0].content && d1.content[0].content.length > 0)) { //have window or panels;
         localStorage.setItem(sessionId, data)
@@ -222,7 +230,6 @@ export default function () {
     })
     dispatch.on("loadSession", function () {
       var d = localStorage.getItem(sessionId)
-
       dispatch.call("initWindows", this, JSON.parse(d))
       $.ajax({
         url: "/getsession",
