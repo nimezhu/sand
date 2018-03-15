@@ -163,6 +163,9 @@ func addAuth(next func(w http.ResponseWriter, r *http.Request)) func(http.Respon
 		}
 	})
 }
+func AddAuthHandler(next http.Handler) http.Handler {
+	return addAuthHandler(next)
+}
 func addAuthHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...
@@ -187,6 +190,9 @@ func checkAuth(next http.Handler) http.Handler {
 			w.Write([]byte("{'error':'not login'}"))
 		}
 	})
+}
+func AdminAccess(next http.Handler) http.Handler {
+	return addAdminHandler(next)
 }
 func addAdminHandler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
