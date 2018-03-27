@@ -121,7 +121,7 @@ export default function () {
       dispatch.call("loadFromSheet", this, _)
     })
     var checkSheetId = function () {
-      d3.json("/getsheetid", function (err, d) {
+      d3.json("/getsheetid").then(function (d) {
         if (d.sheetid) {
           $("#sheetUi").show()
           $("#fileUi").hide()
@@ -131,14 +131,27 @@ export default function () {
           $("#fileUi").show()
           d3.select("#sessionUi").classed("glyphicon-hdd",true).classed("glyphicon-cloud",false)
         }
+      }).catch(function(d){
+        console.log("E",d)
+        $("#sheetUi").hide()
+        $("#fileUi").show()
+        d3.select("#sessionUi").classed("glyphicon-hdd",true).classed("glyphicon-cloud",false)
       })
     }
+    //setTimeout(checkSheetId, null, 200)
     checkSheetId()
     $("#setSheetId").on("click", function (_) {
       if (!isAstilectron) {
-        d3.json("/getsheetid", function (err, d) {
-          console.log(err, d)
+        d3.json("/getsheetid").then(function (d) {
+          //TODO
+          console.log("D",d)
           var id = prompt("sheetId", d.sheetid || "")
+          if (id != null && id != "") {
+            $.post("/setsheetid?id=" + id).done(checkSheetId())
+          }
+        }).catch(function(e){
+          console.log("E",e)
+          var id = prompt("sheetId","")
           if (id != null && id != "") {
             $.post("/setsheetid?id=" + id).done(checkSheetId())
           }
@@ -146,7 +159,7 @@ export default function () {
       } else {
         //var id = "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw"
         var id = ""
-        d3.json("/getsheetid", function (err, d) {
+        d3.json("/getsheetid").then(function (d) {
           if (d.sheetid) {
             $("#promptId").val(d.sheetid)
           } else {

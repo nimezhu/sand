@@ -28,7 +28,7 @@
   (function($, d3, S) {
     var stateId = "cnb000"
     var links = []
-    d3.json("/sheetlist", function(error, d) { //TODO sheets
+    d3.json("/sheetlist", function(d) { //TODO sheets
       console.log(d)
       var panels = d3.select("#layoutContainer")
         .selectAll(".panel")
@@ -55,9 +55,9 @@
         console.log(JSON.parse(JSON.parse(d[2])[-1]))
         return d[1]
       })
-      var _render = function(el){
-        el.each(function(d){
-          var svg = d3.select(this).append("svg").attr("width",134).attr("height",80)
+      var _render = function(el) {
+        el.each(function(d) {
+          var svg = d3.select(this).append("svg").attr("width", 134).attr("height", 80)
           console.log(d)
           var iconRender = S.layoutIcon()
           var dmain = JSON.parse(JSON.parse(d[2])[-1])
@@ -67,7 +67,7 @@
       var svgdiv = bodys.append("div")
 
 
-    svgdiv.call(_render)
+      svgdiv.call(_render)
 
 
 

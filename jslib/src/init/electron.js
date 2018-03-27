@@ -210,7 +210,8 @@ export default function () {
           })
         a.exit().remove()
         d3.select("#loadModalBtn").on("click", function () {
-          d3.json("/sheet?idx=" + idx, function (err, d) {
+          d3.json("/sheet?idx=" + idx, function (d) {
+            var err = null //TODO
             if (err) {
               console.log(err)
             } else {

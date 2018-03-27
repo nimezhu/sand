@@ -2,20 +2,18 @@
 <html>
 
 <head>
-  <title id = "title">{{.Appname}}</title>
+  <title id="title">{{.Appname}}</title>
   {{template "lib"}}
   <script type="text/javascript" src="/web/lib/sand.min.js"></script>
   {{range .Libs}}
   <script type="text/javascript" src="{{.}}"></script>
-  {{end}}
-  {{template "css"}}
+  {{end}} {{template "css"}}
 
   <link rel="stylesheet" href="/web/style/sand.base.css">
   <!-- THEME
   -->
   {{range .Styles}}
-  <link rel="stylesheet" href="{{.}}">
-  {{end}}
+  <link rel="stylesheet" href="{{.}}"> {{end}}
 </head>
 
 <body>
@@ -51,7 +49,7 @@
     fixedLayout = S.toolsGetUrlPara("fixedLayout") || 0 //0 is false
     initedLayout = S.toolsGetUrlPara("initedLayout") || undefined //0 is false
     lite = S.toolsGetUrlPara("lite") || 0 //rm google user system is lite is 1
-    if (win=="ext") {
+    if (win == "ext") {
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
       $("#title").text("Extend Window")
@@ -98,18 +96,17 @@
       }]
     }
     var cfg = S.toolsGetUrlPara("config")
-    if  (!cfg && initedLayout) { //config override the initedLayout
-      initedLayout.split(",").forEach(function(d){
-        if (renders[d]){
-          emptyCfg.content[0].content.push(
-          {
-          "type":"component",
-          "componentName":"canvas",
-          "title": renders[d].label || d, 
-          "componentState": {
-            "render":d,
+    if (!cfg && initedLayout) { //config override the initedLayout
+      initedLayout.split(",").forEach(function(d) {
+        if (renders[d]) {
+          emptyCfg.content[0].content.push({
+            "type": "component",
+            "componentName": "canvas",
+            "title": renders[d].label || d,
+            "componentState": {
+              "render": d,
             }
-          }) 
+          })
         }
       })
     }
@@ -141,13 +138,13 @@
         dispatch.call("initPanels", this, config)
       }
     }
-    
-    if (cfg && cfg.match(/gsheet:\S+:\S+/)){
+
+    if (cfg && cfg.match(/gsheet:\S+:\S+/)) {
       var a = cfg.split(":")
-      S.gsheetQuery("select * where A='"+a[2]+"'",a[1],"_renderGsheet")
+      S.gsheetQuery("select * where A='" + a[2] + "'", a[1], "_renderGsheet")
     } else if (cfg && cfg != "continue") {
       $(".menu .note").hide()
-      d3.json(server + cfg, function(error, config) {
+      d3.json(server + cfg, function(config) {
         if (config[-1] || config["states"]) { //windows format
           dispatch.call("initWindows", this, config)
         } else { // one window format
@@ -155,7 +152,7 @@
         }
       })
     } else if (!cfg) {
-      if (win=="main"){
+      if (win == "main") {
         $(".menu .note").show()
       }
       dispatch.call("initPanels", this, emptyCfg)
