@@ -135,8 +135,6 @@ export default function () {
         "data": data,
       }
       $.post("/uploadsheet", JSON.stringify(d)).done(function(d){
-        //TODO Refresh Sheet List
-        //alert("save to sheet")
         if (d.error){
           console.log("error todo",d)
         }
@@ -155,8 +153,7 @@ export default function () {
       })
     })
     dispatch.on("loadFromSheet", function () {
-      console.log("in dispatch loadFromSheet")
-      d3.json("/sheetlist",function(d){
+      d3.json("/sheetlist",{credentials: 'include'}).then(function(d){
         console.log(d)
         if (d.error) {
           console.log("error todo",d)
@@ -180,7 +177,7 @@ export default function () {
         a.exit().remove()
         d3.select("#loadModalBtn").on("click", function(){
           //window.location="/v1/main.html?config=/sheet?idx="+idx //TODO to Reload
-          d3.json("/sheet?idx="+idx,function(d){
+          d3.json("/sheet?idx="+idx,{credentials: 'include'}).then(function(d){
             var err = null //TODO
             if (err) {
               console.log(err)

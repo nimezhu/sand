@@ -86,13 +86,13 @@ func getUserSession(w http.ResponseWriter, req *http.Request) {
 		err := json.Unmarshal([]byte(userStr.(string)), &user)
 		if err == nil {
 			if v, ok := userCurrentSession[user.Email]; ok {
-				w.Write([]byte("{'id':'" + v + "'}"))
+				w.Write([]byte("{id:\"" + v + "\"}"))
 
 			} else {
-				w.Write([]byte("{'error':'none'}"))
+				w.Write([]byte("{error:\"none\"}"))
 			}
 		} else {
-			w.Write([]byte("{'error':'parsing'}"))
+			w.Write([]byte("{error:\"parsing\"}"))
 		}
 	}
 }

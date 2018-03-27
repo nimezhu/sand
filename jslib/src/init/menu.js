@@ -121,7 +121,7 @@ export default function () {
       dispatch.call("loadFromSheet", this, _)
     })
     var checkSheetId = function () {
-      d3.json("/getsheetid").then(function (d) {
+      d3.json("/getsheetid",{credentials: 'include'}).then(function (d) {
         if (d.sheetid) {
           $("#sheetUi").show()
           $("#fileUi").hide()
@@ -142,7 +142,7 @@ export default function () {
     checkSheetId()
     $("#setSheetId").on("click", function (_) {
       if (!isAstilectron) {
-        d3.json("/getsheetid").then(function (d) {
+        d3.json("/getsheetid",{credentials: 'include'}).then(function (d) {
           //TODO
           console.log("D",d)
           var id = prompt("sheetId", d.sheetid || "")
@@ -159,7 +159,7 @@ export default function () {
       } else {
         //var id = "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw"
         var id = ""
-        d3.json("/getsheetid").then(function (d) {
+        d3.json("/getsheetid", {credentials: 'include'}).then(function (d) {
           if (d.sheetid) {
             $("#promptId").val(d.sheetid)
           } else {
