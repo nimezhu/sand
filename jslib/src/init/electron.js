@@ -187,14 +187,7 @@ export default function () {
       //TODO.
     })
     dispatch.on("loadFromSheet", function () {
-      d3.json("/sheetlist", function (d) {
-        console.log(d)
-        if (d.error) {
-          console.log("error todo", d)
-          return;
-        } else {
-          console.log(d)
-        }
+      d3.json("/sheetlist",{credentials: 'include'}).then(function (d) {
         var a = d3.select("#sheetList").selectAll("li").data(d);
         var idx = 1;
         a.enter()
@@ -210,17 +203,14 @@ export default function () {
           })
         a.exit().remove()
         d3.select("#loadModalBtn").on("click", function () {
-          d3.json("/sheet?idx=" + idx, function (d) {
-            var err = null //TODO
-            if (err) {
-              console.log(err)
-            } else {
+          d3.json("/sheet?idx=" + idx,{ credentials: 'include'}).then(function (d) {
               if (d.error) {
                 console.log("error todo", d)
               } else {
                 dispatch.call("initWindows", this, d)
               }
-            }
+          }).catch(function(e) {
+            console.log(e)
           })
           $("#modalLoad").modal("hide")
         })

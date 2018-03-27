@@ -132,7 +132,6 @@ export default function () {
           d3.select("#sessionUi").classed("glyphicon-hdd",true).classed("glyphicon-cloud",false)
         }
       }).catch(function(d){
-        console.log("E",d)
         $("#sheetUi").hide()
         $("#fileUi").show()
         d3.select("#sessionUi").classed("glyphicon-hdd",true).classed("glyphicon-cloud",false)
@@ -144,20 +143,17 @@ export default function () {
       if (!isAstilectron) {
         d3.json("/getsheetid",{credentials: 'include'}).then(function (d) {
           //TODO
-          console.log("D",d)
           var id = prompt("sheetId", d.sheetid || "")
           if (id != null && id != "") {
             $.post("/setsheetid?id=" + id).done(checkSheetId())
           }
         }).catch(function(e){
-          console.log("E",e)
           var id = prompt("sheetId","")
           if (id != null && id != "") {
             $.post("/setsheetid?id=" + id).done(checkSheetId())
           }
         })
       } else {
-        //var id = "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw"
         var id = ""
         d3.json("/getsheetid", {credentials: 'include'}).then(function (d) {
           if (d.sheetid) {
