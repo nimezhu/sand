@@ -144,7 +144,7 @@
       S.gsheetQuery("select * where A='" + a[2] + "'", a[1], "_renderGsheet")
     } else if (cfg && cfg != "continue") {
       $(".menu .note").hide()
-      d3.json(server + cfg, function(config) {
+      d3.json(server + cfg).then(function(config) {
         if (config[-1] || config["states"]) { //windows format
           dispatch.call("initWindows", this, config)
         } else { // one window format
