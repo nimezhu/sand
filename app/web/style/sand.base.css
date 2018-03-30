@@ -217,3 +217,8 @@ ul {
     font-family: "Monaco";
     src: url(/web/fonts/monaco.ttf) format("truetype");
   }
+
+  @font-face {
+      font-family: "Nimbusmono";
+      src: url(/web/fonts/nimbusmono-regular-webfont.ttf) format("truetype");
+    }
