@@ -28,7 +28,7 @@
   (function($, d3, S) {
     var stateId = "cnb000"
     var links = []
-    d3.json("/sheetlist", function(d) { //TODO sheets
+    d3.json("/sheetlist",{ credentials: 'include'}).then(function(d) { //TODO sheets
       console.log(d)
       var panels = d3.select("#layoutContainer")
         .selectAll(".panel")
