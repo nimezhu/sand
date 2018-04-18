@@ -1,11 +1,14 @@
 import toolsDownload from "../tools/download"
 import toolsUpload from "../tools/upload"
-var isEmpty = function(layout) {
+var isEmpty = function (layout) {
   if (layout.content[0].content.length == 0) {
     return true
   }
 }
 export default function () {
+  var chromeExtID = "gedcoafficobgcagmjpplpnmempkcpfp"
+  var chromeExtPort //port to chromeExt
+
   var sessionId = "_cnb_"
   var ws = {} //window handler
   var message = {}
@@ -15,8 +18,8 @@ export default function () {
   var theme = "light"
   //var app = {}  //application variables; sync between windows;
   var P
-  var dispatch = d3.dispatch("initWindows", "initPanels", "input", "resize", "add", "exportState", "exportStates", "setState", "importState", "importStates", "closeExt", "eletron", "saveSession", "loadSession", "shareSession","saveToSheet")
-  var win = "main"
+  var dispatch = d3.dispatch("initWindows", "initPanels", "input", "resize", "add", "exportState", "exportStates", "setState", "importState", "importStates", "closeExt", "eletron", "saveSession", "loadSession", "shareSession", "saveToSheet")
+  var win = "main" //default main
   var getmessage = function (event) {
     if (event.origin !== domain) //TODO FIX
       return;
@@ -53,7 +56,7 @@ export default function () {
       }
       window.onload = function () {
         var d = localStorage.getItem(sessionId)
-        if (d && config=="continue") {
+        if (d && config == "continue") {
           dispatch.call("initWindows", this, JSON.parse(d))
           $(".menu .note").hide()
         }
@@ -75,7 +78,7 @@ export default function () {
           delete ws[id]
         }
         ws[id] = w
-        console.log("panel app",P.app())
+        console.log("panel app", P.app())
         ws[id].onload = function () {
           ws[id].postMessage({
             code: "app",
@@ -84,6 +87,27 @@ export default function () {
         }
         idx += 1
       })
+
+      /* IF MAIN ADD PORT ,
+         TODO CHECK IF EXTENSION EXISTS
+         TODO FORMALIZE chromeExtID
+       */
+      if (chrome) {
+        chromeExtPort = chrome.runtime.connect(chromeExtID)
+        var processingExternal = false;
+        dispatch.on("sendMessage.apps", function (d) {
+          if (processingExternal) {
+              processingExternal = false;
+          } else {
+            chromeExtPort.postMessage(d) //send message to chromeExt
+          }
+        })
+        chromeExtPort.onMessage.addListener(function (d) {
+          processingExternal = true;
+          dispatch.call("receiveMessage",this,{code:d.code,data:JSON.stringify(d.data)});
+        })
+      }
+
     } else {
       $("#openExt").hide()
     }
@@ -107,6 +131,8 @@ export default function () {
           from: window.name
         }, domain)
       }
+      /* TODO Connect Plugin */
+
     })
     var _getStates = function () {
       var data = {};
@@ -123,40 +149,42 @@ export default function () {
       var data = _getStates();
       $.post("/upload", data).done(function (d) {
         var url = domain + "/v1/main.html?config=/share/" + d
-        console.log("Session URL",url)
+        console.log("Session URL", url)
         prompt("Share Session within 8 hours, Copy to clipboard: Ctrl+C, Enter", url)
       })
     })
-    var _saveToSheet = function(d) {
+    var _saveToSheet = function (d) {
       var data = _getStates();
       var d = {
         "id": d.id || "NoName",
         "note": d.note || "Todo",
         "data": data,
       }
-      $.post("/uploadsheet", JSON.stringify(d)).done(function(d){
-        if (d.error){
-          console.log("error todo",d)
+      $.post("/uploadsheet", JSON.stringify(d)).done(function (d) {
+        if (d.error) {
+          console.log("error todo", d)
         }
       })
     }
-    dispatch.on("saveToSheet", function(d) {
+    dispatch.on("saveToSheet", function (d) {
       $("#modalSave").modal("show");
-      d3.select("#saveModalBtn").on("click", function(){
+      d3.select("#saveModalBtn").on("click", function () {
         //window.location="/v1/main.html?config=/sheet?idx="+idx //TODO to Reload
         var d = {
-          "id" : d3.select("#modalSaveId").node().value,
-          "note" : d3.select("#modalSaveNote").node().value,
+          "id": d3.select("#modalSaveId").node().value,
+          "note": d3.select("#modalSaveNote").node().value,
         }
         _saveToSheet(d)
         $("#modalSave").modal("hide")
       })
     })
     dispatch.on("loadFromSheet", function () {
-      d3.json("/sheetlist",{credentials: 'include'}).then(function(d){
+      d3.json("/sheetlist", {
+        credentials: 'include'
+      }).then(function (d) {
         console.log(d)
         if (d.error) {
-          console.log("error todo",d)
+          console.log("error todo", d)
           return;
         } else {
           console.log(d)
@@ -166,26 +194,28 @@ export default function () {
         a.enter()
           .append("li")
           .merge(a)
-          .text(function(d,i){
-            return i+" "+d[0];
+          .text(function (d, i) {
+            return i + " " + d[0];
           })
-          .on("click",function(d,i){
-            d3.select("#sheetList").select(".selected").classed("selected",false)
-            d3.select(this).classed("selected",true)
+          .on("click", function (d, i) {
+            d3.select("#sheetList").select(".selected").classed("selected", false)
+            d3.select(this).classed("selected", true)
             idx = i + 1
           })
         a.exit().remove()
-        d3.select("#loadModalBtn").on("click", function(){
+        d3.select("#loadModalBtn").on("click", function () {
           //window.location="/v1/main.html?config=/sheet?idx="+idx //TODO to Reload
-          d3.json("/sheet?idx="+idx,{credentials: 'include'}).then(function(d){
+          d3.json("/sheet?idx=" + idx, {
+            credentials: 'include'
+          }).then(function (d) {
             var err = null //TODO
             if (err) {
               console.log(err)
             } else {
               if (d.error) {
-                console.log("error todo",d)
-              }  else {
-                dispatch.call("initWindows",this,d)
+                console.log("error todo", d)
+              } else {
+                dispatch.call("initWindows", this, d)
               }
             }
           })
@@ -219,7 +249,7 @@ export default function () {
         type: "POST",
         data: data,
         async: false,
-        success: function(msg) {
+        success: function (msg) {
           console.log(msg)
         }
       })
@@ -232,9 +262,9 @@ export default function () {
       $.ajax({
         url: "/getsession",
         async: false,
-        success: function(d) {
-          console.log("getsession",d)
-          $.ajax("/share/"+d.id,function(d){
+        success: function (d) {
+          console.log("getsession", d)
+          $.ajax("/share/" + d.id, function (d) {
             console.log(d)
           })
         }
@@ -311,6 +341,9 @@ export default function () {
 
   chart.config = function (_) {
     return arguments.length ? (config = _, chart) : config;
+  }
+  chart.chromeExtID = function (_) {
+    return arguments.length ? (chromeExtID = _, chart) : chromeExtID;
   }
   //chart.app = function(_) { return arguments.length ? (app= _, chart) : app; }
   return chart
