@@ -88,24 +88,39 @@ export default function () {
         idx += 1
       })
 
-      /* IF MAIN ADD PORT ,
-         TODO CHECK IF EXTENSION EXISTS
-         TODO FORMALIZE chromeExtID
-       */
       if (chrome) {
-        chromeExtPort = chrome.runtime.connect(chromeExtID)
-        var processingExternal = false;
-        dispatch.on("sendMessage.apps", function (d) {
-          if (processingExternal) {
+        var hasExtension = false;
+        chrome.runtime.sendMessage(chromeExtID, {
+            message: "version"
+          },
+          function (reply) {
+            if (reply) {
+              if (reply.version) {
+                 hasExtension = true;
+                 connectExt();
+              }
+            } else {
+              hasExtension = false;
+            }
+          });
+        var connectExt = function () {
+          chromeExtPort = chrome.runtime.connect(chromeExtID)
+          var processingExternal = false;
+          dispatch.on("sendMessage.apps", function (d) {
+            if (processingExternal) {
               processingExternal = false;
-          } else {
-            chromeExtPort.postMessage(d) //send message to chromeExt
-          }
-        })
-        chromeExtPort.onMessage.addListener(function (d) {
-          processingExternal = true;
-          dispatch.call("receiveMessage",this,{code:d.code,data:JSON.stringify(d.data)});
-        })
+            } else {
+              chromeExtPort.postMessage(d) //send message to chromeExt
+            }
+          })
+          chromeExtPort.onMessage.addListener(function (d) {
+            processingExternal = true;
+            dispatch.call("receiveMessage", this, {
+              code: d.code,
+              data: JSON.stringify(d.data)
+            });
+          })
+        }
       }
 
     } else {
