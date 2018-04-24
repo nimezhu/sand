@@ -126,7 +126,7 @@
         E()
       })
     } else if (mode == "web" || true) { //any other condition
-      var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg) //app(app) //init windows manager
+      var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).chromeExtID({{.ExtID}}) //app(app) //init windows manager
       W();
     }
     /* TO USE PUBLIC GSHEET */

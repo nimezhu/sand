@@ -23,6 +23,7 @@ type Sand struct {
 	Styles  []string
 	Renders string
 	Mode    map[string]string // lite, initedLayout, fixedLayout
+	ExtID   string            //Chrome Extenstion ID , port to connect.
 }
 
 func modesText(d map[string]string) string {
