@@ -139,7 +139,7 @@ export default function () {
           data: d
         }, domain)
       }
-      if (window.opener) {
+      if (window.opener !== null) {
         window.opener.postMessage({
           code: "extMessage",
           data: d,
