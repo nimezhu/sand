@@ -52,7 +52,7 @@ export default function(config, el, dispatch, renders, app) {
     //app is local client window, in astilectron, need to send update app to new server when new window initialised.
   })
   dispatch.on("add", function(d) {
-    if (!layout.root.contentItems[0]) {
+    if (typeof layout.root.contentItems[0] == "undefined") {
         layout.root.addChild({
             "type": "row",
             "content": []
