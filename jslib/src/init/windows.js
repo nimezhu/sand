@@ -88,7 +88,7 @@ export default function () {
         idx += 1
       })
 
-      if (chrome) {
+      if (typeof chrome !== "undefined") {
         var hasExtension = false;
         chrome.runtime.sendMessage(chromeExtID, {
             message: "version"
