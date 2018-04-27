@@ -183,6 +183,7 @@ export default function () {
       })
       .on("click", function (d) {
         console.log("click", d)
+        $(".menu .frame").hide();
         if (renders[d].id) {
           dispatch.call("add", this, factory(renders[d]))
         } else {
