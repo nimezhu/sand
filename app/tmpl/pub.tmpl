@@ -10,7 +10,7 @@
   <style>
     .panel {
       width: 168px;
-      height: 200px;
+      min-height: 200px;
       float: left;
       margin: 10px;
     }
@@ -49,16 +49,22 @@
         .on("click", function(d, i) {
           window.location = "/v1/main.html?config=gsheet:" + sheetId + ":" + d[0].replace(" ", "%20")
         })
+        .on("mouseover",function(){
+          d3.select(this).style("background-color","#8899AA")
+        })
+        .on("mouseout",function(){
+          d3.select(this).style("background-color","#F5F5F5")
+        })
       var bodys = panels.append("div")
         .classed("panel-body", true)
       bodys.append("div").text(function(d) {
-        console.log(JSON.parse(JSON.parse(d[2])[-1]))
+        //console.log(JSON.parse(JSON.parse(d[2])[-1]))
         return d[1]
       })
       var _render = function(el) {
         el.each(function(d) {
           var svg = d3.select(this).append("svg").attr("width", 134).attr("height", 80)
-          console.log(d)
+          //console.log(d)
           var iconRender = S.layoutIcon()
           var dmain = JSON.parse(JSON.parse(d[2])[-1])
           svg.datum(dmain).call(iconRender)
