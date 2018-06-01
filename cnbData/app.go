@@ -6,25 +6,27 @@ import (
 	"github.com/urfave/cli"
 )
 
-func CmdApp(c *cli.Context) error {
+func CmdStart(c *cli.Context) error {
 	uri := c.String("input")
 	port := c.Int("port")
-	mode := c.String("mode")
+	mode := "w"
 	root := c.String("root")
 	router := mux.NewRouter()
-	cred := c.String("cred")
+	//cred := c.String("cred")
 	s := sand.Sand{
-		"s2 tools",
+		"CMU Dataome Browser",
 		root,
-		"s2",
+		"dataserver",
 		VERSION,
 		[]string{},
 		[]string{},
 		[]string{},
 		"S.render",
+		make(map[string]string),
+		"",
 	}
 	idxRoot := s.InitIdxRoot(root) //???
-	sand.InitCred(cred)
+	//sand.InitCred(cred)
 	addDataServer(uri, router, idxRoot) //TODO
 	s.InitRouter(router)
 	s.InitHome(root)

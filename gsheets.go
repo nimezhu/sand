@@ -12,7 +12,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/nimezhu/sand/gsheets"
+	"github.com/nbrowser/sand/gsheets"
 	"golang.org/x/oauth2"
 )
 
