@@ -87,48 +87,49 @@ export default function () {
         }
         idx += 1
       })
-
-      if (typeof chrome !== "undefined") {
-        var hasExtension = false;
-        if (chrome.runtime) {
-          chrome.runtime.sendMessage(chromeExtID, {
-              message: "version"
-            },
-            function (reply) {
-              if (reply) {
-                if (reply.version) {
-                  hasExtension = true;
-                  connectExt();
-                }
-              } else {
-                hasExtension = false;
-              }
-            });
-
-          var connectExt = function () {
-            chromeExtPort = chrome.runtime.connect(chromeExtID)
-            var processingExternal = false;
-            dispatch.on("sendMessage.apps", function (d) {
-              if (processingExternal) {
-                processingExternal = false;
-              } else {
-                chromeExtPort.postMessage(d) //send message to chromeExt
-              }
-            })
-            chromeExtPort.onMessage.addListener(function (d) {
-              processingExternal = true;
-              dispatch.call("receiveMessage", this, {
-                code: d.code,
-                data: JSON.stringify(d.data)
-              });
-            })
-          }
-        }
-      }
-
-    } else {
+      } else {
       $("#openExt").hide()
     }
+    if (typeof chrome !== "undefined") {
+      var hasExtension = false;
+      if (chrome.runtime) {
+        chrome.runtime.sendMessage(chromeExtID, {
+            message: "version"
+          },
+          function (reply) {
+            if (reply) {
+              if (reply.version) {
+                hasExtension = true;
+                connectExt();
+              }
+            } else {
+              hasExtension = false;
+              console.log("not connect to ext",reply)
+            }
+          });
+
+        var connectExt = function () {
+          chromeExtPort = chrome.runtime.connect(chromeExtID)
+          var processingExternal = false;
+          dispatch.on("sendMessage.apps", function (d) {
+            if (processingExternal) {
+              processingExternal = false;
+            } else {
+              chromeExtPort.postMessage(d) //send message to chromeExt
+            }
+          })
+          chromeExtPort.onMessage.addListener(function (d) {
+            processingExternal = true;
+            dispatch.call("receiveMessage", this, {
+              code: d.code,
+              data: JSON.stringify(d.data)
+            });
+          })
+        }
+      }
+    }
+
+
     dispatch.on("closeExt", function () {
       for (var key in ws) {
         ws[key].close()
