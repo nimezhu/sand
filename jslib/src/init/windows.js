@@ -43,6 +43,7 @@ export default function () {
       dispatch.call(d.code, this, d.data) //TODO PROGRMAMABLE
     }
     if (d.code == "app") {
+      d.data = JSON.parse(d.data)
       console.log("init app", d.data)
       P.updateApp(d.data) //TODO app inited re-render
     }
@@ -82,7 +83,7 @@ export default function () {
         ws[id].onload = function () {
           ws[id].postMessage({
             code: "app",
-            data: P.app()
+            data: JSON.stringify(P.app())
           }, domain) //parse app to other windows;
         }
         idx += 1
