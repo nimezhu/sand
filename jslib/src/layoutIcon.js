@@ -2,7 +2,7 @@ export default function () {
   var color = {
     "Genome Browser": "#226a98",
     "User Data": "#ce5146",
-    "DNA 3d Structrue Viewer": "#337c2e"
+    "DNA 3d Structure Viewer": "#337c2e"
   }
   var wh = function (d) {
     if (d.width) {
@@ -24,7 +24,6 @@ export default function () {
       var offset = x;
       d.content.forEach(function (d) {
         r[d.type](d, offset, y, d.width || 100, h, el)
-        console.log(d)
         offset += d.width || 100
       })
     }
