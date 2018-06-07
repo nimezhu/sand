@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/web/style/sand.base.css">
   <style>
     .panel {
-      width: 168px;
+      width: 300px;
       min-height: 200px;
       float: left;
       margin: 10px;
@@ -39,9 +39,10 @@
         .append("div")
         .classed("panel", true)
         .classed("panel-default", true)
-      panels.append("div")
+      var head = panels.append("div")
         .classed("panel-heading", true)
-        .append("h2")
+
+      head.append("h2")
         .classed("panel-title", true)
         .text(function(d) {
           return d[0]
@@ -55,23 +56,36 @@
         .on("mouseout",function(){
           d3.select(this).style("background-color","#F5F5F5")
         })
+
       var bodys = panels.append("div")
         .classed("panel-body", true)
-      bodys.append("div").text(function(d) {
-        //console.log(JSON.parse(JSON.parse(d[2])[-1]))
+      bodys.append("div").append("h4").text("Description")
+      bodys.append("div").style("overflow-wrap","break-word")
+      //.style("background-color","#fffbea")
+      .style("padding","5px").text(function(d) {
         return d[1]
       })
+
       var _render = function(el) {
         el.each(function(d) {
-          var svg = d3.select(this).append("svg").attr("width", 134).attr("height", 80)
+          var svg = d3.select(this).append("svg").attr("width",250).attr("height", 150)
           //console.log(d)
-          var iconRender = S.layoutIcon()
+          var iconRender = S.layoutIcon().xscale(2.50).yscale(1.68)
           var dmain = JSON.parse(JSON.parse(d[2])[-1])
           svg.datum(dmain).call(iconRender)
         })
       }
-      var svgdiv = bodys.append("div")
-
+      bodys.append("div").append("h4").text("Layout")
+      var svgdiv = bodys.append("div").style("padding-bottom","10px")
+      var btnGrp = bodys.append("div").append("span").style("float","right").style("padding-right","25px")
+      btnGrp.append("button")
+          .classed("btn", true)
+          .classed("btn-success", true)
+          .classed("btn-sm", true)
+          .on("click",function(d){
+            window.open("/v1/main.html?config=gsheet:" + sheetId + ":" + d[0].replace(" ", "%20"))
+          })
+          .text("open")
 
       svgdiv.call(_render)
 
