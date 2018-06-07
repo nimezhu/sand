@@ -1,9 +1,8 @@
 export default function () {
   var color = {
-    "hubs": "green",
-    "img": "yellow",
-    "bookmarks": "grey",
-    "dna3d": "blue"
+    "Genome Browser": "#226a98",
+    "User Data": "#ce5146",
+    "DNA 3d Structrue Viewer": "#337c2e"
   }
   var wh = function (d) {
     if (d.width) {
@@ -14,8 +13,7 @@ export default function () {
     }
   }
   var layout = function (d, el) {
-    console.log("layout")
-    // default 100, 100
+    console.log("layout d?",d)
     wh(d)
     d.content.forEach(function (d) {
       r[d.type](d, 0, 0, 100, 100, el)
@@ -49,7 +47,7 @@ export default function () {
     wh(d)
     if (d.content) {
       d.content.forEach(function (d) {
-        r[d.type](d, x, y, w, h, el) //stack Not change
+        r[d.type](d, x+1, y+1, w-2, h-2, el) //stack Not change
       })
     }
   }
