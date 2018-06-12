@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path"
 	"strings"
 	"time"
 
@@ -18,7 +19,7 @@ import (
 )
 
 func CmdStatus(c *cli.Context) {
-	dir := c.String("root")
+	dir := path.Join(c.String("root"), DIR)
 	ctx := context.Background()
 	title := c.String("title")
 	sheetid := c.String("input")
@@ -105,7 +106,7 @@ func CmdStatus(c *cli.Context) {
 
 	_, err4 := srv.Spreadsheets.Values.BatchUpdate(sheetid, rb).Context(ctx).Do()
 	if err4 != nil {
-		log.Fatalf("Unable to write data to sheet. %v", err)
+		log.Fatalf("Unable to write data to sheet. %v", err4)
 	}
 	fmt.Println("Done")
 

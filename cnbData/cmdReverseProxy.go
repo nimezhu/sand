@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path"
 	"strconv"
 	"strings"
 
@@ -31,7 +32,7 @@ var rpApp = App{
 func CmdRP(c *cli.Context) {
 	ctx := context.Background()
 	root := c.String("root")
-	dir := root //TODO
+	dir := path.Join(root, DIR)
 	title := c.String("title")
 	sheetid := c.String("input")
 	port := c.Int("port")

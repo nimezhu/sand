@@ -9,6 +9,7 @@ import (
 
 const (
 	VERSION = "0.0.8"
+	DIR     = ".cnbData"
 )
 
 func main() {
@@ -43,7 +44,7 @@ func main() {
 				cli.StringFlag{
 					Name:  "root,r",
 					Usage: "root directory",
-					Value: path.Join(home, ".cnbData"),
+					Value: path.Join(home),
 				},
 			},
 		},
@@ -70,7 +71,7 @@ func main() {
 				cli.StringFlag{
 					Name:  "root,r",
 					Usage: "root directory",
-					Value: path.Join(home, ".cnbData"),
+					Value: path.Join(home),
 				},
 			},
 		},
@@ -92,7 +93,7 @@ func main() {
 				cli.StringFlag{
 					Name:  "root,r",
 					Usage: "root directory",
-					Value: path.Join(home, ".cnbData"),
+					Value: path.Join(home),
 				},
 			},
 		},
