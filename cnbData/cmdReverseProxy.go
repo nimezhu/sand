@@ -7,8 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
-	"path"
 	"strconv"
 	"strings"
 
@@ -25,15 +23,15 @@ type App struct {
 	Version string
 }
 
-var app = App{
+var rpApp = App{
 	"Reverse Proxy Dataome Browser",
 	"0.0.1",
 }
 
 func CmdRP(c *cli.Context) {
-	home := os.Getenv("HOME")
-	dir := path.Join(home, ".cnbdata") //TODO
 	ctx := context.Background()
+	root := c.String("root")
+	dir := root //TODO
 	title := c.String("title")
 	sheetid := c.String("input")
 	port := c.Int("port")
@@ -116,7 +114,7 @@ func CmdRP(c *cli.Context) {
 	router := mux.NewRouter()
 	router.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		a, _ := json.Marshal(app)
+		a, _ := json.Marshal(rpApp)
 		w.Write(a)
 	})
 	router.HandleFunc("/genomes", func(w http.ResponseWriter, r *http.Request) {
@@ -197,11 +195,7 @@ func CmdRP(c *cli.Context) {
 				w.Write(body)
 			}
 		}
-		//w.Write([]byte(uri))
 	})
-	// proxy url mapping ( local server start , proxy to out port )
-	// web server proxy mapping too
-	// out port only one server
 	server := &http.Server{Addr: ":" + strconv.Itoa(port), Handler: router}
 	err = server.ListenAndServe()
 	if err != nil {

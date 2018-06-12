@@ -6,8 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
-	"path"
 	"strings"
 	"time"
 
@@ -19,9 +17,8 @@ import (
 	sheets "google.golang.org/api/sheets/v4"
 )
 
-func CmdStart(c *cli.Context) {
-	home := os.Getenv("HOME")
-	dir := path.Join(home, ".cnbdata") //TODO
+func CmdStatus(c *cli.Context) {
+	dir := c.String("root")
 	ctx := context.Background()
 	title := c.String("title")
 	sheetid := c.String("input")

@@ -14,7 +14,7 @@ const (
 func main() {
 	app := cli.NewApp()
 	app.Version = VERSION
-	app.Name = "cnb data server"
+	app.Name = "cnb dataserver tools"
 	app.Usage = "cnbData start -i [[google_sheet_id]]"
 	app.EnableBashCompletion = true //TODO
 	app.Flags = []cli.Flag{
@@ -39,6 +39,55 @@ func main() {
 					Name:  "port,p",
 					Usage: "data server port",
 					Value: 8080,
+				},
+				cli.StringFlag{
+					Name:  "root,r",
+					Usage: "root directory",
+					Value: path.Join(home, ".cnbData"),
+				},
+			},
+		},
+		{
+			Name:   "rproxy",
+			Usage:  "start an data server reverse proxy",
+			Action: CmdRP,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "input,i",
+					Usage: "input data google sheet id",
+					Value: "",
+				},
+				cli.StringFlag{
+					Name:  "title,t",
+					Usage: "sheet title",
+					Value: "Sheet1",
+				},
+				cli.IntFlag{
+					Name:  "port,p",
+					Usage: "data server port",
+					Value: 8080,
+				},
+				cli.StringFlag{
+					Name:  "root,r",
+					Usage: "root directory",
+					Value: path.Join(home, ".cnbData"),
+				},
+			},
+		},
+		{
+			Name:   "status",
+			Usage:  "get data servers status",
+			Action: CmdStatus,
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "input,i",
+					Usage: "input data google sheet id",
+					Value: "",
+				},
+				cli.StringFlag{
+					Name:  "title,t",
+					Usage: "sheet title",
+					Value: "Sheet1",
 				},
 				cli.StringFlag{
 					Name:  "root,r",
