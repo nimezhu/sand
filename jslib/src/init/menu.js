@@ -123,10 +123,12 @@ export default function () {
     var checkSheetId = function () {
       d3.json("/getsheetid",{credentials: 'include'}).then(function (d) {
         if (d.sheetid) {
+          d3.select("#setSheetId").style("color",null)
           $("#sheetUi").show()
           $("#fileUi").hide()
           d3.select("#sessionUi").classed("glyphicon-hdd",false).classed("glyphicon-cloud",true)
         } else {
+          d3.select("#setSheetId").style("color","#A20")
           $("#sheetUi").hide()
           $("#fileUi").show()
           d3.select("#sessionUi").classed("glyphicon-hdd",true).classed("glyphicon-cloud",false)
