@@ -211,7 +211,7 @@ export default function () {
     })
     dispatch.on("loadFromSheet", function () {
       d3.json("/sheetlist", {
-        credentials: 'include'
+        credentials: 'same-origin'
       }).then(function (d) {
         console.log(d)
         if (d.error) {
@@ -237,7 +237,7 @@ export default function () {
         d3.select("#loadModalBtn").on("click", function () {
           //window.location="/v1/main.html?config=/sheet?idx="+idx //TODO to Reload
           d3.json("/sheet?idx=" + idx, {
-            credentials: 'include'
+            credentials: 'same-origin'
           }).then(function (d) {
             var err = null //TODO
             if (err) {

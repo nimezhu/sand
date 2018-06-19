@@ -187,7 +187,7 @@ export default function () {
       //TODO.
     })
     dispatch.on("loadFromSheet", function () {
-      d3.json("/sheetlist",{credentials: 'include'}).then(function (d) {
+      d3.json("/sheetlist",{credentials: 'same-origin'}).then(function (d) {
         var a = d3.select("#sheetList").selectAll("li").data(d);
         var idx = 1;
         a.enter()
@@ -203,7 +203,7 @@ export default function () {
           })
         a.exit().remove()
         d3.select("#loadModalBtn").on("click", function () {
-          d3.json("/sheet?idx=" + idx,{ credentials: 'include'}).then(function (d) {
+          d3.json("/sheet?idx=" + idx,{ credentials: 'same-origin'}).then(function (d) {
               if (d.error) {
                 console.log("error todo", d)
               } else {
