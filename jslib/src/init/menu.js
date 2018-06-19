@@ -145,10 +145,20 @@ export default function () {
           //TODO
           var id = prompt("sheetId", d.sheetid || "")
           if (id != null && id != "") {
+            $.ajaxSetup({
+              xhrFields: {
+                withCredentials: true
+              },
+            });
             $.post("/setsheetid?id=" + id).done(checkSheetId())
           }
         }).catch(function(e){
           var id = prompt("sheetId","")
+          $.ajaxSetup({
+            xhrFields: {
+              withCredentials: true
+            },
+          });
           if (id != null && id != "") {
             $.post("/setsheetid?id=" + id).done(checkSheetId())
           }

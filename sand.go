@@ -43,6 +43,7 @@ func (s *Sand) InitRouter(router *mux.Router) {
 	snowjs.AddHandlers(router, "")
 	s.addOpenBindata(router)
 	s.addTmplBindata(router)
+	/* Lite Version without Google Sheet Support */
 	if v, ok := s.Mode["lite"]; ok && v == "1" {
 
 	} else {
@@ -52,12 +53,19 @@ func (s *Sand) InitRouter(router *mux.Router) {
 	 * config = ...
 	 * fixedLayout = 1
 	 */
+	/* Add Auth Redirect to Sign Up Page */
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/v1/main.html?"+modesText(s.Mode), http.StatusTemporaryRedirect)
+		session, _ := store.Get(r, sessionID)
+		userStr := session.Values["user"]
+		if userStr != nil {
+			http.Redirect(w, r, "/v1/main.html?"+modesText(s.Mode), http.StatusTemporaryRedirect)
+		} else {
+			http.Redirect(w, r, "/static/main.html", http.StatusTemporaryRedirect) //Static Main TODO
+		}
 	})
+	/********************/
 	s.addAuthTo(router)
 	router.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		a, err := json.Marshal(s)
 		if err == nil {
 			w.Write(a)

@@ -233,7 +233,8 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	session.Save(r, w)
 	//w.Write([]byte("<html><head><title>Logout</title></head><body>Logout</body></html>"))
-	http.Redirect(w, r, continueWeb, http.StatusTemporaryRedirect)
+	//http.Redirect(w, r, continueWeb, http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "", http.StatusTemporaryRedirect)
 	//TODO LOGOUT RIDIRECT
 }
 

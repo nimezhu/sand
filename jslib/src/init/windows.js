@@ -79,7 +79,6 @@ export default function () {
           delete ws[id]
         }
         ws[id] = w
-        console.log("panel app", P.app())
         ws[id].onload = function () {
           ws[id].postMessage({
             code: "app",
@@ -88,7 +87,7 @@ export default function () {
         }
         idx += 1
       })
-      } else {
+    } else {
       $("#openExt").hide()
     }
     if (typeof chrome !== "undefined") {
@@ -105,7 +104,7 @@ export default function () {
               }
             } else {
               hasExtension = false;
-              console.log("not connect to ext",reply)
+              console.log("not connect to ext", reply)
             }
           });
 
@@ -167,6 +166,12 @@ export default function () {
     }
     dispatch.on("shareSession", function () {
       var data = _getStates();
+      $.ajaxSetup({
+        xhrFields: {
+          withCredentials: true
+        },
+      });
+
       $.post("/upload", data).done(function (d) {
         var url = domain + "/v1/main.html?config=/share/" + d
         console.log("Session URL", url)
@@ -180,6 +185,12 @@ export default function () {
         "note": d.note || "Todo",
         "data": data,
       }
+      $.ajaxSetup({
+        xhrFields: {
+          withCredentials: true
+        },
+      });
+
       $.post("/uploadsheet", JSON.stringify(d)).done(function (d) {
         if (d.error) {
           console.log("error todo", d)
@@ -264,6 +275,12 @@ export default function () {
         localStorage.removeItem(sessionId) //delete session...
       }
 
+      $.ajaxSetup({
+        xhrFields: {
+          withCredentials: true
+        },
+      });
+
       $.ajax({
         url: "/setsession",
         type: "POST",
@@ -279,6 +296,12 @@ export default function () {
     dispatch.on("loadSession", function () {
       var d = localStorage.getItem(sessionId)
       dispatch.call("initWindows", this, JSON.parse(d))
+      $.ajaxSetup({
+        xhrFields: {
+          withCredentials: true
+        },
+      });
+
       $.ajax({
         url: "/getsession",
         async: false,

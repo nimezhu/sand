@@ -10,7 +10,11 @@ func TesterMiddlewareFactory(testers map[string]bool) func(http.Handler) http.Ha
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			url := r.URL.Path
-			if url == "/version" || url == "/login" || url == "/logout" || url == "/auth/google/callback" || url == "/profile" {
+			/* TODO
+			   Users
+				 Sign Up System
+			*/
+			if url == "" || url == "/" || url == "/static/main.html" || url == "/version" || url == "/login" || url == "/logout" || url == "/auth/google/callback" || url == "/profile" {
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -27,7 +31,7 @@ func TesterMiddlewareFactory(testers map[string]bool) func(http.Handler) http.Ha
 				if _, ok := testers[user.Email]; ok {
 					next.ServeHTTP(w, r)
 				} else {
-					w.Write([]byte("need to be granted testers"))
+					w.Write([]byte("<html><head></head><body><div>CNB is now under alpha testing. It is only open for testers. Please contact zhuxp@cmu.edu for further information.</div> <div><a href='/logout'>Log Out</a></div></body></html>"))
 				}
 			} else {
 				http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
