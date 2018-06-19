@@ -222,7 +222,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, sessionID)
 	session.Values["state"] = state
 	session.Save(r, w)
-	w.Write([]byte("<html><title>Golang Google</title> <body display='none'> <a href='" + getLoginURL(state) + "'><button id='myCheck'>Login with Google!</button> </a> </body><script>(function(){document.getElementById('myCheck').click();}())</script></html>"))
+	w.Write([]byte("<html><title>Golang Google</title> <body style='display:none'><a href='" + getLoginURL(state) + "'><button id='myCheck'>Login with Google!</button> </a> </body><script>(function(){document.getElementById('myCheck').click();}())</script></html>"))
 	//TODO  LOGIN BUTTON
 }
 func logoutHandler(w http.ResponseWriter, r *http.Request) {

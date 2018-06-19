@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 )
+
+var urlMatch = regexp.MustCompile("/static/image/*")
 
 func TesterMiddlewareFactory(testers map[string]bool) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -14,7 +17,7 @@ func TesterMiddlewareFactory(testers map[string]bool) func(http.Handler) http.Ha
 			   Users
 				 Sign Up System
 			*/
-			if url == "" || url == "/" || url == "/static/main.html" || url == "/version" || url == "/login" || url == "/logout" || url == "/auth/google/callback" || url == "/profile" {
+			if url == "/static/favicon.ico" || url == "/favicon.ico" || url == "" || url == "/" || url == "/static/main.html" || url == "/version" || url == "/login" || url == "/logout" || url == "/auth/google/callback" || url == "/profile" || urlMatch.Match([]byte(url)) {
 				next.ServeHTTP(w, r)
 				return
 			}
