@@ -70,8 +70,8 @@
     var app = {}
     d3.json("/userinfo",{credentials:"same-origin"}).then(function(d){
       sandUser=d
-      sandHeaders = new Headers({"UserEmail":sandUser.email})
-      sandInits["headers"] = sandHeaders
+      // sandHeaders = new Headers({"UserEmail":sandUser.email})
+      // sandInits["headers"] = sandHeaders
     })
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
