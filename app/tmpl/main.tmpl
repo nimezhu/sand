@@ -27,6 +27,9 @@
   var domain = arr[0] + "//" + arr[2];
   var server = ""; //TODO
   var app = {};
+  var sandUser
+  var sandHeaders = new Headers({})
+  var sandInits = {credentials:"same-origin"}
   var mode
   var win
   var fixedLayout
@@ -65,6 +68,11 @@
     //saveToGSheet is for electron
     var message = {}
     var app = {}
+    d3.json("/userinfo",{credentials:"same-origin"}).then(function(d){
+      sandUser=d
+      sandHeaders = new Headers({"UserEmail":sandUser.email})
+      sandInits["headers"] = sandHeaders
+    })
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
@@ -144,7 +152,7 @@
       S.gsheetQuery("select * where A='" + a[2] + "'", a[1], "_renderGsheet")
     } else if (cfg && cfg != "continue") {
       $(".menu .note").hide()
-      d3.json(server + cfg, {credentials:'same-origin'}).then(function(config) {
+      d3.json(server + cfg, sandInits).then(function(config) {
         if (config[-1] || config["states"]) { //windows format
           dispatch.call("initWindows", this, config)
         } else { // one window format

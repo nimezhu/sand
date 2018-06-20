@@ -8,7 +8,7 @@ var isEmpty = function (layout) {
 export default function () {
   var chromeExtID = "gedcoafficobgcagmjpplpnmempkcpfp"
   var chromeExtPort //port to chromeExt
-
+  var user
   var sessionId = "_cnb_"
   var ws = {} //window handler
   var message = {}
@@ -388,6 +388,7 @@ export default function () {
   chart.chromeExtID = function (_) {
     return arguments.length ? (chromeExtID = _, chart) : chromeExtID;
   }
+  chart.user = function(_) { return arguments.length ? (user= _, chart) : user; }
   //chart.app = function(_) { return arguments.length ? (app= _, chart) : app; }
   return chart
 }

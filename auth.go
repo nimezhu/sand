@@ -237,12 +237,21 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "", http.StatusTemporaryRedirect)
 	//TODO LOGOUT RIDIRECT
 }
-
+func userInfoHandler(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, sessionID)
+	userStr := session.Values["user"]
+	if userStr != nil {
+		w.Write([]byte(userStr.(string)))
+	} else {
+		w.Write([]byte("need to login"))
+	}
+}
 func (s *Sand) addAuthTo(router *mux.Router) {
 	router.HandleFunc("/profile", addAuth(indexHandler))
 	router.HandleFunc("/login", loginHandler)
 	router.HandleFunc("/logout", logoutHandler)
 	router.HandleFunc("/auth/google/callback", authHandler)
+	router.HandleFunc("/userinfo", userInfoHandler)
 	addSheetTo(router)
 	s.addSessionTo(router)
 }

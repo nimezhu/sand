@@ -7,6 +7,7 @@ export default function() {
   var layout
   var eventHub
   var app = {}
+  var user
   //var _dispatch = d3.dispatch("updateApp")
   var callback = function(){}
   var chart = function(el){
@@ -57,5 +58,6 @@ export default function() {
       app[k]=_[k]
     })
   }
+  chart.user = function(_) { return arguments.length ? (user= _, chart) : user; }
   return chart
 }

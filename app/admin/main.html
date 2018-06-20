@@ -48,7 +48,7 @@
 </body>
 <script>
   (function(d3, $) {
-    d3.json("/myadmin/token",{credentials:'same-origin'}).then(function(d) {
+    d3.json("/myadmin/token",sandInits).then(function(d) {
       console.log(d)
       var keys = Object.keys(d).sort()
       d3.select(info).html(
