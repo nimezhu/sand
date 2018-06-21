@@ -73,7 +73,12 @@
       sandHeaders = new Headers({"Authorization":"Basic "+btoa(sandUser.email)})
       sandInits["headers"] = sandHeaders
     })
-    d3.select("#logo").attr("title","{{.Appname}} {{.Version}}")
+    d3.select("#logo")
+      .attr("title","Click to open introduction")
+      .on("click",function(){
+        window.open("/static/")
+      })
+    d3.select("#appinfo").text("{{.Appname}} v{{.Version}}")
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
