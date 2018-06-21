@@ -70,9 +70,10 @@
     var app = {}
     d3.json("/userinfo",{credentials:"same-origin"}).then(function(d){
       sandUser=d
-      // sandHeaders = new Headers({"UserEmail":sandUser.email})
-      // sandInits["headers"] = sandHeaders
+      sandHeaders = new Headers({"Authorization":"Basic "+btoa(sandUser.email)})
+      sandInits["headers"] = sandHeaders
     })
+    d3.select("#logo").attr("title","{{.Appname}} {{.Version}}")
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
