@@ -28,6 +28,7 @@
   (function($, d3, S) {
     var stateId = "cnb000"
     var links = []
+    var sandInits = {credentials:"same-origin"}
     d3.json("/sheetlist",sandInits).then(function(d) { //TODO sheets
       console.log(d)
       var panels = d3.select("#layoutContainer")
