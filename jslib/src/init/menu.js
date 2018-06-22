@@ -28,47 +28,33 @@ export default function () {
       }
     })
     var sign = false
-    var initMenu = function () {
-      $(".menu > ul > li").click(function (event) {
-        $(".menu .note").hide()
-        if ($(event.target).closest(".frame").length === 1) {
-          return;
-        }
-        var $it = $(this);
-        $it.find('.frame').show();
-        $(".menu > ul > li").removeClass("selected");
-        $(this).addClass("selected");
-
-        $(".menu > ul > li").unbind();
-
-        $(".menu > ul > li").mouseover(function () {
-          if ($(event.target).closest(".frame").length === 1) {
-            return;
+    var TOHIDE
+    $(".menu > ul > li").mouseover(function (event) {
+      if (TOHIDE) {
+        clearTimeout(TOHIDE)
+      }
+      if ($(event.target).closest(".frame").length === 1) {
+        return;
+      }
+      $(".menu .frame").hide();
+      $(this).find('.frame').show();
+      $(".menu > ul > li").removeClass("selected");
+      $(this).addClass("selected");
+    })
+    $(".menu > ul > li").mouseout(function(){
+        //$(this).find('.frame') //TODO
+        var t = $(this)
+        TOHIDE = setTimeout(function(e){
+          if (!sign) {
+            t.removeClass("selected");
+            t.find('.frame').hide();
           }
-          $(".menu .frame").hide();
-          $(this).find('.frame').show();
-          $(this).find('.frame').mouseover(function(){
-            sign = true
-          })
-          $(".menu > ul > li").removeClass("selected");
-          $(this).addClass("selected");
-        })
-        $(".menu > ul > li").mouseout(function(){
-            //$(this).find('.frame') //TODO
-            if (!sign) {
-              $(this).removeClass("selected");
-              $(this).find('.frame').hide();
-            }
-        })
-        $("#home").on("click", function () {
-          window.location = "/v1/home.html"
-        })
-      });
-    }
-    initMenu();
-
+        }, 500)
+    })
+    $('.frame').mouseover(function(){
+      sign = true
+    })
     $(".frame").mouseout(function () {
-      $(this).hide();
       $(".menu > ul > li").removeClass("selected");
       sign=false
     })
