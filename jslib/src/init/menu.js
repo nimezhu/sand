@@ -60,7 +60,9 @@ export default function () {
               $(this).find('.frame').hide();
             }
         })
-        ;
+        $("#home").on("click", function () {
+          window.location = "/v1/home.html"
+        })
       });
     }
     initMenu();
