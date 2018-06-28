@@ -21,9 +21,14 @@ export default function(config, el, dispatch, renders, app) {
   });
   layout.on('stackCreated', function(stack) {
     var toggle = $("<li class='lm_cfgbtn' title='config'></li>")
+    var duplicate = $("<li class='lm_dupbtn' title='clone'></li>") //TODO
+    stack.header.controlsContainer.prepend(duplicate);
     stack.header.controlsContainer.prepend(toggle);
     toggle.on("click", function() {
       toggleConfig();
+    })
+    duplicate.on("click",function(){
+      duplicatePanel();
     })
     var toggleConfig = function() {
       var container = stack.getActiveContentItem().container;
@@ -39,6 +44,19 @@ export default function(config, el, dispatch, renders, app) {
         container.getElement().closest(".lm_item").addClass("s_content").removeClass("s_cfg")
       }
     };
+
+    var duplicatePanel = function(){
+      var container = stack.getActiveContentItem().container;
+      var state = container.getState();
+      console.log(container,state)
+      var d = {
+        title: state.name,
+        type: 'component',
+        componentName: 'canvas',
+        componentState: JSON.parse(JSON.stringify(state))
+      };
+      layout.root.contentItems[0].addChild(d);
+    }
 
   });
   layout.on("initialised", function() {
