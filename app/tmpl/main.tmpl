@@ -56,7 +56,9 @@
       d3.select("#wrapper").classed("extWin",true)
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
-      $("#title").text("Extend Window")
+      $("#home").hide()
+      $("#title").text("Extend Window") //TODO Set Id
+      //TODO Add Main Window Link
     } else {
       d3.select("#wrapper").classed("mainWin",true)
     }
@@ -66,7 +68,7 @@
     var renderList = Object.keys(renders).sort()
     //interface for add other input
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
-      "saveToElectron", "openExt","closeExt",
+      "saveToElectron", "openExt","closeExt","renderExtWinNav",
       "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet")
     //saveToGSheet is for electron
     var message = {}

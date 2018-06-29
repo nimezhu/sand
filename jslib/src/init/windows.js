@@ -159,6 +159,7 @@ export default function () {
       var id = idx
       w.onbeforeunload = function () {
         delete ws[id]
+        dispatch.call("renderExtWinNav",this,{})
       }
       ws[id] = w
       ws[id].onload = function () {
@@ -173,6 +174,32 @@ export default function () {
           ws[id].postMessage(d,domain)
         })
       }
+      /*TODO */
+      dispatch.call("renderExtWinNav",this,{})
+    })
+
+
+    var winnav = function(selection){
+      selection.each(function(d){
+        var el= d3.select(this)
+        el.selectAll("span").remove();
+        var s = el.append("span")
+        s.classed("glyphicon",true)
+         .classed("glyphicon-unchecked",true)
+        s.text(d)
+        s.on("click",function(){
+          ws[d].focus();
+        })
+      })
+    }
+    dispatch.on("renderExtWinNav",function(){
+      var k = Object.keys(ws)
+      var li = d3.select("#extWinNav").selectAll("li").data(k)
+      li.exit().remove()
+      li.enter()
+        .append("li")
+        .merge(li)
+        .call(winnav)
     })
     dispatch.on("closeExt", function () {
       for (var key in ws) {
@@ -393,6 +420,7 @@ export default function () {
           ws[id] = w
           ws[id].onbeforeunload = function () {
             delete ws[id]
+            dispatch.call("renderExtWinNav",this,{})
           }
           ws[id].addEventListener('begin', function () {})
           message[id] = {
@@ -404,6 +432,7 @@ export default function () {
           })
           idx += 1
         }
+        dispatch.call("renderExtWinNav",this,{})
       }
     })
   }
