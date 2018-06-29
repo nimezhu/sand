@@ -48,7 +48,6 @@ export default function(config, el, dispatch, renders, app) {
     var duplicatePanel = function(){
       var container = stack.getActiveContentItem().container;
       var state = container.getState();
-      console.log(container,state)
       var d = {
         title: state.name,
         type: 'component',
