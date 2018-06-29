@@ -53,6 +53,7 @@
     initedLayout = S.toolsGetUrlPara("initedLayout") || undefined //0 is false
     lite = S.toolsGetUrlPara("lite") || 0 //rm google user system is lite is 1
     if (win == "ext") {
+      d3.select("#wrapper").classed("extWin",true)
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
       $("#title").text("Extend Window")
@@ -63,7 +64,7 @@
     var renderList = Object.keys(renders).sort()
     //interface for add other input
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
-      "saveToElectron", "closeExt",
+      "saveToElectron", "openExt","closeExt",
       "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet")
     //saveToGSheet is for electron
     var message = {}

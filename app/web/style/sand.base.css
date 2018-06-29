@@ -44,7 +44,9 @@
 .lm_controls .lm_cfgbtn {
 
 }
-
+.extWin .lm_outbtn {
+  display: none;
+}
 
 .s_content svg {
     padding: 0;

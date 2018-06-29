@@ -18,13 +18,15 @@ export default function () {
   var theme = "light"
   //var app = {}  //application variables; sync between windows;
   var P
-  var dispatch = d3.dispatch("initWindows", "initPanels", "input", "resize", "add", "exportState", "exportStates", "setState", "importState", "importStates", "closeExt", "eletron", "saveSession", "loadSession", "shareSession", "saveToSheet")
+  var dispatch = d3.dispatch("initWindows", "initPanels", "input", "resize", "add", "exportState", "exportStates", "setState", "importState", "importStates", "openExt", "closeExt", "eletron", "saveSession", "loadSession", "shareSession", "saveToSheet")
   var win = "main" //default main
+
+  /* external message processing */
   var getmessage = function (event) {
     if (event.origin !== domain) //TODO FIX
       return;
     var d = event.data
-    if (d.code == "extMessage") {
+    if (d.code == "extMessage") {  //external window to main window
       dispatch.call("receiveMessage", this, d.data)
       var id = parseInt(d.from.replace("external_", ""))
       for (var key in ws) {
@@ -39,13 +41,33 @@ export default function () {
     if (d.code == "message") {
       dispatch.call("receiveMessage", this, d.data)
     }
-    if (d.code == "setState") {
+    if (d.code == "setState") { //set state
       dispatch.call(d.code, this, d.data) //TODO PROGRMAMABLE
     }
-    if (d.code == "app") {
+    if (d.code == "app") {  // set global variables
       d.data = JSON.parse(d.data)
       console.log("init app", d.data)
       P.updateApp(d.data) //TODO app inited re-render
+    }
+    if (d.code == "addPanel") { // add new panel (mv panel between windows)
+      //TODO
+      //
+      /* mv this to src window
+      var container = stack.getActiveContentItem().container;
+      var state = container.getState();
+      var d = {
+        title: state.name,
+        type: 'component',
+        componentName: 'canvas',
+        componentState: JSON.parse(JSON.stringify(state))
+      };
+      d = JSON.stringify(d)
+      */
+      // render data
+      // need init apps first
+      console.log("get Message add Panel",d.data)
+      var layout = P.layout()
+      layout.root.contentItems[0].addChild(JSON.parse(d.data));
     }
   }
   var chart = function (el) {
@@ -73,6 +95,7 @@ export default function () {
     }
     if (win == "main") {
       $("#openExt").on("click", function () {
+        /*
         var w = window.open("/v1/main.html?mode=web&win=ext&theme=" + theme, "external_" + idx, "width=1000,height=618")
         var id = idx
         w.onbeforeunload = function () {
@@ -86,7 +109,9 @@ export default function () {
           }, domain) //parse app to other windows;
         }
         idx += 1
-      })
+      })*/
+      dispatch.call("openExt",this,{})
+    })
     } else {
       $("#openExt").hide()
     }
@@ -129,7 +154,26 @@ export default function () {
       }
     }
 
-
+    dispatch.on("openExt", function(d){
+      var w = window.open("/v1/main.html?mode=web&win=ext&theme=" + theme, "external_" + idx, "width=1000,height=618")
+      var id = idx
+      w.onbeforeunload = function () {
+        delete ws[id]
+      }
+      ws[id] = w
+      ws[id].onload = function () {
+        ws[id].postMessage({
+          code: "app",
+          data: JSON.stringify(P.app())
+        }, domain) //parse app to other windows;
+      }
+      idx += 1
+      if (typeof d.code != undefined) {
+        ws[id].addEventListener("inited",function(){
+          ws[id].postMessage(d,domain)
+        })
+      }
+    })
     dispatch.on("closeExt", function () {
       for (var key in ws) {
         ws[key].close()
@@ -381,7 +425,9 @@ export default function () {
   chart.win = function (_) {
     return arguments.length ? (win = _, chart) : win;
   }
+  chart.addPanel = function(_) {
 
+  }
   chart.config = function (_) {
     return arguments.length ? (config = _, chart) : config;
   }
