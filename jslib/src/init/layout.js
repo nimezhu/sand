@@ -22,8 +22,10 @@ export default function (config, el, dispatch, renders, app) {
   layout.on('stackCreated', function (stack) {
     var toggle = $("<li class='lm_cfgbtn' title='config'></li>")
     var duplicate = $("<li class='lm_dupbtn' title='clone'></li>") //TODO
-    var popout = $("<li class='lm_outbtn' title='popout'></li>") //TODO
+    var popout = $("<li class='lm_outbtn' title='pop out'></li>") //TODO
+    var popin = $("<li class='lm_inbtn' title='pop in'></li>") //TODO
     stack.header.controlsContainer.prepend(popout);
+    stack.header.controlsContainer.prepend(popin);
     stack.header.controlsContainer.prepend(duplicate);
     stack.header.controlsContainer.prepend(toggle);
     toggle.on("click", function () {
@@ -34,6 +36,9 @@ export default function (config, el, dispatch, renders, app) {
     })
     popout.on("click", function () {
       popoutPanel();
+    })
+    popin.on("click", function () {
+      popinPanel();
     })
     var toggleConfig = function () {
       var container = stack.getActiveContentItem().container;
@@ -70,30 +75,32 @@ export default function (config, el, dispatch, renders, app) {
         componentName: 'canvas',
         componentState: JSON.parse(JSON.stringify(state))
       };
-
-
-      //console.log("TODO send message to new inited window and sendMessage {code:addPanel,data:d} to new window and close current window")
-      //console.log("close container",container)
-      //TODO USING Dipatch
-      /*
-      var domain = "http://x7.andrew.cmu.edu:8080" //TODO
-      var wt = window.open("/v1/main.html?mode=web&win=ext&theme=" + "light", "external_" + "t", "width=1000,height=618")
-      wt.onload = function () {
-        wt.postMessage({
-          code: "app",
-          data: JSON.stringify(app)
-        }, domain) //parse app to other windows;
-      }
-      wt.addEventListener("inited",function(){
-        wt.postMessage({code:"addPanel",data:JSON.stringify(d)},domain)
-      })
-      */
       dispatch.call("openExt", this, {
         code: "addPanel",
         data: JSON.stringify(d)
       })
       container.close()
-
+    }
+    var popinPanel = function(d) {
+      var container = stack.getActiveContentItem().container;
+      var state = container.getState();
+      var d = {
+        title: state.name,
+        type: 'component',
+        componentName: 'canvas',
+        componentState: JSON.parse(JSON.stringify(state))
+      };
+      /*
+      dispatch.call("openExt", this, {
+        code: "addPanel",
+        data: JSON.stringify(d)
+      })
+      */
+      window.opener.postMessage({code:"addPanel",data:JSON.stringify(d)},window.location.origin)
+      container.close()
+      if (layout.root.contentItems.length==0) {
+          window.close()
+      }
     }
 
   });

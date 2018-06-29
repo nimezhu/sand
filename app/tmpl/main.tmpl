@@ -57,6 +57,8 @@
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
       $("#title").text("Extend Window")
+    } else {
+      d3.select("#wrapper").classed("mainWin",true)
     }
     var theme = S.initTheme();
 

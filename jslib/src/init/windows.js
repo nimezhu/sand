@@ -65,9 +65,9 @@ export default function () {
       */
       // render data
       // need init apps first
-      console.log("get Message add Panel",d.data)
       var layout = P.layout()
       layout.root.contentItems[0].addChild(JSON.parse(d.data));
+
     }
   }
   var chart = function (el) {
