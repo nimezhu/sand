@@ -95,25 +95,12 @@ export default function () {
     }
     if (win == "main") {
       $("#openExt").on("click", function () {
-        /*
-        var w = window.open("/v1/main.html?mode=web&win=ext&theme=" + theme, "external_" + idx, "width=1000,height=618")
-        var id = idx
-        w.onbeforeunload = function () {
-          delete ws[id]
-        }
-        ws[id] = w
-        ws[id].onload = function () {
-          ws[id].postMessage({
-            code: "app",
-            data: JSON.stringify(P.app())
-          }, domain) //parse app to other windows;
-        }
-        idx += 1
-      })*/
       dispatch.call("openExt",this,{})
+      window.name = "cnbMain"
     })
     } else {
       $("#openExt").hide()
+
     }
     if (typeof chrome !== "undefined") {
       var hasExtension = false;
@@ -155,7 +142,7 @@ export default function () {
     }
 
     dispatch.on("openExt", function(d){
-      var w = window.open("/v1/main.html?mode=web&win=ext&theme=" + theme, "external_" + idx, "width=1000,height=618")
+      var w = window.open("/v1/main.html?mode=web&win=ext&theme=" + theme+"&winid="+idx, "external_" + idx, "width=1000,height=618")
       var id = idx
       w.onbeforeunload = function () {
         delete ws[id]
@@ -178,7 +165,9 @@ export default function () {
       dispatch.call("renderExtWinNav",this,{})
     })
 
-
+    /* TODO:
+     *
+     */
     var winnav = function(selection){
       selection.each(function(d){
         var el= d3.select(this)
@@ -189,10 +178,38 @@ export default function () {
         s.text(d)
         s.on("click",function(){
           ws[d].focus();
+        }).on("mouseover",function(){
+          d3.select(this).classed("selected",true)
+        }).on("mouseout",function(){
+          d3.select(this).classed("selected",false)
         })
       })
     }
+    //TODO render win nav if it is ext windows
+    if  (win!="main" && window.opener) {
+      var d = ["main"]
+      d3.select("#extWinNav").selectAll("li")
+         .data(d)
+         .enter()
+         .append("li")
+         .append("span")
+         .classed("glyphicon",true)
+         .classed("glyphicon-unchecked",true)
+         .on("mouseover",function(){
+           d3.select(this).classed("selected",true)
+         })
+         .on("mouseout",function(){
+           d3.select(this).classed("selected",false)
+         })
+         .on("click",function(){
+           var goBack = window.open('', 'cnbMain');
+           goBack.focus();
+         })
+         .text("main")
+
+    }
     dispatch.on("renderExtWinNav",function(){
+      if (win=="main") {
       var k = Object.keys(ws)
       var li = d3.select("#extWinNav").selectAll("li").data(k)
       li.exit().remove()
@@ -200,6 +217,7 @@ export default function () {
         .append("li")
         .merge(li)
         .call(winnav)
+      }
     })
     dispatch.on("closeExt", function () {
       for (var key in ws) {

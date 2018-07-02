@@ -32,6 +32,7 @@
   var sandInits = {credentials:"same-origin"}
   var mode
   var win
+  var winid
   var fixedLayout
   var initedLayout
   var lite = 0
@@ -49,6 +50,7 @@
     /* init theme */
     mode = S.toolsGetUrlPara("mode") || "web"
     win = S.toolsGetUrlPara("win") || "main"
+    winid = S.toolsGetUrlPara("winid") || -1
     fixedLayout = S.toolsGetUrlPara("fixedLayout") || 0 //0 is false
     initedLayout = S.toolsGetUrlPara("initedLayout") || undefined //0 is false
     lite = S.toolsGetUrlPara("lite") || 0 //rm google user system is lite is 1
@@ -57,7 +59,7 @@
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
       $("#home").hide()
-      $("#title").text("Extend Window") //TODO Set Id
+      $("#title").text("Extend Window " + winid) //TODO Set Id
       //TODO Add Main Window Link
     } else {
       d3.select("#wrapper").classed("mainWin",true)
