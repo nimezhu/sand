@@ -246,7 +246,7 @@ export default function () {
       $.post("/upload", data).done(function (d) {
         var url = domain + "/v1/main.html?config=/share/" + d
         console.log("Session URL", url)
-        prompt("Share Session within 8 hours, Copy to clipboard: Ctrl+C, Enter", url)
+        prompt("Share Session within 7 days, Copy to clipboard: Ctrl+C, Enter", url)
       })
     })
     var _saveToSheet = function (d) {
