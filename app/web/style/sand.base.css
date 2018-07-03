@@ -217,7 +217,7 @@ ul {
 .liteVersion #menuUser {
     display : none;
 }
-
+/*
 @font-face {
     font-family: "Monaco";
     src: url(/web/fonts/monaco.ttf) format("truetype");
@@ -227,3 +227,7 @@ ul {
       font-family: "Nimbusmono";
       src: url(/web/fonts/nimbusmono-regular-webfont.ttf) format("truetype");
     }
+*/
+.extWin .mainWinOnly {
+  display : none;
+}
