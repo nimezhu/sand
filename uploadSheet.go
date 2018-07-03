@@ -189,10 +189,12 @@ func setSheetID(w http.ResponseWriter, r *http.Request) {
 		if err == nil {
 			userSheetIDMap[user.Email] = id
 			sheetIDBucket.Put([]byte(user.Email), []byte(id))
-			err2 := tx.Commit()
-			if err2 != nil {
-				log.Println("error in commit sheetid", err2)
-			}
+			/*
+				err2 := tx.Commit()
+				if err2 != nil {
+					log.Println("error in commit sheetid", err2)
+				}
+			*/
 		}
 	}
 	session.Values["sheetId"] = id
