@@ -110,7 +110,7 @@ export default function () {
     })
     var checkSheetId = function () {
       d3.json("/getsheetid",{credentials: 'same-origin'}).then(function (d) {
-        if (d.sheetid) {
+        if (d.sheetid && d.sheetid != "null") {
           d3.select("#setSheetId").style("color",null)
           $("#sheetUi").show()
           $("#fileUi").hide()
@@ -134,13 +134,15 @@ export default function () {
         d3.json("/getsheetid",{credentials: 'same-origin'}).then(function (d) {
           //TODO
           var id = prompt("sheetId", d.sheetid || "")
-          if (id != null && id != "") {
+          if (id != null && id != "" && id != "null") {
             $.ajaxSetup({
               xhrFields: {
                 withCredentials: true
               },
             });
             $.post("/setsheetid?id=" + id).done(checkSheetId())
+          } else {
+            $.post("/setsheetid?id=" + "null").done(checkSheetId())
           }
         }).catch(function(e){
           var id = prompt("sheetId","")
@@ -149,8 +151,10 @@ export default function () {
               withCredentials: true
             },
           });
-          if (id != null && id != "") {
+          if (id != null && id != "" && id != "null") {
             $.post("/setsheetid?id=" + id).done(checkSheetId())
+          } else {
+            $.post("/setsheetid?id=" + "null").done(checkSheetId())
           }
         })
       } else {
