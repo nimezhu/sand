@@ -55,14 +55,14 @@
     initedLayout = S.toolsGetUrlPara("initedLayout") || undefined //0 is false
     lite = S.toolsGetUrlPara("lite") || 0 //rm google user system is lite is 1
     if (win == "ext") {
-      d3.select("#wrapper").classed("extWin",true)
+      d3.select("body").classed("extWin",true)
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
       $("#home").hide()
       $("#title").text("Extend Window " + winid) //TODO Set Id
       //TODO Add Main Window Link
     } else {
-      d3.select("#wrapper").classed("mainWin",true)
+      d3.select("body").classed("mainWin",true)
     }
     var theme = S.initTheme();
 
