@@ -27,7 +27,7 @@ export default function() {
     }
     dispatch.on("initPanels", function(d) {
       $("#layoutContainer").empty();
-      initPanels(d, $("#layoutContainer"))
+      initPanels(d, $("#layoutContainer")) 
       window.dispatchEvent(eventInited)
 
     })

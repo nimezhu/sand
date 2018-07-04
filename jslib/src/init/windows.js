@@ -46,7 +46,6 @@ export default function () {
     }
     if (d.code == "app") {  // set global variables
       d.data = JSON.parse(d.data)
-      console.log("init app", d.data)
       P.updateApp(d.data) //TODO app inited re-render
     }
     if (d.code == "addPanel") { // add new panel (mv panel between windows)
@@ -140,10 +139,10 @@ export default function () {
         }
       }
     }
-
+    /* TODO popup*/
     dispatch.on("openExt", function(d){
       var w = window.open("/v1/main.html?mode=web&win=ext&theme=" + theme+"&winid="+idx, "external_" + idx, "width=1000,height=618")
-      var id = idx
+      var id = idx //clone point
       w.onbeforeunload = function () {
         delete ws[id]
         dispatch.call("renderExtWinNav",this,{})
@@ -156,12 +155,13 @@ export default function () {
         }, domain) //parse app to other windows;
       }
       idx += 1
-      if (typeof d.code != undefined) {
+      if (typeof d.code != undefined ) { //TODO setState code
         ws[id].addEventListener("inited",function(){
+          //console.log("addPanel message")
           ws[id].postMessage(d,domain)
         })
       }
-      /*TODO */
+
       dispatch.call("renderExtWinNav",this,{})
     })
 
@@ -433,22 +433,7 @@ export default function () {
       //initPanels(JSON.parse(d[-1]), $("#layoutContainer"))
       for (var k in d) {
         if (k > 0) {
-          var id = idx
-          var w = window.open("/v1/main.html?mode=web&win=ext&theme=" + theme, "external_" + idx, "width=1000,height=618")
-          ws[id] = w
-          ws[id].onbeforeunload = function () {
-            delete ws[id]
-            dispatch.call("renderExtWinNav",this,{})
-          }
-          ws[id].addEventListener('begin', function () {})
-          message[id] = {
-            code: "setState",
-            data: JSON.parse(d[k])
-          }
-          ws[id].addEventListener('inited', function () {
-            ws[id].postMessage(message[id], domain)
-          })
-          idx += 1
+          dispatch.call("openExt",this,{code:"setState",data:JSON.parse(d[k])})
         }
         dispatch.call("renderExtWinNav",this,{})
       }
