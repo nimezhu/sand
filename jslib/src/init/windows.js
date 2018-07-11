@@ -49,24 +49,8 @@ export default function () {
       P.updateApp(d.data) //TODO app inited re-render
     }
     if (d.code == "addPanel") { // add new panel (mv panel between windows)
-      //TODO
-      //
-      /* mv this to src window
-      var container = stack.getActiveContentItem().container;
-      var state = container.getState();
-      var d = {
-        title: state.name,
-        type: 'component',
-        componentName: 'canvas',
-        componentState: JSON.parse(JSON.stringify(state))
-      };
-      d = JSON.stringify(d)
-      */
-      // render data
-      // need init apps first
       var layout = P.layout()
       layout.root.contentItems[0].addChild(JSON.parse(d.data));
-
     }
   }
   var chart = function (el) {

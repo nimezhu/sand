@@ -1,25 +1,23 @@
-{{define "title"}} NBrowser Home {{end}} {{define "id"}} "cnb000"{{end}}
-{{define "homemenu"}}
+{{define "title"}} NBrowser Home {{end}} {{define "id"}} "cnb000"{{end}} {{define "homemenu"}}
 <div class="menu fn-clear">
   <ul id="myNavLeft">
-    <li id="play"  title="start application"><span class="glyphicon glyphicon-play"></span>Start Application</li>
-    <li style="padding-right:0px" title="Login with google" id="menuUser"><span id="login" class="glyphicon glyphicon-log-in" ></li>
+    <li id="play" title="start application"><span class="glyphicon glyphicon-play"></span>Start Application</li>
+    <li style="padding-right:0px" title="Login with google" id="menuUser"><span id="login" class="glyphicon glyphicon-log-in"></li>
     <li style="padding-right:0px"><image id="picture" style="height:18px;width:18px;margin:7px 4px"></image>
     <div class="frame">
       <ul>
       <li id="logout" title="Logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
-      </ul>
-    </div>
-   </li>
+  </ul>
+</div>
+</li>
 </ul>
 <ul id="myNavRight" style="float:right">
   <li id="logo">
-      <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="appinfo" style="color:#777"></span>
+    <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="appinfo" style="color:#777"></span>
   </li>
 </ul>
 </div>
-{{end}}
-{{define "html"}}
+{{end}} {{define "html"}}
 <html>
 
 <head>
@@ -31,21 +29,24 @@
   <link rel="stylesheet" href="/web/style/sand.base.css">
 
   <style>
-  .panel {
-    width: 300px;
-    min-height: 200px;
-    float: left;
-    margin: 10px;
-  }
-  #layoutContainer {
-    overflow-y:scroll;
-  }
-  .menu {
-    background-color: #F0F0F0;
-  }
-  .selected {
-    background-color: #CFCFCF;
-  }
+    .panel {
+      width: 300px;
+      min-height: 200px;
+      float: left;
+      margin: 10px;
+    }
+
+    #layoutContainer {
+      overflow-y: scroll;
+    }
+
+    .menu {
+      background-color: #F0F0F0;
+    }
+
+    .selected {
+      background-color: #CFCFCF;
+    }
   </style>
 </head>
 
@@ -54,129 +55,143 @@
   <div id="wrapper" style="height:calc(100%-20px)">
     <div id="menuContainer" style="display:none"></div>
     <div id="layoutContainer" style="left:0%;width:100%">
-  <div class="panel">
-  <div class="panel-head">
-  </div>
-  <div class="panel-body">
-  <form>
-  <div class="form-group">
-    <label for="sheetIdInput">Google SheetID to Host Sessions</label>
-    <input type="text" class="form-control" id="sheetIdInput" placeholder="name@example.com">
-  </div>
-  <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-</form>
-</div>
+      <div class="panel">
+        <div class="panel-head">
+        </div>
+        <div class="panel-body">
+          <form>
+            <div class="form-group">
+              <label for="sheetIdInput">Google SheetID to Host Sessions</label>
+              <input type="text" class="form-control" id="sheetIdInput" placeholder="name@example.com">
+            </div>
+            <button id="edit" class="btn btn-success">Edit</button>
+            <button id="load" class="btn btn-primary">Load</button>
+            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
 </body>
 <script>
   (function($, d3, S) {
     var stateId = "cnb000"
     var links = []
-    var sandInits = {credentials:"same-origin"}
-
-
+    var sandInits = {
+      credentials: "same-origin"
+    }
     var container = d3.select("#layoutContainer")
-    var ctrldiv = container.append("div").classed("ctrl",true)
-    var currentdiv = container.append("div").style("background-color","#cee8d9")
+    var ctrldiv = container.append("div").classed("ctrl", true)
+    var currentdiv = container.append("div").style("background-color", "#cee8d9")
     var panelsdiv = container.append("div")
     //ctrldiv.append("span").text("SheetID:").style("padding-right","10px")
     var sheetIdInput = d3.select("#sheetIdInput")
-    d3.json("/getsheetid",sandInits).then(function(d){
-      sheetIdInput.node().value = d.sheetid
-      renderSessions()
-    })
+    var currentId = ""
+    var fLoad = function() {
+      d3.json("/getsheetid", sandInits).then(function(d) {
+        sheetIdInput.node().value = d.sheetid
+        currentId = d.sheetid
+        renderSessions()
+      })
+    }
+    fLoad()
+    d3.select("#load")
+      .on("click", function() {
+        fLoad()
+      })
     d3.select("#submit")
-      .on("click",function(){
+      .on("click", function() {
         var id = sheetIdInput.node().value
-        console.log("sheet id",id)
-        if (id != null && id != "") {
+        if (id != null && id != "" && id.length == 44 && id != currentId) {
           $.ajaxSetup({
             xhrFields: {
               withCredentials: true
             },
           });
-          $.post("/setsheetid?id=" + id).done(function(){
+          $.post("/setsheetid?id=" + id).done(function() {
             renderSessions();
           })
+        } else if (id == currentId) {
+          renderSessions();
         }
       })
-      
+    d3.select("#edit")
+      .on("click", function() {
+        window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
+      })
 
     var iconRender = S.layoutIcon().xscale(2.50).yscale(1.68)
     var _render = function(el) {
-        el.each(function(d) {
-          var svg = d3.select(this).append("svg").attr("width",250).attr("height", 150)
-          //console.log(d)
-          var dmain = JSON.parse(JSON.parse(d[2])[-1])
-          svg.datum(dmain).call(iconRender)
-        })
-      }
-    var pchart = function(selection){
-        selection.each(function(d,i){
-          var el = d3.select(this)
-          el.selectAll("div").remove()
-          el.append("div")
-            .classed("panel-heading", true)
-            .append("h2")
-            .classed("panel-title", true)
-            .text(function(d) {
-              return d[0]
-            })
-            .on("click", function(d) {
-              window.location = d[3] || "/v1/main.html?config=/sheet?idx=" + (i + 1);
-            })
-            .on("mouseover",function(){
-              d3.select(this).style("background-color","#8899AA")
-            })
-            .on("mouseout",function(){
-              d3.select(this).style("background-color","#F5F5F5")
-            })
-            var pbody = el.append("div")
-              .classed("panel-body", true)
-            pbody.append("div").append("h4").text("Description")
-            pbody.append("div").style("overflow-wrap","break-word")
-            //.style("background-color","#fffbea")
-            .style("padding","5px").text(function(d) {
-              return d[1]
-            })
+      el.each(function(d) {
+        var svg = d3.select(this).append("svg").attr("width", 250).attr("height", 150)
+        //console.log(d)
+        var dmain = JSON.parse(JSON.parse(d[2])[-1])
+        svg.datum(dmain).call(iconRender)
+      })
+    }
+    var pchart = function(selection) {
+      selection.each(function(d, i) {
+        var el = d3.select(this)
+        el.selectAll("div").remove()
+        el.append("div")
+          .classed("panel-heading", true)
+          .append("h2")
+          .classed("panel-title", true)
+          .text(function(d) {
+            return d[0]
+          })
+          .on("click", function(d) {
+            window.location = d[3] || "/v1/main.html?config=/sheet?idx=" + (i + 1);
+          })
+          .on("mouseover", function() {
+            d3.select(this).style("background-color", "#8899AA")
+          })
+          .on("mouseout", function() {
+            d3.select(this).style("background-color", "#F5F5F5")
+          })
+        var pbody = el.append("div")
+          .classed("panel-body", true)
+        pbody.append("div").append("h4").text("Description")
+        pbody.append("div").style("overflow-wrap", "break-word")
+          //.style("background-color","#fffbea")
+          .style("padding", "5px").text(function(d) {
+            return d[1]
+          })
 
 
-          pbody.append("div").append("h4").text("Layout")
-          var svgdiv = pbody.append("div").style("padding-bottom","10px")
-          svgdiv.call(_render)
-          var btnGrp = pbody.append("div").append("span").style("float","right").style("padding-right","25px")
-          btnGrp.append("button")
-              .classed("btn", true)
-              .classed("btn-success", true)
-              .classed("btn-sm", true)
-              .on("click",function(){
-                window.open(d[3] || "/v1/main.html?config=/sheet?idx=" + (i + 1))
-              }
-              )
-              .text("open")
-        })
+        pbody.append("div").append("h4").text("Layout")
+        var svgdiv = pbody.append("div").style("padding-bottom", "10px")
+        svgdiv.call(_render)
+        var btnGrp = pbody.append("div").append("span").style("float", "right").style("padding-right", "25px")
+        btnGrp.append("button")
+          .classed("btn", true)
+          .classed("btn-success", true)
+          .classed("btn-sm", true)
+          .on("click", function() {
+            window.open(d[3] || "/v1/main.html?config=/sheet?idx=" + (i + 1))
+          })
+          .text("open")
+      })
     }
 
 
 
     var renderSessions = function() {
-    d3.json("/sheetlist",sandInits).then(function(d) { //TODO sheets
-      var panels = panelsdiv
-        .selectAll(".panel")
-        .data(d)
-      panels.exit().remove()
-      panels.enter()
-        .append("div")
-        .merge(panels)
-        .classed("panel", true)
-        .classed("panel-default", true)
-        .call(pchart)
-    })
-}
+      d3.json("/sheetlist", sandInits).then(function(d) { //TODO sheets
+        var panels = panelsdiv
+          .selectAll(".panel")
+          .data(d)
+        panels.exit().remove()
+        panels.enter()
+          .append("div")
+          .merge(panels)
+          .classed("panel", true)
+          .classed("panel-default", true)
+          .call(pchart)
+      })
+    }
 
 
-    $.get("/profile", function (d) {
+    $.get("/profile", function(d) {
       d = JSON.parse(d);
       if (d.email) {
         $("#logout").show();
@@ -195,16 +210,16 @@
     })
 
     d3.select("#logo")
-      .attr("title","Click to open introduction")
-      .on("click",function(){
+      .attr("title", "Click to open introduction")
+      .on("click", function() {
         window.open("/static/")
       })
     d3.select("#appinfo").text("{{.Appname}} v{{.Version}}")
 
-    $(".menu > ul > li").mouseover(function (event) {
+    $(".menu > ul > li").mouseover(function(event) {
       $(this).addClass("selected");
     })
-    $(".menu > ul > li").mouseout(function(){
+    $(".menu > ul > li").mouseout(function() {
       $(this).removeClass("selected");
     })
 
@@ -212,7 +227,7 @@
     var sessionId = "_cnb_"
     var d = localStorage.getItem(sessionId)
     if (d) {
-      var d = ["Current","Current Session",d,"/v1/main.html?config=continue"]
+      var d = ["Current", "Current Session", d, "/v1/main.html?config=continue"]
       //var svg = currentdiv.append("svg").attr("height","300px").attr("width","300px")
       //svg.datum(JSON.parse(p[-1])).call(iconRender)
       var _panels = currentdiv
@@ -227,8 +242,8 @@
         .call(pchart)
     }
 
-    $("#play").click(function(){
-      window.location="/v1/main.html"
+    $("#play").click(function() {
+      window.location = "/v1/main.html"
     })
   }(jQuery, d3, sand))
 </script>
