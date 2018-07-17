@@ -93,12 +93,14 @@ export default function () {
           },
           function (reply) {
             if (reply) {
+              d3.select("#extension").style("display","none")
               if (reply.version) {
                 hasExtension = true;
                 connectExt();
               }
             } else {
               hasExtension = false;
+              d3.select("#extension").style("display",null)
               console.log("not connect to ext", reply)
             }
           });

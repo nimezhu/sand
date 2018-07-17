@@ -31,7 +31,7 @@
   (function($, d3, S) {
     var stateId = "cnb000"
     var links = []
-    var sheetId = S.toolsGetUrlPara("sheetid") || "1sl7ZkGWKX3Sx2yNLPpYNwVhBklVMXucVs4Ht9ukKVhw" //TODO Get SheetTitle and SheetId for publication.
+    var sheetId = S.toolsGetUrlPara("sheetid") || "1fGLVMKMSDMl_lvKB8b4V-1ec5TCs4yMdHsZCtEA6WUw" //TODO Get SheetTitle and SheetId for publication.
     var title = S.toolsGetUrlPara("title") || "Sheet1"
     var apiKey = "AIzaSyBhECk4C1LpxI1mDJjSTwot-hRP2v3bwEA"
     d3.json("https://sheets.googleapis.com/v4/spreadsheets/" + sheetId + "/values/"+ title +"!A:C?key=" + apiKey).then(function(d) { //TODO sheets
