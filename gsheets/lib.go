@@ -41,3 +41,20 @@ func Get(conf *oauth2.Config, token *oauth2.Token, sheetid string, readRange str
 	}
 	return resp.Values, nil
 }
+
+func Create(conf *oauth2.Config, token *oauth2.Token) (*sheets.Spreadsheet, error) {
+	ctx := context.Background()
+	client := conf.Client(ctx, token)
+	srv, err := sheets.New(client)
+	if err != nil {
+		log.Printf("Unable to retrieve Sheets Client %v", err)
+		return nil, err
+	}
+	s := sheets.Spreadsheet{}
+	resp, err := srv.Spreadsheets.Create(&s).Do()
+	if err != nil {
+		log.Printf("Unable to create a new sheet. %v", err)
+		return nil, err
+	}
+	return resp, nil
+}

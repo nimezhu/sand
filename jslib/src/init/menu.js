@@ -110,13 +110,15 @@ export default function () {
     })
     var checkSheetId = function () {
       d3.json("/getsheetid",{credentials: 'same-origin'}).then(function (d) {
-        if (d.sheetid && d.sheetid != "null") {
+        if (d.sheetid && d.sheetid.length == 44) {
           d3.select("#setSheetId").style("color",null)
+          d3.select("#createSheetId").style("display","none")
           $("#sheetUi").show()
           $("#fileUi").hide()
           d3.select("#sessionUi").classed("glyphicon-hdd",false).classed("glyphicon-cloud",true)
         } else {
           d3.select("#setSheetId").style("color","#A20")
+          d3.select("#createSheetId").style("display",null)
           $("#sheetUi").hide()
           $("#fileUi").show()
           d3.select("#sessionUi").classed("glyphicon-hdd",true).classed("glyphicon-cloud",false)
@@ -129,33 +131,37 @@ export default function () {
     }
     //setTimeout(checkSheetId, null, 200)
     checkSheetId()
+    $("#createSheetId").on("click",function(){
+      $.ajaxSetup({
+        xhrFields: {
+          withCredentials: true
+        },
+      });
+      $.post("/gsheets/create").done(function(){checkSheetId()})
+      $("#sessionFrame").hide()
+      alert("New google sheet created, you can save and load sessions in your google sheet")
+    })
     $("#setSheetId").on("click", function (_) {
-      if (!isAstilectron) {
-        d3.json("/getsheetid",{credentials: 'same-origin'}).then(function (d) {
-          //TODO
-          var id = prompt("sheetId", d.sheetid || "")
-          if (id != null && id != "" && id != "null") {
-            $.ajaxSetup({
-              xhrFields: {
-                withCredentials: true
-              },
-            });
-            $.post("/setsheetid?id=" + id).done(checkSheetId())
-          } else {
-            $.post("/setsheetid?id=" + "null").done(checkSheetId())
-          }
-        }).catch(function(e){
-          var id = prompt("sheetId","")
+      var setSheetId = function(id){
+        if (id != null && id != "" && id.length == 44){
           $.ajaxSetup({
             xhrFields: {
               withCredentials: true
             },
           });
-          if (id != null && id != "" && id != "null") {
-            $.post("/setsheetid?id=" + id).done(checkSheetId())
-          } else {
-            $.post("/setsheetid?id=" + "null").done(checkSheetId())
-          }
+          $.post("/setsheetid?id=" + id).done(function(){checkSheetId()})
+        } else if (id != null) {
+          $.post("/setsheetid?id=" + "null").done(function(){checkSheetId()})
+        }
+      }
+      if (!isAstilectron) {
+        d3.json("/getsheetid",{credentials: 'same-origin'}).then(function (d) {
+          //TODO
+          var id = prompt("sheetId", d.sheetid || "")
+          setSheetId(id)
+        }).catch(function(e){
+          var id = prompt("sheetId","")
+          setSheetId(id)
         })
       } else {
         var id = ""

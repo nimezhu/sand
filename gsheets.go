@@ -77,7 +77,38 @@ func gsheetsGet(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "No data found.")
 	}
 }
+
+func gsheetsCreate(w http.ResponseWriter, req *http.Request) {
+	session, _ := store2.Get(req, sessionID)
+	userStr := session.Values["user"]
+	var user user
+	if userStr != nil {
+		err := json.Unmarshal([]byte(userStr.(string)), &user)
+		if err != nil {
+			//TODO
+		}
+	}
+	token := &oauth2.Token{}
+	err := json.Unmarshal(session.Values["token"].([]byte), token)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	sheets0, err := gsheets.Create(conf, token)
+	id := sheets0.SpreadsheetId
+	userSheetIDMap[user.Email] = id
+	sheetIDBucket.Put([]byte(user.Email), []byte(id))
+	if err == nil {
+		fmt.Fprintf(w, "%s", sheets0.SpreadsheetId)
+	} else {
+		fmt.Fprintf(w, "Cannot Create Sheets.")
+	}
+
+	//TODO Set User Google Sheet ID
+
+}
 func addGSheetsHandler(router *mux.Router) {
 	router.Handle("/gsheets/append", checkAuth(checkToken(http.HandlerFunc(gsheetsAppend)))) //upload to sheet
+	router.Handle("/gsheets/create", checkAuth(checkToken(http.HandlerFunc(gsheetsCreate)))) //create a google sheet
 	router.Handle("/gsheets/get", checkAuth(checkToken(http.HandlerFunc(gsheetsGet))))       //get sheet
 }
