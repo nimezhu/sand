@@ -5,6 +5,19 @@ var isEmpty = function (layout) {
     return true
   }
 }
+var emptyCfg = {
+      "settings": {
+        "showPopoutIcon": false
+      },
+      "dimensions": {
+        "borderWidth": 2
+      },
+      "content": [{
+        "type": "row",
+        "content": []
+      }]
+    }
+
 export default function () {
   var chromeExtID = "gedcoafficobgcagmjpplpnmempkcpfp"
   var chromeExtPort //port to chromeExt
@@ -62,6 +75,9 @@ export default function () {
       }
       window.onload = function () {
         var d = localStorage.getItem(sessionId)
+        if (!d && config == "continue"){
+            dispatch.call("initPanels",this,emptyCfg)
+        }
         if (d && config == "continue") {
           dispatch.call("initWindows", this, JSON.parse(d))
           $(".menu .note").hide()
