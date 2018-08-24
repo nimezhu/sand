@@ -64,16 +64,19 @@
         .classed("panel-body", true)
       bodys.append("div").append("h4").text("Description")
       bodys.append("div").style("overflow-wrap","break-word")
-      //.style("background-color","#fffbea")
-      .style("padding","5px").text(function(d) {
+      .style("background-color","#fffbea")
+      .style("padding","5px")
+      .style("height","100px")
+      .style("overflow-y","auto")
+      .text(function(d) {
         return d[1]
       })
 
       var _render = function(el) {
         el.each(function(d) {
-          var svg = d3.select(this).append("svg").attr("width",250).attr("height", 150)
+          var svg = d3.select(this).append("svg").attr("width",270).attr("height", 150)
           //console.log(d)
-          var iconRender = S.layoutIcon().xscale(2.50).yscale(1.68)
+          var iconRender = S.layoutIcon().xscale(2.70).yscale(1.68)
           var dmain = JSON.parse(JSON.parse(d[2])[-1])
           svg.datum(dmain).call(iconRender)
         })
@@ -91,10 +94,6 @@
           .text("open")
 
       svgdiv.call(_render)
-
-
-
-
     })
   }(jQuery, d3, sand))
 </script>
