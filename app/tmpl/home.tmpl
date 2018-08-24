@@ -1,4 +1,4 @@
-{{define "title"}} NBrowser Home {{end}} {{define "id"}} "cnb000"{{end}} {{define "homemenu"}}
+{{define "title"}} CNB User Home {{end}} {{define "id"}} "cnb000"{{end}} {{define "homemenu"}}
 <div class="menu fn-clear">
   <ul id="myNavLeft">
     <li id="play" title="start application"><span class="glyphicon glyphicon-play"></span>Start Application</li>
@@ -119,10 +119,10 @@
         window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
       })
 
-    var iconRender = S.layoutIcon().xscale(2.50).yscale(1.68)
+    var iconRender = S.layoutIcon().xscale(2.70).yscale(1.68)
     var _render = function(el) {
       el.each(function(d) {
-        var svg = d3.select(this).append("svg").attr("width", 250).attr("height", 150)
+        var svg = d3.select(this).append("svg").attr("width", 270).attr("height", 150)
         //console.log(d)
         var dmain = JSON.parse(JSON.parse(d[2])[-1])
         svg.datum(dmain).call(iconRender)
@@ -152,7 +152,9 @@
           .classed("panel-body", true)
         pbody.append("div").append("h4").text("Description")
         pbody.append("div").style("overflow-wrap", "break-word")
-          //.style("background-color","#fffbea")
+          .style("background-color","#fffbea")
+          .style("overflow-y","auto")
+          .style("height","100px")
           .style("padding", "5px").text(function(d) {
             return d[1]
           })
