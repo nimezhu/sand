@@ -1,4 +1,18 @@
-{{define "title"}} NBrowser Home {{end}} {{define "id"}} "cnb000"{{end}} {{define "html"}}
+{{define "title"}} NBrowser Home {{end}} 
+{{define "id"}} "cnb000"{{end}} 
+{{define "pubmenu"}}
+<div class="menu fn-clear">
+<ul id="myNav" style="float:left">
+  <li id="logo">
+    <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="appinfo" style="color:#777"></span>
+  </li>
+</ul>
+</div>
+{{end}}
+
+{{define "html"}}
+
+
 <html>
 
 <head>
@@ -17,10 +31,19 @@
     #layoutContainer {
       overflow-y:scroll;
     }
+    .menu {
+      background-color: #F0F0F0;
+    }
+
+    .selected {
+      background-color: #CFCFCF;
+    }
+
   </style>
 </head>
 
 <body>
+  {{template "pubmenu"}}
   {{template "wrapper"}}
 </body>
 <!--
