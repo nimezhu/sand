@@ -31,7 +31,7 @@
   <style>
     .panel {
       width: 300px;
-      min-height: 200px;
+      height: 530px;
       float: left;
       margin: 10px;
     }
@@ -74,6 +74,18 @@
 </body>
 <script>
   (function($, d3, S) {
+    var niceFormat = d3.format(",")
+    var regionNiceText = function(d){
+        return d.chr + ":" + niceFormat(d.start) + "-" + niceFormat(d.end)
+    } 
+    var regionsNiceText = function(d){
+        var r = []
+        d.forEach(function(d){
+            r.push(regionNiceText(d))
+        })
+        return r.join(";")
+    }
+
     var stateId = "cnb000"
     var links = []
     var sandInits = {
@@ -158,12 +170,24 @@
           .style("padding", "5px").text(function(d) {
             return d[1]
           })
+ 
+        var regions = pbody.append("div")
+        regions.append("h4").text("Regions")
+        var regionsDiv = regions.append("div").style("height","50px").style("overflow-y","auto")
+        regionsDiv.text(function(d){
+          var k = JSON.parse(JSON.parse(d[2])[-2])
+          if (k.regions){
+            return regionsNiceText(k.regions)
+          } else {
+            return "null"
+          }
+        })
 
 
         pbody.append("div").append("h4").text("Layout")
         var svgdiv = pbody.append("div").style("padding-bottom", "10px")
         svgdiv.call(_render)
-        var btnGrp = pbody.append("div").append("span").style("float", "right").style("padding-right", "25px")
+            var btnGrp = pbody.append("div").append("span").style("float", "right").style("padding-right", "25px")
         btnGrp.append("button")
           .classed("btn", true)
           .classed("btn-success", true)

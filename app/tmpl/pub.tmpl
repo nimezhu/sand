@@ -1,5 +1,4 @@
-{{define "title"}} NBrowser Home {{end}} 
-{{define "id"}} "cnb000"{{end}} 
+{{define "title"}} CMU Nucleome Browser Entrypoints {{end}} 
 {{define "pubmenu"}}
 <div class="menu fn-clear">
 <ul id="myNav" style="float:left">
@@ -9,7 +8,6 @@
 </ul>
 </div>
 {{end}}
-
 {{define "html"}}
 
 
@@ -24,7 +22,7 @@
   <style>
     .panel {
       width: 300px;
-      min-height: 200px;
+      height: 530px;
       float: left;
       margin: 10px;
     }
@@ -37,6 +35,10 @@
 
     .selected {
       background-color: #CFCFCF;
+    }
+    h4 {
+      font-size: 16px;
+      color: #336289;
     }
 
   </style>
@@ -52,6 +54,17 @@
 -->
 <script>
   (function($, d3, S) {
+    var niceFormat = d3.format(",")
+    var regionNiceText = function(d){
+        return d.chr + ":" + niceFormat(d.start) + "-" + niceFormat(d.end)
+    } 
+    var regionsNiceText = function(d){
+        var r = []
+        d.forEach(function(d){
+            r.push(regionNiceText(d))
+        })
+        return r.join(";")
+    }
     var stateId = "cnb000"
     var links = []
     var sheetId = S.toolsGetUrlPara("sheetid") || "1fGLVMKMSDMl_lvKB8b4V-1ec5TCs4yMdHsZCtEA6WUw" //TODO Get SheetTitle and SheetId for publication.
@@ -98,12 +111,24 @@
       var _render = function(el) {
         el.each(function(d) {
           var svg = d3.select(this).append("svg").attr("width",270).attr("height", 150)
-          //console.log(d)
           var iconRender = S.layoutIcon().xscale(2.70).yscale(1.68)
           var dmain = JSON.parse(JSON.parse(d[2])[-1])
           svg.datum(dmain).call(iconRender)
         })
       }
+      
+      var regions = bodys.append("div")
+      regions.append("h4").text("Regions")
+      var regionsDiv = regions.append("div").style("height","50px").style("overflow-y","auto")
+      regionsDiv.text(function(d){
+          var k = JSON.parse(JSON.parse(d[2])[-2])
+          if (k.regions){
+            return regionsNiceText(k.regions)
+          } else {
+            return "null"
+          }
+      })
+
       bodys.append("div").append("h4").text("Layout")
       var svgdiv = bodys.append("div").style("padding-bottom","10px")
       var btnGrp = bodys.append("div").append("span").style("float","right").style("padding-right","25px")
