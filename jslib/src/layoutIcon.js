@@ -78,7 +78,7 @@ export default function() {
             })
         }
     }
-    /* TODO */
+    /* TODO : multi windows show layout*/
     var component = function(d, x, y, w, h, el) {
         var e = el.append("g").attr("transform", "translate(" + x * xscale + "," + y * yscale + ")")
         var width = w * xscale
@@ -183,8 +183,9 @@ export default function() {
     var xscale = 1.34
     var yscale = 0.8
     var chart = function(selection) {
-        var d = selection.datum();
-        layout(d, selection)
+        selection.each(function(d){
+            layout(d, d3.select(this))
+        })
     }
     chart.xscale = function(_) {
         return arguments.length ? (xscale = _, chart) : xscale;

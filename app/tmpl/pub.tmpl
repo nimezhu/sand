@@ -40,6 +40,12 @@
       font-size: 16px;
       color: #336289;
     }
+    .active, li:active {
+        background-color: #336289;
+    }
+    li:mouseover {
+        background-color: lightyellow;
+    }
 
   </style>
 </head>
@@ -65,6 +71,8 @@
         })
         return r.join(";")
     }
+
+  
     var stateId = "cnb000"
     var links = []
     var sheetId = S.toolsGetUrlPara("sheetid") || "1fGLVMKMSDMl_lvKB8b4V-1ec5TCs4yMdHsZCtEA6WUw" //TODO Get SheetTitle and SheetId for publication.
@@ -108,12 +116,56 @@
         return d[1]
       })
 
+      var trans = function(d) {
+          if (d=="-1") {return "main"}
+          return "ext"+d
+      }
+
       var _render = function(el) {
         el.each(function(d) {
-          var svg = d3.select(this).append("svg").attr("width",270).attr("height", 150)
+          var div = d3.select(this).append("div")
           var iconRender = S.layoutIcon().xscale(2.70).yscale(1.68)
-          var dmain = JSON.parse(JSON.parse(d[2])[-1])
-          svg.datum(dmain).call(iconRender)
+          //TODO WITH OTHER EXTERNAL WINDOW
+          var allw = JSON.parse(d[2])
+          var keys = Object.keys(allw).sort(function(a,b){return parseInt(a) > parseInt(b)})
+          keys.shift()
+
+          var darr = []
+          keys.forEach(function(k){
+            darr.push(JSON.parse(JSON.stringify(JSON.parse(allw[k]))));
+          })
+         //TODO ADD TAB
+          if (darr.length==1) {
+            var dmain = JSON.parse(JSON.parse(d[2])[-1])
+            var svg = d3.select(this).append("svg").attr("width",270).attr("height", 150)
+            svg.datum(dmain).call(iconRender)
+          } else {
+           var ul = div.append("ul").classed("nav",true).classed("nav-tabs",true)
+           var tabdiv = div.append("div")
+           var divs = tabdiv.selectAll(".tabdiv").data(darr)
+             .enter()
+             .append("div")
+             .classed("tabdiv",true)
+             .style("display","none")
+             .append("svg")
+             .attr("width",270)
+             .attr("height",150)
+             .call(iconRender)
+
+           var lis = ul.selectAll("li")
+           .data(keys)
+           .enter()
+           .append("li")
+           .on("click",function(d,i){
+                tabdiv.selectAll(".tabdiv").style("display","none")
+                ul.selectAll("li").classed("active",false)
+                tabdiv.select(".tabdiv:nth-child("+(i+1)+")").style("display",null) 
+                ul.select("li:nth-child("+(i+1)+")").classed("active",true)
+           })
+           .text(function(k){return trans(k)})
+            ul.select("li:nth-child(1)").classed("active",true)
+            tabdiv.select(".tabdiv:nth-child(1)").style("display",null) 
+          } 
         })
       }
       
@@ -143,7 +195,7 @@
 
       svgdiv.call(_render)
     })
-  }(jQuery, d3, sand))
+  })(jQuery, d3, sand)
 </script>
 
 </html>
