@@ -17,15 +17,14 @@ var trackIcon = function(selection) {
             })
             .attr("opacity", 0.5)
             .on("mouseover", function(d) {
-                d3.select(this).attr("opacity",1.0)
+                d3.select(this).attr("opacity", 1.0)
 
             })
             .on("mouseout", function(d) {
-                d3.select(this).attr("opacity",0.5)
+                d3.select(this).attr("opacity", 0.5)
 
             })
-            .on("click", function(d) {
-            })
+            .on("click", function(d) {})
         el.append("text")
             .attr("x", "10")
             .style("font-size", "10px")
@@ -36,8 +35,8 @@ var trackIcon = function(selection) {
 export default function() {
     var color = {
         "Genome Browser": "#226a98",
-        "User Data": "#ce5146",
-        "DNA 3d Structure Viewer": "#337c2e"
+        "Google Sheet": "#0f9d58",
+        "DNA 3d Structure Viewer": "#ce5146"
     }
     var wh = function(d) {
         if (d.width) {
@@ -64,8 +63,6 @@ export default function() {
         }
     }
     var column = function(d, x, y, w, h, el) {
-        //console.log("column", x, y)
-        //wh(d)
         if (d.content) {
             var offset = y
             d.content.forEach(function(d) {
@@ -75,8 +72,6 @@ export default function() {
         }
     }
     var stack = function(d, x, y, w, h, el) {
-        //console.log("stack", x, y)
-        //wh(d)
         if (d.content) {
             d.content.forEach(function(d) {
                 r[d.type](d, x + 1, y + 1, w - 2, h - 2, el) //stack Not change
@@ -86,28 +81,89 @@ export default function() {
     /* TODO */
     var component = function(d, x, y, w, h, el) {
         var e = el.append("g").attr("transform", "translate(" + x * xscale + "," + y * yscale + ")")
+        var width = w * xscale
+        var height = h * yscale
         var rect = e.append("rect")
-            .attr("width", w * xscale)
-            .attr("height", h * yscale)
+            .attr("width", width)
+            .attr("height", height)
             .attr("fill", color[d.title] || "grey")
             .attr("opacity", 0.5)
-        var maxrows = Math.floor((h * yscale-35) / 20)
+        var maxrows = Math.floor((h * yscale - 45) / 20)
+        e.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("height", 15)
+            .attr("width", width)
+            .attr("opacity", 0.5)
+        e.append("text").attr("x", 5).attr("y", 11).attr("font-size", "10px")
+            .attr("fill", "#F3FDD6")
+            .text(d.componentState.name)
+            .attr("pointer-events", "none")
+
+        if (d.componentState.sheetId) {
+            var btn = e.append("g")
+                .attr("transform", "translate(5,35)")
+            var rBtn = btn.append("rect")
+                .attr("height", 20)
+                .attr("width", 34)
+                .attr("fill", "#123")
+                .on("mouseover", function() {
+                    d3.select(this).attr("opacity", 0.9)
+
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("opacity", 0.5)
+                }) 
+                .attr("opacity", 0.5)
+            if (d.componentState.isPub) {
+                rBtn.on("click", function() {
+                    var uri = "https://docs.google.com/spreadsheets/d/" + d.componentState.sheetId + "/edit?usp=sharing"
+                    window.open(uri)
+                })
+
+            } else {
+                rBtn.on("click", function() {
+                    var currentId = d.componentState.sheetId
+                    window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
+
+                })
+            }
+            btn.append("rect")
+                .attr("x",34)
+                .attr("height", 20)
+                .attr("width", 74)
+                .attr("fill", "#123")
+                .attr("opacity",0.3)
+             
+            btn.append("text").attr("y", 12).attr("x", 5)
+                .attr("font-size", "10px")
+                .attr("pointer-events", "none")
+                .text("open")
+                .attr("fill", "#F3FDD6")
+            btn.append("text")
+                .attr("x",40)
+                .attr("y",12)
+                .attr("font-size", "10px")
+                .text(d.componentState.sheetTitle)
+                .attr("fill", "#F3FDD6")
+                .attr("pointer-events", "none")
+        }
         if (d.componentState.genome) {
-            e.append("text").attr("x", 5).attr("y", 15).text(d.componentState.genome)
+            e.append("text").attr("x", 5).attr("y", 27).text(d.componentState.genome)
         }
         if (d.componentState.trackViews) {
-            var l = d.componentState.trackViews.length            
-            if(l>maxrows){
-                e.append("text").attr("x",5).attr("y", h*yscale -30 ).style("font-size","10px")
-                .text("... "+(l-maxrows+1)+" more tracks")
-                l=maxrows-1
+            var l = d.componentState.trackViews.length
+            if (l > maxrows) {
+                e.append("text").attr("x", 5).attr("y", h * yscale - 30).style("font-size", "10px")
+                    .text("... " + (l - maxrows + 1) + " more tracks")
+                l = maxrows - 1
             }
             e.selectAll("g")
-                .data(d.componentState.trackViews.slice(0,l))
+                .data(d.componentState.trackViews.slice(0, l))
                 .enter()
                 .append("g")
                 .attr("transform", function(d, i) {
-                    return "translate( 5," + (i * 20 + 35) + ")"
+                    return "translate( 5," + (i * 20 + 45) + ")"
                 })
                 .call(trackIcon)
         }
