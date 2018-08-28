@@ -52,9 +52,11 @@
       color: #336289;
     }
     .active, li:active {
+        color : lightyellow;
         background-color: #336289;
     }
-    li:mouseover {
+    li:hover {
+        color: #333333;
         background-color: lightyellow;
     }
 
@@ -95,19 +97,6 @@
             r.push(regionNiceText(d))
         })
         return r.join(";")
-    }
-
-    var randomString = function(length){
-        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
-        if (!length) {
-            length = Math.floor(Math.random() * chars.length);
-        }
-
-        var str = '';
-        for (var i = 0; i < length; i++) {
-            str += chars[Math.floor(Math.random() * chars.length)];
-        }
-        return str;
     }
 
     var stateId = "cnb000"
@@ -154,7 +143,7 @@
       .on("click", function() {
         window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
       })
-
+/*
     var iconRender = S.layoutIcon().xscale(2.70).yscale(1.68)
   
         var trans = function(d) {
@@ -166,7 +155,6 @@
         el.each(function(d) {
           var div = d3.select(this).append("div")
           var iconRender = S.layoutIcon().xscale(2.70).yscale(1.68)
-          var dmain = JSON.parse(JSON.parse(d[2])[-1])
           //TODO WITH OTHER EXTERNAL WINDOW
           var allw = JSON.parse(d[2])
           var keys = Object.keys(allw).sort(function(a,b){return parseInt(a) > parseInt(b)})
@@ -175,11 +163,6 @@
           keys.forEach(function(k){
             d.push(JSON.parse(allw[k]));
           })
-         //TODO ADD TAB
-          if (d.length==1) {
-            var svg = d3.select(this).append("svg").attr("width",270).attr("height", 150)
-            svg.datum(dmain).call(iconRender)
-          } else {
            var ul = div.append("ul").classed("nav",true).classed("nav-tabs",true)
            var tabdiv = div.append("div")
            tabdiv.selectAll(".tabdiv").data(d)
@@ -205,7 +188,7 @@
             ul.select("li:nth-child(1)").classed("active",true)
             tabdiv.select(".tabdiv:nth-child(1)").style("display",null) 
           } 
-        })
+        )
       }
       
 
@@ -268,7 +251,8 @@
       })
     }
 
-
+*/
+    var pchart=S.layoutPanel();//TODO
 
     var renderSessions = function() {
       d3.json("/sheetlist", sandInits).then(function(d) { //TODO sheets
