@@ -85,13 +85,14 @@ export default function() {
     var stack = function(d, x, y, w, h, el) {
         if (d.content) {
             d.content.forEach(function(d) {
-                r[d.type](d, x + 1, y + 1, w - 2, h - 2, el) //stack Not change
+                r[d.type](d, x, y, w - 1, h - 1, el) //stack Not change
             })
         }
     }
     /* TODO : multi windows show layout*/
     var component = function(d, x, y, w, h, el) {
-        var e = el.append("g").attr("transform", "translate(" + x * xscale + "," + y * yscale + ")")
+        var e = el.append("g")
+            .attr("transform", "translate(" + x * xscale + "," + y * yscale + ")")
         var width = w * xscale
         var height = h * yscale
         var rect = e.append("rect")
@@ -164,7 +165,7 @@ export default function() {
         if (d.componentState.trackViews) {
             var l = d.componentState.trackViews.length
             if (l > maxrows) {
-                e.append("text").attr("x", 5).attr("y", h * yscale - 30).style("font-size", "10px")
+                e.append("text").attr("x", 5).attr("y", h * yscale - 20).style("font-size", "10px")
                     .text("... " + (l - maxrows + 1) + " more tracks")
                 l = maxrows - 1
             }
@@ -177,8 +178,8 @@ export default function() {
                 })
                 .call(trackIcon)
         }
-        rect.append("svg:title")
-            .text(d.title || "unknown")
+        //rect.append("svg:title")
+        //    .text(d.title || "unknown")
         //wh(d)
 
     }

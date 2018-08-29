@@ -36,7 +36,8 @@ export default function() {
                 keys.forEach(function(k) {
                     darr.push(JSON.parse(JSON.stringify(JSON.parse(allw[k]))));
                 })
-                var ul = div.append("ul").classed("nav", true).classed("nav-tabs", true)
+                var bar = div.append("div").style("height","20px")
+                var ul = bar.append("ul").classed("nav", true).classed("nav-tabs", true)
                 var tabdiv = div.append("div")
                 var divs = tabdiv.selectAll(".tabdiv").data(darr)
                     .enter()
@@ -44,8 +45,8 @@ export default function() {
                     .classed("tabdiv", true)
                     .style("display", "none")
                     .append("svg")
-                    .attr("width", 270)
-                    .attr("height", 150)
+                    .attr("width", 100*xscale)
+                    .attr("height", 100*yscale)
                     .call(iconRender)
 
                 var lis = ul.selectAll("li")
@@ -62,6 +63,9 @@ export default function() {
                         return trans(k)
                     })
                     .attr("pointer-events", "none")
+                if (keys.length==1) {
+                    ul.style("display","none")
+                }
                 ul.select("li:nth-child(1)").classed("active", true)
                 tabdiv.select(".tabdiv:nth-child(1)").style("display", null)
             })
