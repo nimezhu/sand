@@ -25,7 +25,6 @@ export default function() {
         var iconRender = layoutIcon().xscale(xscale).yscale(yscale)
         var _render = function(el) {
             el.each(function(d) {
-                console.log("render_", d)
                 var div = d3.select(this).append("div")
                 var allw = JSON.parse(d[2])
                 var keys = Object.keys(allw).sort(function(a, b) {
