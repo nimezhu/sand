@@ -1,15 +1,17 @@
-{{define "title"}} CNB User Home {{end}} {{define "id"}} "cnb000"{{end}} {{define "homemenu"}}
+{{define "title"}} CNB User Home {{end}} {{define "id"}} "cnb000"{{end}} 
+
+{{define "homemenu"}}
 <div class="menu fn-clear">
   <ul id="myNavLeft">
     <li id="play" title="start application"><span class="glyphicon glyphicon-play"></span>Start Application</li>
     <li style="padding-right:0px" title="Login with google" id="menuUser"><span id="login" class="glyphicon glyphicon-log-in"></li>
     <li style="padding-right:0px"><image id="picture" style="height:18px;width:18px;margin:7px 4px"></image>
-    <div class="frame">
-      <ul>
-      <li id="logout" title="Logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
-  </ul>
-</div>
-</li>
+      <div class="frame">
+       <ul>
+       <li id="logout" title="Logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
+       </ul>
+      </div>
+   </li>
 </ul>
 <ul id="myNavRight" style="float:right">
   <li id="logo">
@@ -17,7 +19,10 @@
   </li>
 </ul>
 </div>
-{{end}} {{define "html"}}
+{{end}} 
+
+
+{{define "html"}}
 <html>
 
 <head>
@@ -80,6 +85,26 @@
         cursor:default;
     }
 
+    .loader {
+        border: 10px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 10px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+    }
+    
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
 
 
   </style>
@@ -90,8 +115,9 @@
   <div id="wrapper" style="height:calc(100%-20px)">
     <div id="menuContainer" style="display:none"></div>
     <div id="layoutContainer" style="left:0%;width:100%">
-      <div class="panel">
-        <div class="panel-head">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Sessions Manager</h3>
         </div>
         <div class="panel-body">
           <form>
@@ -103,6 +129,8 @@
             <button id="load" class="btn btn-primary">Load</button>
             <button id="submit" type="submit" class="btn btn-primary">Submit</button>
           </form>
+          <div id="loader" class="loader" style="display:none;position:absolute;left:100px">
+          </div>
         </div>
       </div>
     </div>
@@ -134,10 +162,12 @@
     var sheetIdInput = d3.select("#sheetIdInput")
     var currentId = ""
     var fLoad = function() {
+      d3.select("#loader").style("display",null) 
       d3.json("/getsheetid", sandInits).then(function(d) {
         sheetIdInput.node().value = d.sheetid
         currentId = d.sheetid
         renderSessions()
+        d3.select("#loader").style("display","none")
       })
     }
     fLoad()
@@ -230,7 +260,7 @@
         .append("div")
         .merge(_panels)
         .classed("panel", true)
-        .classed("panel-default", true)
+        .classed("panel-success", true)
         .call(pchart)
     }
 
