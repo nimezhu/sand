@@ -70,7 +70,7 @@ export default function() {
                 tabdiv.select(".tabdiv:nth-child(1)").style("display", null)
             })
         }
-        selection.each(function(d) {
+        selection.each(function(d,i) {
             var panels = d3.select(this)
             var head = panels.append("div")
                 .classed("panel-heading", true)
@@ -79,7 +79,7 @@ export default function() {
                 .text(function(d) {
                     return d[0]
                 })
-                .on("click", function(d, i) {
+                .on("click", function(d) {
                     if (sheetId) {
                         window.location = "/v1/main.html?config=gsheet:" + sheetId + ":" + d[0].replace(" ", "%20")
                     } else {
@@ -123,7 +123,7 @@ export default function() {
                 .classed("btn", true)
                 .classed("btn-success", true)
                 .classed("btn-sm", true)
-                .on("click", function(d, i) {
+                .on("click", function(d) {
                     if (sheetId) {
                         window.open("/v1/main.html?config=gsheet:" + sheetId + ":" + d[0].replace(" ", "%20"))
                     } else {
