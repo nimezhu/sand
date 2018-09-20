@@ -123,7 +123,7 @@ waitForWebfonts(["Roboto Mono"],function(){
     var renderList = Object.keys(renders).sort()
     //interface for add other input
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
-      "saveToElectron", "openExt","closeExt","renderExtWinNav",
+      "saveToElectron", "openExt","closeExt","renderExtWinNav", "loadPanel",
       "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet")
     //saveToGSheet is for electron
     var message = {}

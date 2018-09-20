@@ -22,12 +22,14 @@ export default function (config, el, dispatch, renders, app) {
   layout.on('stackCreated', function (stack) {
     var toggle = $("<li class='lm_cfgbtn' title='config'></li>")
     var duplicate = $("<li class='lm_dupbtn' title='clone'></li>") //TODO
+    var save = $("<li class='lm_savebtn' title='save to workspace'></li>") //TODO
     var popout = $("<li class='lm_outbtn' title='pop out'></li>") //TODO
     var popin = $("<li class='lm_inbtn' title='pop in'></li>") //TODO
     stack.header.controlsContainer.prepend(popout);
     stack.header.controlsContainer.prepend(popin);
     stack.header.controlsContainer.prepend(duplicate);
     stack.header.controlsContainer.prepend(toggle);
+    stack.header.controlsContainer.prepend(save);
     toggle.on("click", function () {
       toggleConfig();
     })
@@ -39,6 +41,9 @@ export default function (config, el, dispatch, renders, app) {
     })
     popin.on("click", function () {
       popinPanel();
+    })
+    save.on("click",function(){
+       savePanel()
     })
     var toggleConfig = function () {
       var container = stack.getActiveContentItem().container;
@@ -54,7 +59,15 @@ export default function (config, el, dispatch, renders, app) {
         container.getElement().closest(".lm_item").addClass("s_content").removeClass("s_cfg")
       }
     };
-
+    /* save panel to workspace */
+    var savePanel = function() {
+      var container = stack.getActiveContentItem().container;
+      var state = container.getState();
+      var result = window.prompt("Please input a name for this panel")
+      if (result && result!=""){
+         localStorage.setItem("cnb-panel-"+result,JSON.stringify(state))
+      }
+    }
     var duplicatePanel = function () {
       var container = stack.getActiveContentItem().container;
       var state = container.getState();
