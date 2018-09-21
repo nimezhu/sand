@@ -38,10 +38,18 @@ export default function() {
     dispatch.on("receiveMessage.panels",function(d){
       //TODO Layout Event Emittion?
       eventHub.emit("receiveMessage",d)
+        if (d.code=="refreshWorkSpace"){
+            dispatch.call("refreshWorkSpace",this,{})
+        }
       var k = d.code
       var v = JSON.parse(d.data)
       eventHub.emit(k,v)
     })
+      /*
+      eventHub.on("refreshWorkSpace",function(){
+          dispatch.call("refreshWorkSpace",this,{})
+      })
+      */
 
   }
   chart.dispatch = function(_) { return arguments.length ? (dispatch= _, chart) : dispatch; }

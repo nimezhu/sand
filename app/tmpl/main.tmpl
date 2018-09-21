@@ -44,6 +44,11 @@
     e = e || event;
     e.preventDefault();
   }, false);
+ /*
+ $(window).bind('storage', function (e) {
+     console.log(e.originalEvent.key, e.originalEvent.newValue);
+ });
+ */
 
  function waitForWebfonts(fonts, callback) {
     var loadedFonts = 0;
@@ -124,7 +129,7 @@ waitForWebfonts(["Roboto Mono"],function(){
     //interface for add other input
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
       "saveToElectron", "openExt","closeExt","renderExtWinNav", "loadPanel",
-      "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet")
+      "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet", "refreshWorkSpace")
     //saveToGSheet is for electron
     var message = {}
     var app = {}

@@ -65,6 +65,49 @@ export default function() {
 
         var spaceOn = false
         var spaceUl = d3.select("#menuContainer").append("ul")
+        var renderSpaceList = function(){
+                var list = []
+                for (var i = 0, len = localStorage.length; i < len; i++) {
+                    var key = localStorage.key(i);
+                    if (key.match(/^cnb-panel-/)) {
+                        var name = key.replace("cnb-panel-", "")
+                        list.push(name)
+                    }
+
+                }
+                var _chart = function(selection) {
+                    selection.each(function(d) {
+                        var el = d3.select(this)
+                        el.selectAll("*").remove()
+                        el.append("span").text(d)
+                        var elR = el.append("span").style("float","right")
+
+                        elR.append("span").classed("glyphicon",true).classed("glyphicon-open",true).on("click", function() {
+                                var v = localStorage.getItem("cnb-panel-" + d)
+                                console.log("get panel", v,d)
+                                var state = JSON.parse(v)
+                                var a = {
+                                    title: state.name,
+                                    type: 'component',
+                                    componentName: 'canvas',
+                                    componentState: JSON.parse(JSON.stringify(state))
+                                };
+                                dispatch.call("loadPanel", this, a)
+                            })
+                        elR.append("span").classed("glyphicon",true).classed("glyphicon-remove",true).on("click",function(){
+                                var v = localStorage.removeItem("cnb-panel-" + d)
+                                el.remove()
+                        })
+
+                    })
+                }
+                var _li = spaceUl.selectAll("li").data(list)
+                _li.exit().remove()
+                _li.enter().append("li")
+                    .merge(_li)
+                    .call(_chart)
+
+        }
         $("#space").on("click", function() {
             //TODO layout container togglea
             console.log("space click", spaceOn)
@@ -76,42 +119,12 @@ export default function() {
                 $("#menuContainer").width("20%").show()
                 $("#layoutContainer").width("80%").css("left", "20%")
                 dispatch.call("resize", this, {})
-                var list = []
-                for (var i = 0, len = localStorage.length; i < len; i++) {
-                    var key = localStorage.key(i);
-                    /*
-                     var value = localStorage[key];
-                     console.log(key + " => " + value);
-                     */
-                    if (key.match(/^cnb-panel-/)) {
-                        var name = key.replace("cnb-panel-", "")
-                        list.push(name)
-                    }
-
-                }
-                var _li = spaceUl.selectAll("li").data(list)
-                _li.exit().remove()
-                _li.enter().append("li")
-                    .merge(_li)
-                    .text(function(d) {
-                        return d
-                    })
-                    .on("click", function(d) {
-                        var v = localStorage.getItem("cnb-panel-" + d)
-                        console.log("get panel", v)
-                        var state = JSON.parse(v)
-                        var d = {
-                            title: state.name,
-                            type: 'component',
-                            componentName: 'canvas',
-                            componentState: JSON.parse(JSON.stringify(state))
-                        };
-                        dispatch.call("loadPanel", this, d) 
-                    })
-                console.log(list)
-
+                renderSpaceList() 
             }
             spaceOn = !spaceOn
+        })
+        dispatch.on("refreshWorkSpace",function(){
+                renderSpaceList() 
         })
         $("#export").on("click", function(_) {
             dispatch.call("exportStates", this, _)

@@ -38,6 +38,7 @@ export default function() {
     var getmessage = function(event) {
         if (event.origin !== domain) //TODO FIX
             return;
+        
         var d = event.data
         if (d.code == "extMessage") { //external window to main window
             dispatch.call("receiveMessage", this, d.data)
@@ -65,6 +66,11 @@ export default function() {
             var layout = P.layout()
             layout.root.contentItems[0].addChild(JSON.parse(d.data));
         }
+        /*
+        if (d.code=="refreshWorkSpace"){
+            dispatch.call("refreshWorkSpace",this,{})
+        }
+        */
     }
     var chart = function(el) {
         window.addEventListener("message", getmessage, false);
@@ -143,6 +149,12 @@ export default function() {
         }
         dispatch.on("loadPanel", function(d) {
             var layout = P.layout()
+            if (typeof layout.root.contentItems[0] == "undefined") {
+                layout.root.addChild({
+                    "type": "row",
+                    "content": []
+                })
+            }
             layout.root.contentItems[0].addChild(d);
         })
         /* TODO popup*/

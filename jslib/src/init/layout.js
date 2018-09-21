@@ -66,6 +66,8 @@ export default function (config, el, dispatch, renders, app) {
       var result = window.prompt("Please input a name for this panel")
       if (result && result!=""){
          localStorage.setItem("cnb-panel-"+result,JSON.stringify(state))
+         dispatch.call("refreshWorkSpace",this,{})
+         layout.eventHub.emit("sendMessage",{"code":"refreshWorkSpace","data":JSON.stringify({})}) //TODO
       }
     }
     var duplicatePanel = function () {
