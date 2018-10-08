@@ -28,8 +28,8 @@ export default function (config, el, dispatch, renders, app) {
     stack.header.controlsContainer.prepend(popout);
     stack.header.controlsContainer.prepend(popin);
     stack.header.controlsContainer.prepend(duplicate);
-    stack.header.controlsContainer.prepend(toggle);
     stack.header.controlsContainer.prepend(save);
+    stack.header.controlsContainer.prepend(toggle);
     toggle.on("click", function () {
       toggleConfig();
     })

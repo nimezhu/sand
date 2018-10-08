@@ -97,6 +97,7 @@ export default function() {
                         elR.append("span").classed("glyphicon",true).classed("glyphicon-remove",true).on("click",function(){
                                 var v = localStorage.removeItem("cnb-panel-" + d)
                                 el.remove()
+                                dispatch.call("sendMessage",this,{code:"refreshWorkSpace",data:""})
                         })
 
                     })

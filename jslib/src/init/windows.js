@@ -129,16 +129,11 @@ export default function() {
 
                 var connectExt = function() {
                     chromeExtPort = chrome.runtime.connect(chromeExtID)
-                    var processingExternal = false;
+                    //var processingExternal = false;
                     dispatch.on("sendMessage.apps", function(d) {
-                        if (processingExternal) {
-                            processingExternal = false;
-                        } else {
                             chromeExtPort.postMessage(d) //send message to chromeExt
-                        }
                     })
                     chromeExtPort.onMessage.addListener(function(d) {
-                        processingExternal = true;
                         dispatch.call("receiveMessage", this, {
                             code: d.code,
                             data: JSON.stringify(d.data)
