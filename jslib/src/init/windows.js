@@ -64,8 +64,7 @@ export default function() {
         }
         if (d.code == "addPanel") { // add new panel (mv panel between windows)
             var layout = P.layout();
-            if (layout==null) {
-            } else if (layout.root == null) {
+            if (layout.root == null) {
                 setTimeout(function(){
                     console.log("after 2 secs")
                     layout.root.contentItems[0].addChild(JSON.parse(d.data))
