@@ -63,8 +63,18 @@ export default function() {
             P.updateApp(d.data) //TODO app inited re-render
         }
         if (d.code == "addPanel") { // add new panel (mv panel between windows)
-            var layout = P.layout()
-            layout.root.contentItems[0].addChild(JSON.parse(d.data));
+            var layout = P.layout();
+            if (layout==null) {
+            } else if (layout.root == null) {
+                setTimeout(function(){
+                    console.log("after 2 secs")
+                    layout.root.contentItems[0].addChild(JSON.parse(d.data))
+                }
+                ,2000)
+            } else {
+                layout.root.contentItems[0].addChild(JSON.parse(d.data));
+            }
+
         }
         /*
         if (d.code=="refreshWorkSpace"){
