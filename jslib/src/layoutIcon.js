@@ -32,13 +32,13 @@ var trackIcon = function(selection) {
             })
             .append("svg:title")
             .text(d.longLabel || d.id)
-            
+
         var txt = el.append("text")
             .attr("x", "15")
             .style("font-size", "10px")
-            .style("cursor","default")
+            .style("cursor", "default")
             .text(d.id || d.longLabel)
-            .attr("pointer-events","null")
+            .attr("pointer-events", "null")
 
     })
 }
@@ -58,10 +58,13 @@ export default function() {
         }
     }
     var layout = function(d, el) {
-        //wh(d)
-        d.content.forEach(function(d) {
-            r[d.type](d, 0, 0, 100, 100, el)
-        })
+        if (d.content) {
+            d.content.forEach(function(d) {
+                r[d.type](d, 0, 0, 100, 100, el)
+            })
+            } else {
+                console.log("TODO", d)
+            }
     }
     var row = function(d, x, y, w, h, el) {
         //wh(d)
@@ -124,7 +127,7 @@ export default function() {
                 })
                 .on("mouseout", function() {
                     d3.select(this).attr("opacity", 0.5)
-                }) 
+                })
                 .attr("opacity", 0.5)
             if (d.componentState.isPub) {
                 rBtn.on("click", function() {
@@ -140,20 +143,20 @@ export default function() {
                 })
             }
             btn.append("rect")
-                .attr("x",34)
+                .attr("x", 34)
                 .attr("height", 20)
                 .attr("width", 74)
                 .attr("fill", "#123")
-                .attr("opacity",0.3)
-             
+                .attr("opacity", 0.3)
+
             btn.append("text").attr("y", 12).attr("x", 5)
                 .attr("font-size", "10px")
                 .attr("pointer-events", "none")
                 .text("open")
                 .attr("fill", "#F3FDD6")
             btn.append("text")
-                .attr("x",40)
-                .attr("y",12)
+                .attr("x", 40)
+                .attr("y", 12)
                 .attr("font-size", "10px")
                 .text(d.componentState.sheetTitle)
                 .attr("fill", "#F3FDD6")
@@ -194,7 +197,7 @@ export default function() {
     var xscale = 1.34
     var yscale = 0.8
     var chart = function(selection) {
-        selection.each(function(d){
+        selection.each(function(d) {
             layout(d, d3.select(this))
         })
     }

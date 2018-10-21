@@ -27,11 +27,11 @@ export default function() {
             el.each(function(d) {
                 var div = d3.select(this).append("div")
                 var allw = JSON.parse(d[2])
-                var keys = Object.keys(allw).sort(function(a, b) {
-                    return parseInt(a) > parseInt(b)
-                })
-                keys.shift()
-
+                var keys = Object.keys(allw)
+                keys.sort(function(a,b){return parseInt(a)-parseInt(b)})
+                if (keys[0]=="-2"){
+                    keys.shift();
+                }
                 var darr = []
                 keys.forEach(function(k) {
                     darr.push(JSON.parse(JSON.stringify(JSON.parse(allw[k]))));
