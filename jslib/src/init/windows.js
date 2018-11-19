@@ -19,7 +19,7 @@ var emptyCfg = {
 }
 
 export default function() {
-    var chromeExtID = "gedcoafficobgcagmjpplpnmempkcpfp"
+    var chromeExtID //= "gedcoafficobgcagmjpplpnmempkcpfp"
     var chromeExtPort //port to chromeExt
     var user
     var sessionId = "_cnb_"
@@ -118,7 +118,7 @@ export default function() {
         }
         if (typeof chrome !== "undefined") {
             var hasExtension = false;
-            if (chrome.runtime) {
+            if (chrome.runtime && chromeExtID) {
                 chrome.runtime.sendMessage(chromeExtID, {
                         message: "version"
                     },

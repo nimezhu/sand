@@ -37,7 +37,8 @@ func TesterMiddlewareFactory(testers map[string]bool) func(http.Handler) http.Ha
 					w.Write([]byte("<html><head></head><body><div>CNB is now under alpha testing. It is only open for testers. Please contact zhuxp@cmu.edu for further information.</div> <div><a href='/logout'>Log Out</a></div></body></html>"))
 				}
 			} else {
-				http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+				next.ServeHTTP(w, r) //TODO
+				//http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 			}
 		})
 	}

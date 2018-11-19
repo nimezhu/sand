@@ -204,9 +204,12 @@ waitForWebfonts(["Roboto Mono"],function(){
         var E = S.NewElectronManager().dispatch(dispatch).dialogE(dialogE).astilectron(astilectron).P(PanelManager) //.app(app)
         E()
       })
-    } else if (mode == "web" || true) { //any other condition
+    } else if (mode == "web" && win == "main") { //any other condition
       var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).chromeExtID({{.ExtID}}) //app(app) //init windows manager
       W();
+    } else if (mode == "web" && win == "ext") {
+        var W1 = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).chromeExtID({{.ExtID}}) //app(app) //init windows manager
+      W1();
     }
     /* TO USE PUBLIC GSHEET */
     window._renderGsheet = function(d) {
