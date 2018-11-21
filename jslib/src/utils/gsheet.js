@@ -23,7 +23,7 @@ var jsonp = function(url){
   };
 export default function(sql, sheetid, callback){
   	if (typeof callback == "undefined") {callback="console.log"}
-  	var url = 'http://spreadsheets.google.com/a/google.com/tq?',
+  	var url = 'https://spreadsheets.google.com/a/google.com/tq?',
   	params = {
   		key: sheetid,
   		tq: encodeURIComponent(sql),
