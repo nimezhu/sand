@@ -40,6 +40,7 @@ type user struct {
 }
 
 var cred Credentials
+
 var conf *oauth2.Config
 var state string
 var store = sessions.NewCookieStore([]byte("secret"))
@@ -91,8 +92,29 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("%s", v)))
 }
 
-func getLoginURL(state string) string {
-	return conf.AuthCodeURL(state, oauth2.AccessTypeOffline)
+func getLoginURL(state string, host string) string {
+	if v, ok := redirectMap[host]; ok {
+		newconf := &oauth2.Config{
+			ClientID:     cred.Cid,
+			ClientSecret: cred.Csecret,
+			RedirectURL:  v,
+			Scopes: []string{
+				"https://www.googleapis.com/auth/userinfo.email",
+				"https://www.googleapis.com/auth/spreadsheets",
+			},
+			Endpoint: google.Endpoint,
+		}
+		return newconf.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	} else {
+		return conf.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	}
+}
+
+/* TODO RedirectURL override HARD CODE???*/
+var redirectMap = map[string]string{
+	"genome.compbio.cs.cmu.edu":      "https://genome.compbio.cs.cmu.edu/auth/google/callback",
+	"genome.compbio.cs.cmu.edu:8080": "http://genome.compbio.cs.cmu.edu:8080/auth/google/callback",
+	"x7.andrew.cmu.edu:8080":         "http://x7.andrew.cmu.edu:8080/auth/google/callback",
 }
 
 func authHandler(w http.ResponseWriter, r *http.Request) {
@@ -105,8 +127,23 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	code := r.FormValue("code")
+	//add New Conf Here
+	redirect := cred.RedirectURL
+	if v, ok := redirectMap[r.Host]; ok {
+		redirect = v
+	}
+	newconf := &oauth2.Config{
+		ClientID:     cred.Cid,
+		ClientSecret: cred.Csecret,
+		RedirectURL:  redirect,
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.email",
+			"https://www.googleapis.com/auth/spreadsheets",
+		},
+		Endpoint: google.Endpoint,
+	}
 
-	token, err := conf.Exchange(oauth2.NoContext, code)
+	token, err := newconf.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		fmt.Println("Code exchange failed with \n", err)
 		http.Redirect(w, r, "/v1/main.html?config=continue", http.StatusTemporaryRedirect)
@@ -222,7 +259,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, sessionID)
 	session.Values["state"] = state
 	session.Save(r, w)
-	w.Write([]byte("<html><title>Golang Google</title> <body style='display:none'><a href='" + getLoginURL(state) + "'><button id='myCheck'>Login with Google!</button> </a> </body><script>(function(){document.getElementById('myCheck').click();}())</script></html>"))
+	w.Write([]byte("<html><title>Golang Google</title> <body style='display:none'><a href='" + getLoginURL(state, r.Host) + "'><button id='myCheck'>Login with Google!</button> </a> </body><script>(function(){document.getElementById('myCheck').click();}())</script></html>"))
 	//TODO  LOGIN BUTTON
 }
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
