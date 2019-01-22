@@ -160,6 +160,8 @@ export default function() {
                             connectChan()
                         }
                     });
+            } else {
+                connectChan()
             }
         } else {
             connectChan()
