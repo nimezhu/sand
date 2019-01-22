@@ -19,3 +19,4 @@ export{default as NewPanelManager} from "./src/init/panels"
 export{default as factory} from "./src/utils/factory"
 
 export{default as gsheetQuery} from "./src/utils/gsheet"
+export{default as chan} from "./src/utils/chan"
