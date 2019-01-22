@@ -161,6 +161,8 @@ export default function() {
                         }
                     });
             }
+        } else {
+            connectChan()
         }
         /* Add Channel Here Test*/
         /* TODO Make Channel as A Not Ext Found Alternative */
