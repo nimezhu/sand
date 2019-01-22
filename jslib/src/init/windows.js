@@ -38,7 +38,7 @@ export default function() {
     var getmessage = function(event) {
         if (event.origin !== domain) //TODO FIX
             return;
-        
+
         var d = event.data
         if (d.code == "extMessage") { //external window to main window
             dispatch.call("receiveMessage", this, d.data)
@@ -65,11 +65,10 @@ export default function() {
         if (d.code == "addPanel") { // add new panel (mv panel between windows)
             var layout = P.layout();
             if (layout.root == null) {
-                setTimeout(function(){
+                setTimeout(function() {
                     console.log("after 2 secs")
                     layout.root.contentItems[0].addChild(JSON.parse(d.data))
-                }
-                ,2000)
+                }, 2000)
             } else {
                 layout.root.contentItems[0].addChild(JSON.parse(d.data));
             }
@@ -116,9 +115,34 @@ export default function() {
             $("#openExt").hide()
 
         }
+        var channel = "cnbChan01"
+        var connectChan = function() {
+            console.log("connect to channel " + channel)
+            var chan = new BroadcastChannel(channel)
+            dispatch.on("sendMessage.chan", function(d) {
+                chan.postMessage(d)
+            })
+            chan.onmessage = function(e) {
+                var d = e.data
+                dispatch.call("receiveMessage", this,d)
+                    
+            };
+        }
         if (typeof chrome !== "undefined") {
             var hasExtension = false;
             if (chrome.runtime && chromeExtID) {
+                var connectExt = function() {
+                    chromeExtPort = chrome.runtime.connect(chromeExtID)
+                    dispatch.on("sendMessage.apps", function(d) {
+                        chromeExtPort.postMessage(d)
+                    })
+                    chromeExtPort.onMessage.addListener(function(d) {
+                        dispatch.call("receiveMessage", this, {
+                            code: d.code,
+                            data: JSON.stringify(d.data)
+                        });
+                    })
+                }
                 chrome.runtime.sendMessage(chromeExtID, {
                         message: "version"
                     },
@@ -133,24 +157,15 @@ export default function() {
                             hasExtension = false;
                             d3.select("#extension").style("display", null)
                             console.log("not connect to ext", reply)
+                            connectChan()
                         }
                     });
-
-                var connectExt = function() {
-                    chromeExtPort = chrome.runtime.connect(chromeExtID)
-                    //var processingExternal = false;
-                    dispatch.on("sendMessage.apps", function(d) {
-                            chromeExtPort.postMessage(d) //send message to chromeExt
-                    })
-                    chromeExtPort.onMessage.addListener(function(d) {
-                        dispatch.call("receiveMessage", this, {
-                            code: d.code,
-                            data: JSON.stringify(d.data)
-                        });
-                    })
-                }
             }
         }
+        /* Add Channel Here Test*/
+        /* TODO Make Channel as A Not Ext Found Alternative */
+        /* TEST Channel */
+
         dispatch.on("loadPanel", function(d) {
             var layout = P.layout()
             if (typeof layout.root.contentItems[0] == "undefined") {

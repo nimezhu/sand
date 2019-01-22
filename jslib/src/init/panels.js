@@ -35,9 +35,19 @@ export default function() {
       $("#layoutContainer").empty()
       initPanels(d, $("#layoutContainer"))
     })
+    var lastSent = ""
     dispatch.on("receiveMessage.panels",function(d){
+      /* 
+       * check if it is last message , no resend, 
+       * especially get message from both chan and ext
+       */
+      var s = JSON.stringify(d)
+      if (s==lastSent) {
+          return
+      } else {
+          lastSent = s
+      }
       eventHub.emit("receiveMessage",d)
-    
       if (d.code=="refreshWorkSpace"){
         dispatch.call("refreshWorkSpace",this,{})
       }
