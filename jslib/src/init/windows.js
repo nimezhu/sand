@@ -117,6 +117,7 @@ export default function() {
         }
         var channel = "cnbChan01"
         var connectChan = function() {
+            try {
             console.log("connect to channel " + channel)
             var chan = new BroadcastChannel(channel)
             dispatch.on("sendMessage.chan", function(d) {
@@ -127,6 +128,10 @@ export default function() {
                 dispatch.call("receiveMessage", this,d)
                     
             };
+
+            } catch(e) {
+                console.log("Your browser doesn't support BroadcastChannel.")
+            }
         }
         if (typeof chrome !== "undefined") {
             var hasExtension = false;
