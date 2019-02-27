@@ -32,8 +32,10 @@ export default function() {
 
     })
     dispatch.on("setState", function(d) {
-      $("#layoutContainer").empty()
-      initPanels(d, $("#layoutContainer"))
+        setTimeout(function(){ //TODO
+            $("#layoutContainer").empty()
+            initPanels(d, $("#layoutContainer"))
+        },1000)
     })
     var lastSent = ""
     dispatch.on("receiveMessage.panels",function(d){

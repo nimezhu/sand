@@ -3,21 +3,28 @@
 
 <head>
   <title id="title">{{.Appname}}</title>
+  <link rel="manifest" href="/manifest.json"> <!-- For Progressive Web App -->
   {{template "lib"}}
   <script type="text/javascript" src="/web/lib/sand.min.js"></script>
   {{range .Libs}}
   <script type="text/javascript" src="{{.}}"></script>
   {{end}} {{template "css"}}
-
   <link rel="stylesheet" href="/web/style/sand.base.css">
   <!-- THEME
   -->
   {{range .Styles}}
   <link rel="stylesheet" href="{{.}}"> {{end}}
+<style>
+.hide {
+    display:none;
+}
+</style>
 </head>
 
 <body style="height:100%">
-  {{template "menu"}} {{template "wrapper"}} {{ template "modal"}} {{ template "modalLoad"}} {{ template "modalSave"}} {{ template "modalPrompt"}}
+  {{template "menu"}} 
+    <div id="notify" class="hide">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
+  {{template "wrapper"}} {{ template "modal"}} {{ template "modalLoad"}} {{ template "modalSave"}} {{ template "modalPrompt"}}
 </body>
 <script>
   var eventHub;
@@ -144,7 +151,7 @@ waitForWebfonts(["Roboto Mono"],function(){
       .on("click",function(){
         window.open("/static/")
       })
-    d3.select("#appinfo").text("{{.Appname}} v{{.Version}}")
+    d3.select("#appinfo").text("{{.Appname}}")
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
