@@ -5,24 +5,37 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
 
+func addType(uri string, w http.ResponseWriter) {
+	a := strings.Split(uri, ".")
+	s := a[len(a)-1]
+	if s == "js" {
+		w.Header().Add("Content-Type", "text/javascript")
+	}
+	if s == "css" {
+		w.Header().Add("Content-Type", "text/css")
+	}
+}
 func bindataServer(root string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...
 		id := root + r.RequestURI
 		bytes, err := Asset(id)
+
 		if err != nil {
 			w.Write([]byte("file not found"))
 		} else {
+			addType(r.RequestURI, w)
 			w.Write(bytes)
 		}
 	})
 }
 func addBindata(router *mux.Router) {
-	router.PathPrefix("/web/").Handler(addAuthHandler(bindataServer("app")))
+	router.PathPrefix("/web/").Handler(bindataServer("app"))
 	router.PathPrefix("/data/").Handler(addAuthHandler(bindataServer("app")))
 	router.PathPrefix("/admin/").Handler(addAdminHandler(bindataServer("app")))
 }
