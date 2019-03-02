@@ -12,6 +12,7 @@ export default function () {
     theme = "light"
   }
   loadCssJs("/css/goldenlayout-" + theme + "-theme.css", "css")
-  loadCssJs("/web/style/sand." + theme + ".css", "css")
+  //loadCssJs("/web/style/sand." + theme + ".css", "css")
+  loadCssJs("/static/css/sand." + theme + ".css", "css")
   return theme
 }

@@ -160,6 +160,11 @@ export default function() {
                 $("#login").show();
                 $("#picture").hide();
             }
+        }).fail(function(){
+                $("#logout").hide();
+                $("#login").hide();
+                $("#picture").hide();
+
         })
         $("#share").on("click", function(_) {
             dispatch.call("shareSession", this, _)

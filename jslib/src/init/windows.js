@@ -124,7 +124,7 @@ export default function() {
                 chan.postMessage(d)
             })
             chan.onmessage = function(e) {
-                var d = e.data
+                var d = e.data  
                 dispatch.call("receiveMessage", this,d)
                     
             };

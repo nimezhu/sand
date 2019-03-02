@@ -43,12 +43,14 @@ export default function() {
        * check if it is last message , no resend, 
        * especially get message from both chan and ext
        */
+      /*
       var s = JSON.stringify(d)
       if (s==lastSent) {
           return
       } else {
           lastSent = s
       }
+      */
       eventHub.emit("receiveMessage",d)
       if (d.code=="refreshWorkSpace"){
         dispatch.call("refreshWorkSpace",this,{})
