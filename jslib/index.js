@@ -14,7 +14,7 @@ export{default as initTheme} from "./src/init/theme"
 export{default as initMenu} from "./src/init/menu"
 export{default as NewLayout} from "./src/init/layout"
 export{default as NewWindowManager} from "./src/init/windows"
-export{default as NewElectronManager} from "./src/init/electron"
+//export{default as NewElectronManager} from "./src/init/electron"
 export{default as NewPanelManager} from "./src/init/panels"
 export{default as factory} from "./src/utils/factory"
 

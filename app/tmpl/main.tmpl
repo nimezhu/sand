@@ -134,11 +134,9 @@ waitForWebfonts(["Roboto Mono"],function(){
 
     var renders = eval({{.Renders}});
     var renderList = Object.keys(renders).sort()
-    //interface for add other input
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
-      "saveToElectron", "openExt","closeExt","renderExtWinNav", "loadPanel",
-      "electron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet", "refreshWorkSpace")
-    //saveToGSheet is for electron
+      "openExt","closeExt","renderExtWinNav", "loadPanel",
+      "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet", "refreshWorkSpace")
     var message = {}
     var app = {}
     d3.json("/userinfo",{credentials:"same-origin"}).then(function(d){
@@ -197,25 +195,10 @@ waitForWebfonts(["Roboto Mono"],function(){
         }
       })
     }
-
-    if (S.toolsGetBrowserType() == "electron" && cfg == "continue") {
-      //TODO : for parameters in uri passing
-      window.location = "/v1/main.html?mode=app&win=main"
-    }
-    if (mode == "app") {
-      $("#share").hide();
-      mode = "app"
-      var dialogE = require("electron").remote.dialog;
-      document.addEventListener('astilectron-ready', function() {
-        isAstilectron = true
-        console.log("astelectron ready")
-        var E = S.NewElectronManager().dispatch(dispatch).dialogE(dialogE).astilectron(astilectron).P(PanelManager) //.app(app)
-        E()
-      })
-    } else if (mode == "web" && win == "main") { //any other condition
+    if (win == "main") { //any other condition
       var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).chromeExtID({{.ExtID}}) //app(app) //init windows manager
       W();
-    } else if (mode == "web" && win == "ext") {
+    } else if (win == "ext") {
         var W1 = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).chromeExtID({{.ExtID}}) //app(app) //init windows manager
       W1();
     }

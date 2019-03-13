@@ -70,28 +70,19 @@ func (s *Sand) InitIdxRoot(root string) string {
 	return idxRoot
 }
 
-/*Start : Start an electron Application or start a web server
- *        options :  mode {"web","desktop"}
- * 				port :  8080-8082
- */
-func (s *Sand) Start(mode string, port int, router *mux.Router) {
-	s._startApp(mode, port, router)
+func (s *Sand) Start(port int, router *mux.Router) {
+	s._startApp(port, router)
 }
-func (s *Sand) _startApp(mode string, port int, router *mux.Router) {
-	if mode == "d" || mode == "desktop" {
-		go http.ListenAndServe(":"+strconv.Itoa(port), router) //ERROR HANDLER
-		s.startAstilectron(port, router)
-	} else {
-		server := &http.Server{Addr: ":" + strconv.Itoa(port), Handler: router}
-		router.Handle("/cmd/stop", addAdminHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("Command Stop Server"))
-			s.handleInterrupt()
-			os.Exit(0)
-		})))
-		err := server.ListenAndServe()
-		if err != nil {
-			panic(err)
-		}
-		log.Println("Please open http://127.0.0.1:" + strconv.Itoa(port))
+func (s *Sand) _startApp(port int, router *mux.Router) {
+	server := &http.Server{Addr: ":" + strconv.Itoa(port), Handler: router}
+	router.Handle("/cmd/stop", addAdminHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Command Stop Server"))
+		s.handleInterrupt()
+		os.Exit(0)
+	})))
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(err)
 	}
+	log.Println("Please open http://127.0.0.1:" + strconv.Itoa(port))
 }

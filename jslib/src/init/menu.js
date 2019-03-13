@@ -132,10 +132,12 @@ export default function() {
         })
         $("#import").on("click", function(d) {
             dispatch.call("importStates", this, function(d) {
+                /*
                 dispatch.call("electron", this, JSON.stringify({
                     "code": "readFile",
                     "data": d[0]
                 }))
+                */
             })
         })
         $("#login").on("click", function(d) {
@@ -178,22 +180,6 @@ export default function() {
             console.log("on click loadSheet")
             dispatch.call("loadFromSheet", this, _)
         })
-        /*
-        $("#loadFromSpace").on("click", function(_) {
-            var state = localStorage.getItem("panelTest")
-            state = JSON.parse(state)
-            console.log("load", state)
-            var d = {
-                title: state.name,
-                type: 'component',
-                componentName: 'canvas',
-                componentState: JSON.parse(JSON.stringify(state))
-            };
-            //layout.root.contentItems[0].addChild(d);
-            dispatch.call("loadPanel",this,d) //addPanel
-
-        })
-        */
         var checkSheetId = function() {
             d3.json("/getsheetid", {
                 credentials: 'same-origin'
@@ -248,7 +234,7 @@ export default function() {
                     })
                 }
             }
-            if (!isAstilectron) {
+            //if (!isAstilectron) {
                 d3.json("/getsheetid", {
                     credentials: 'same-origin'
                 }).then(function(d) {
@@ -259,7 +245,10 @@ export default function() {
                     var id = prompt("sheetId", "")
                     setSheetId(id)
                 })
-            } else {
+
+            //}
+            /*
+            else {
                 var id = ""
                 d3.json("/getsheetid", {
                     credentials: 'same-origin'
@@ -277,7 +266,7 @@ export default function() {
                     })
                 })
 
-            }
+            }*/
         })
         var renderLis = d3.select("#renders").selectAll("li").data(renderList)
             .enter()
