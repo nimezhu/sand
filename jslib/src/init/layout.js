@@ -73,14 +73,18 @@ export default function (config, el, dispatch, renders, app) {
       }
     };
     /* save panel to workspace */
+    var panelDb = localforage.createInstance({name:"nbPanel"})
     var savePanel = function() {
       var container = stack.getActiveContentItem().container;
       var state = container.getState();
-      var result = window.prompt("Please input a name for this panel")
+      var result = window.prompt("Panel Name:", state.name||"")
       if (result && result!=""){
-         localStorage.setItem("cnb-panel-"+result,JSON.stringify(state))
-         dispatch.call("refreshWorkSpace",this,{})
-         layout.eventHub.emit("sendMessage",{"code":"refreshWorkSpace","data":JSON.stringify({})}) //TODO
+         //localStorage.setItem("cnb-panel-"+result,JSON.stringify(state))
+          state.name = result
+          panelDb.setItem(result,JSON.stringify(state)).then(function(){
+            dispatch.call("refreshWorkSpace",this,{})
+            layout.eventHub.emit("sendMessage",{"code":"refreshWorkSpace","data":JSON.stringify({})}) //TODO
+          })
       }
     }
     var duplicatePanel = function () {

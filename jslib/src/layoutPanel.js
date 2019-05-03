@@ -131,6 +131,22 @@ export default function() {
                     }
                 })
                 .text("open")
+            btnGrp.append("button")
+                .classed("btn", true)
+                .classed("btn-success", true)
+                .classed("btn-sm", true)
+                .on("click", function(d) {
+                    if (sheetId) {
+                        console.log("TODO:d?",d)
+                        //window.open("/v1/main.html?config=gsheet:" + sheetId + ":" + d[0].replace(" ", "%20"))
+                    } else {
+                        console.log("TODO:d",d)
+                        //window.open(d[3] || "/v1/main.html?config=/sheet?idx=" + (i + 1))
+                    }
+                })
+                .text("download")
+
+
             svgdiv.call(_render)
         })
 

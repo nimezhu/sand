@@ -65,26 +65,56 @@ export default function() {
 
         var spaceOn = false
         var spaceUl = d3.select("#menuContainer").append("ul")
-        var renderSpaceList = function(){
-                var list = []
-                for (var i = 0, len = localStorage.length; i < len; i++) {
-                    var key = localStorage.key(i);
-                    if (key.match(/^cnb-panel-/)) {
-                        var name = key.replace("cnb-panel-", "")
-                        list.push(name)
-                    }
 
+        /* using localforage */
+        var panelDb = localforage.createInstance({
+            "name": "nbPanel"
+        })
+        var renderSpaceList = function() {
+            panelDb.keys().then(function(list) {
+                var _li = spaceUl.selectAll("li").data(list)
+                _li.exit().remove()
+                _li.enter().append("li")
+                    .merge(_li)
+                    .call(_chart)
+
+            })
+
+            /*
+            for (var i = 0, len = localStorage.length; i < len; i++) {
+                var key = localStorage.key(i);
+                if (key.match(/^cnb-panel-/)) {
+                    var name = key.replace("cnb-panel-", "")
+                    list.push(name)
                 }
-                var _chart = function(selection) {
-                    selection.each(function(d) {
-                        var el = d3.select(this)
-                        el.selectAll("*").remove()
-                        el.append("span").text(d)
-                        var elR = el.append("span").style("float","right")
 
-                        elR.append("span").classed("glyphicon",true).classed("glyphicon-open",true).on("click", function() {
-                                var v = localStorage.getItem("cnb-panel-" + d)
-                                console.log("get panel", v,d)
+            }
+            */
+            var _chart = function(selection) {
+                selection.each(function(d) {
+                    var el = d3.select(this).style("height", "45px")
+                    el.style("cursor", "default").style("background-color", "#333")
+                    el.on("mouseover", function() {
+                        d3.select(this).style("background-color", "#555")
+                    }).on("mouseout", function() {
+                        d3.select(this).style("background-color", "#333")
+                    })
+                    el.selectAll("*").remove()
+                    el.append("div").style("float", "left").style("font-size", "18px").text(d)
+                    var elR = el.append("div")
+                        .style("float", "right")
+                        .classed("btn-group", true)
+
+                    elR.append("button")
+                        .attr("type", "button")
+                        .classed("btn", true)
+                        .classed("btn-xs", true)
+                        .classed("btn-default", true)
+                        .classed("glyphicon", true)
+                        .classed("glyphicon-open", true)
+                        .on("click", function() {
+                            panelDb.getItem(d).then(function(v) {
+                                console.log("get panel", v, d)
                                 var state = JSON.parse(v)
                                 var a = {
                                     title: state.name,
@@ -94,19 +124,27 @@ export default function() {
                                 };
                                 dispatch.call("loadPanel", this, a)
                             })
-                        elR.append("span").classed("glyphicon",true).classed("glyphicon-remove",true).on("click",function(){
-                                var v = localStorage.removeItem("cnb-panel-" + d)
-                                el.remove()
-                                dispatch.call("sendMessage",this,{code:"refreshWorkSpace",data:""})
+                        })
+                    elR.append("button")
+                        .attr("type", "button")
+                        .classed("btn", true)
+                        .classed("btn-xs", true)
+                        .classed("btn-default", true)
+                        .classed("glyphicon", true).classed("glyphicon-remove", true).on("click", function() {
+                            var r = window.confirm("Delete panel " + d + " in workspace?")
+                            if (r == true) {
+                                var v = panelDb.removeItem(d).then(function() {
+                                    el.remove()
+                                    dispatch.call("sendMessage", this, {
+                                        code: "refreshWorkSpace",
+                                        data: ""
+                                    })
+                                })
+                            }
                         })
 
-                    })
-                }
-                var _li = spaceUl.selectAll("li").data(list)
-                _li.exit().remove()
-                _li.enter().append("li")
-                    .merge(_li)
-                    .call(_chart)
+                })
+            }
 
         }
         $("#space").on("click", function() {
@@ -120,12 +158,12 @@ export default function() {
                 $("#menuContainer").width("20%").show()
                 $("#layoutContainer").width("80%").css("left", "20%")
                 dispatch.call("resize", this, {})
-                renderSpaceList() 
+                renderSpaceList()
             }
             spaceOn = !spaceOn
         })
-        dispatch.on("refreshWorkSpace",function(){
-                renderSpaceList() 
+        dispatch.on("refreshWorkSpace", function() {
+            renderSpaceList()
         })
         $("#export").on("click", function(_) {
             dispatch.call("exportStates", this, _)
@@ -162,10 +200,10 @@ export default function() {
                 $("#login").show();
                 $("#picture").hide();
             }
-        }).fail(function(){
-                $("#logout").hide();
-                $("#login").hide();
-                $("#picture").hide();
+        }).fail(function() {
+            $("#logout").hide();
+            $("#login").hide();
+            $("#picture").hide();
 
         })
         $("#share").on("click", function(_) {
@@ -235,16 +273,16 @@ export default function() {
                 }
             }
             //if (!isAstilectron) {
-                d3.json("/getsheetid", {
-                    credentials: 'same-origin'
-                }).then(function(d) {
-                    //TODO
-                    var id = prompt("sheetId", d.sheetid || "")
-                    setSheetId(id)
-                }).catch(function(e) {
-                    var id = prompt("sheetId", "")
-                    setSheetId(id)
-                })
+            d3.json("/getsheetid", {
+                credentials: 'same-origin'
+            }).then(function(d) {
+                //TODO
+                var id = prompt("sheetId", d.sheetid || "")
+                setSheetId(id)
+            }).catch(function(e) {
+                var id = prompt("sheetId", "")
+                setSheetId(id)
+            })
 
             //}
             /*
