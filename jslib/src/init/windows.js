@@ -393,7 +393,7 @@ export default function() {
         })
         dispatch.on("exportStates", function() {
             var data = _getStates()
-            toolsDownload("scopeExt.json", data)
+            toolsDownload("scopeExt.json", data) //TODO Replace with DB
         })
         dispatch.on("saveSession", function() {
             var data = _getStates()
@@ -448,7 +448,7 @@ export default function() {
                 }
             })
         })
-        var fileUpload = toolsUpload().callback(function(d) {
+        var fileUpload = toolsUpload().callback(function(d) { //TODO: Replace with dbget
             dispatch.call("initWindows", this, d)
         })
         dispatch.on("importStates", function(_) {

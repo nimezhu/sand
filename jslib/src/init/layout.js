@@ -22,6 +22,7 @@ export default function (config, el, dispatch, renders, app) {
   layout.on('stackCreated', function (stack) {
     var toggle = $("<li class='lm_cfgbtn' title='config'></li>")
     var duplicate = $("<li class='lm_dupbtn' title='clone'></li>") //TODO
+    var rename = $("<li class='lm_renamebtn' title='rename'></li>") //TODO
     var save = $("<li class='lm_savebtn' title='save to workspace'></li>") //TODO
     var popout = $("<li class='lm_outbtn' title='pop out'></li>") //TODO
     var popin = $("<li class='lm_inbtn' title='pop in'></li>") //TODO
@@ -29,7 +30,19 @@ export default function (config, el, dispatch, renders, app) {
     stack.header.controlsContainer.prepend(popin);
     stack.header.controlsContainer.prepend(duplicate);
     stack.header.controlsContainer.prepend(save);
+    stack.header.controlsContainer.prepend(rename);
     stack.header.controlsContainer.prepend(toggle);
+      rename.on("click", function(){
+        var container = stack.getActiveContentItem().container;
+        var state = container.getState()
+        var newname = prompt("Set Tab Title", state.name);
+        if (newname == null || newname == "") {
+        } else {
+            container.setTitle(newname)
+            state.name = newname
+            container.setState(state)
+        }
+      })
     toggle.on("click", function () {
       toggleConfig();
     })
