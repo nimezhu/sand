@@ -131,6 +131,7 @@
           </form>
           <div id="loader" class="loader" style="display:none;position:absolute;left:100px">
           </div>
+
         </div>
       </div>
     </div>
@@ -157,6 +158,8 @@
     var container = d3.select("#layoutContainer")
     var ctrldiv = container.append("div").classed("ctrl", true)
     var currentdiv = container.append("div").style("background-color", "#cee8d9")
+    var localPanelListDiv = container.append("div")
+    var localPanelRenderDiv = container.append("div")
     var panelsdiv = container.append("div")
     //ctrldiv.append("span").text("SheetID:").style("padding-right","10px")
     var sheetIdInput = d3.select("#sheetIdInput")
@@ -168,6 +171,9 @@
         currentId = d.sheetid
         renderSessions()
         d3.select("#loader").style("display","none")
+      }).catch(function(e){
+            //No User Sheet
+        d3.select("#loader").style("display","none")
       })
     }
     fLoad()
@@ -175,6 +181,8 @@
       .on("click", function() {
         fLoad()
       })
+
+      
     d3.select("#submit")
       .on("click", function() {
         var id = sheetIdInput.node().value
@@ -195,6 +203,8 @@
       .on("click", function() {
         window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
       })
+    
+      
     var pchart=S.layoutPanel();//TODO
 
     var renderSessions = function() {
@@ -211,10 +221,40 @@
           .call(pchart)
       })
     }
+    var sessionDb = localforage.createInstance({
+            "name": "nbSession"
+        })
+
+    var localRender = S.layoutLocalForage()
+    sessionDb.keys().then(function(d) {
+                var a = localPanelListDiv.selectAll("li").data(d);
+                var idx = 1;
+                a.enter()
+                    .append("li")
+                    .merge(a)
+                    .text(function(d, i) {
+                        return i + " " + d
+                    })
+                    .on("click", function(d, i) {
+                        sessionDb.getItem(d).then(function(d){
+                            localPanelRenderDiv.selectAll(".panel").remove()
+                            var p = localPanelRenderDiv.selectAll(".panel").data([d])
+                            p.exit().remove()
+                            p.enter().append("div").classed("panel",true)
+                            .merge(p)
+                            .call(localRender)
+                        }) 
+                    })
+                //Add　Delete Button
+                a.exit().remove()
+   })
+
+
 
 
     $.get("/profile", function(d) {
       d = JSON.parse(d);
+      //TODO Handle
       if (d.email) {
         $("#logout").show();
         $("#login").hide();

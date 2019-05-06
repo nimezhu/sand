@@ -44,6 +44,7 @@
   var fixedLayout
   var initedLayout
   var lite = 0
+ /*
   window.addEventListener("dragover", function(e) {
     e = e || event;
     e.preventDefault();
@@ -52,7 +53,6 @@
     e = e || event;
     e.preventDefault();
   }, false);
- /*
  $(window).bind('storage', function (e) {
      console.log(e.originalEvent.key, e.originalEvent.newValue);
  });
@@ -215,6 +215,14 @@ waitForWebfonts(["Roboto Mono"],function(){
     if (cfg && cfg.match(/gsheet:\S+:\S+/)) {
       var a = cfg.split(":")
       S.gsheetQuery("select * where A='" + a[2] + "'", a[1], "_renderGsheet")
+    } else if (cfg && cfg.match(/localstorage:\S+/) ){
+        var a = cfg.split(":")
+        var sessionDb = localforage.createInstance({
+            "name": "nbSession"
+        })
+        sessionDb.getItem(a[1]).then(function(d){
+          dispatch.call("initWindows", this, JSON.parse(d.data))
+        })
     } else if (cfg && cfg != "continue") {
       $(".menu .note").hide()
       d3.json(server + cfg, sandInits).then(function(config) {
@@ -224,12 +232,12 @@ waitForWebfonts(["Roboto Mono"],function(){
           dispatch.call("initPanels", this, config)
         }
       })
-    } else if (!cfg) {
+   }  else if (!cfg) {
       if (win == "main") {
         $(".menu .note").show()
       }
       dispatch.call("initPanels", this, emptyCfg)
-    } 
+   }
 
     window.onresize = function() {
       dispatch.call("resize", this, {})

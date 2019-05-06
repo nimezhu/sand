@@ -1,5 +1,5 @@
-import toolsDownload from "../tools/download"
-import toolsUpload from "../tools/upload"
+//import toolsDownload from "../tools/download"
+//import toolsUpload from "../tools/upload"
 var isEmpty = function(layout) {
     if (layout.content[0].content.length == 0) {
         return true
@@ -391,10 +391,6 @@ export default function() {
             $("#modalLoad").modal("show");
 
         })
-        dispatch.on("exportStates", function() {
-            var data = _getStates()
-            toolsDownload("scopeExt.json", data) //TODO Replace with DB
-        })
         dispatch.on("saveSession", function() {
             var data = _getStates()
             var d = JSON.parse(data) //TODO check data empty.
@@ -448,17 +444,69 @@ export default function() {
                 }
             })
         })
+
+        //TODO Change Export States to LocalForage
+        //
+        var sessionDb = localforage.createInstance({
+            "name": "nbSession"
+        })
+
+
+        dispatch.on("exportStates", function() {
+            var data = _getStates()
+            $("#modalSave").modal("show");
+            d3.select("#saveModalBtn").on("click", function() {
+                //window.location="/v1/main.html?config=/sheet?idx="+idx //TODO to Reload
+                var d = {
+                    "id": d3.select("#modalSaveId").node().value,
+                    "note": d3.select("#modalSaveNote").node().value,
+                    "data":data
+                }
+                //_saveToSheet(d)
+                sessionDb.setItem(d.id,d)
+                $("#modalSave").modal("hide")
+            })
+  
+            //popup modal and save session to sessionDb
+        })
+
+
+        /* TODO importStates from localforage */
+        /*
         var fileUpload = toolsUpload().callback(function(d) { //TODO: Replace with dbget
             dispatch.call("initWindows", this, d)
         })
-        dispatch.on("importStates", function(_) {
-            fileUpload();
-        })
-        /*
-        dispatch.on("input", function(d) {
-          layout.eventHub.emit("input", d)
-        })
         */
+        dispatch.on("importStates", function(_) {
+            //TODO Open States in List
+            //
+            //fileUpload();
+            //popup modal and load session from sessionDb
+            sessionDb.keys().then(function(d) {
+                var a = d3.select("#sheetList").selectAll("li").data(d);
+                var idx = 1;
+                a.enter()
+                    .append("li")
+                    .merge(a)
+                    .text(function(d, i) {
+                        return i + " " + d
+                    })
+                    .on("click", function(d, i) {
+                        d3.select("#sheetList").select(".selected").classed("selected", false)
+                        d3.select(this).classed("selected", true)
+                        idx = i + 1
+                    })
+                a.exit().remove()
+                d3.select("#loadModalBtn").on("click", function() {
+                    sessionDb.getItem(d[idx-1]).then(function(d) {
+                        dispatch.call("initWindows", this, JSON.parse(d.data))
+                    })
+                    $("#modalLoad").modal("hide")
+                })
+            })
+            $("#modalLoad").modal("show");
+
+        })
 
 
         dispatch.on("initWindows", function(d) {

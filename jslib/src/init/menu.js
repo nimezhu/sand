@@ -170,12 +170,6 @@ export default function() {
         })
         $("#import").on("click", function(d) {
             dispatch.call("importStates", this, function(d) {
-                /*
-                dispatch.call("electron", this, JSON.stringify({
-                    "code": "readFile",
-                    "data": d[0]
-                }))
-                */
             })
         })
         $("#login").on("click", function(d) {
