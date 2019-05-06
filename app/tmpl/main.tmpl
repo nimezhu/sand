@@ -242,6 +242,7 @@ waitForWebfonts(["Roboto Mono"],function(){
     window.onresize = function() {
       dispatch.call("resize", this, {})
     }
+    history.pushState({},"main","/v1/main.html")
   })(jQuery, d3, sand)
 });
 </script>

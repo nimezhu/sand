@@ -226,26 +226,36 @@
         })
 
     var localRender = S.layoutLocalForage()
+    var itemRender = function(selection){
+        selection.each(function(d){
+            var el = d3.select(this)
+            el.append("span").text(d)
+            el.append("span").classed("glyphicon",true).classed("glyphicon-play",true)
+                .on("click", function(d, i) {
+                        sessionDb.getItem(d).then(function(d){
+                            localPanelRenderDiv.selectAll(".panel").remove()
+                            var p = localPanelRenderDiv.selectAll(".panel").data([d])
+                            p.exit().remove()
+                            p.enter().append("div").classed("panel",true).classed("panel-default",true)
+                            .merge(p)
+                            .call(localRender)
+                        }) 
+                    })
+            el.append("span").classed("glyphicon",true).classed("glyphicon-remove",true)
+                .on("click", function(d, i) {
+                    sessionDb.removeItem(d).then(function(){
+                        el.remove() //TODO
+                    })
+                })
+        })
+    }
     sessionDb.keys().then(function(d) {
                 var a = localPanelListDiv.selectAll("li").data(d);
                 var idx = 1;
                 a.enter()
                     .append("li")
                     .merge(a)
-                    .text(function(d, i) {
-                        return i + " " + d
-                    })
-                    .on("click", function(d, i) {
-                        sessionDb.getItem(d).then(function(d){
-                            localPanelRenderDiv.selectAll(".panel").remove()
-                            var p = localPanelRenderDiv.selectAll(".panel").data([d])
-                            p.exit().remove()
-                            p.enter().append("div").classed("panel",true)
-                            .merge(p)
-                            .call(localRender)
-                        }) 
-                    })
-                //Add　Delete Button
+                    .call(itemRender)
                 a.exit().remove()
    })
 
