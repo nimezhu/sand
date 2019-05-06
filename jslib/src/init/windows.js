@@ -1,5 +1,5 @@
 //import toolsDownload from "../tools/download"
-//import toolsUpload from "../tools/upload"
+import toolsUpload from "../tools/upload"
 var isEmpty = function(layout) {
     if (layout.content[0].content.length == 0) {
         return true
@@ -31,7 +31,25 @@ export default function() {
     var theme = "light"
     //var app = {}  //application variables; sync between windows;
     var P
-    var dispatch = d3.dispatch("initWindows", "initPanels", "input", "resize", "add", "exportState", "exportStates", "setState", "importState", "importStates", "openExt", "closeExt", "eletron", "saveSession", "loadSession", "shareSession", "saveToSheet", "loadPanel")
+    var dispatch = d3.dispatch("initWindows",
+        "initPanels",
+        "input",
+        "resize",
+        "add",
+        "exportState",
+        "exportStates",
+        "setState",
+        "importState",
+        "importStates",
+        "openExt",
+        "closeExt",
+        "eletron",
+        "saveSession",
+        "loadSession",
+        "shareSession",
+        "saveToSheet",
+        "loadPanel",
+    )
     var win = "main" //default main
 
     /* external message processing */
@@ -118,18 +136,18 @@ export default function() {
         var channel = "cnbChan01"
         var connectChan = function() {
             try {
-            console.log("connect to channel " + channel)
-            var chan = new BroadcastChannel(channel)
-            dispatch.on("sendMessage.chan", function(d) {
-                chan.postMessage(d)
-            })
-            chan.onmessage = function(e) {
-                var d = e.data  
-                dispatch.call("receiveMessage", this,d)
-                    
-            };
+                console.log("connect to channel " + channel)
+                var chan = new BroadcastChannel(channel)
+                dispatch.on("sendMessage.chan", function(d) {
+                    chan.postMessage(d)
+                })
+                chan.onmessage = function(e) {
+                    var d = e.data
+                    dispatch.call("receiveMessage", this, d)
 
-            } catch(e) {
+                };
+
+            } catch (e) {
                 console.log("Your browser doesn't support BroadcastChannel.")
             }
         }
@@ -460,28 +478,22 @@ export default function() {
                 var d = {
                     "id": d3.select("#modalSaveId").node().value,
                     "note": d3.select("#modalSaveNote").node().value,
-                    "data":data
+                    "data": data
                 }
                 //_saveToSheet(d)
-                sessionDb.setItem(d.id,d)
+                sessionDb.setItem(d.id, d)
                 $("#modalSave").modal("hide")
             })
-  
+
             //popup modal and save session to sessionDb
         })
 
 
-        /* TODO importStates from localforage */
-        /*
         var fileUpload = toolsUpload().callback(function(d) { //TODO: Replace with dbget
             dispatch.call("initWindows", this, d)
         })
-        */
+        
         dispatch.on("importStates", function(_) {
-            //TODO Open States in List
-            //
-            //fileUpload();
-            //popup modal and load session from sessionDb
             sessionDb.keys().then(function(d) {
                 var a = d3.select("#sheetList").selectAll("li").data(d);
                 var idx = 1;
@@ -497,11 +509,22 @@ export default function() {
                         idx = i + 1
                     })
                 a.exit().remove()
+                d3.select("#sheetList").append("li").text("import from file...").on("click", function() {
+                    d3.select("#sheetList").select(".selected").classed("selected", false)
+                    d3.select(this).classed("selected", true)
+                    idx = -1
+
+                })
+
                 d3.select("#loadModalBtn").on("click", function() {
-                    sessionDb.getItem(d[idx-1]).then(function(d) {
-                        dispatch.call("initWindows", this, JSON.parse(d.data))
-                    })
                     $("#modalLoad").modal("hide")
+                    if (idx == -1) {
+                        fileUpload()
+                    } else {
+                        sessionDb.getItem(d[idx - 1]).then(function(d) {
+                            dispatch.call("initWindows", this, JSON.parse(d.data))
+                        })
+                    }
                 })
             })
             $("#modalLoad").modal("show");

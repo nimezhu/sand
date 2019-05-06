@@ -198,7 +198,6 @@ ul {
     height: 21px;
     margin: 0 5px 0 0px
 }
-
 .menu img.gravatar {
     float: left;
     margin: 2px 8px;
@@ -231,3 +230,9 @@ ul {
 .extWin .mainWinOnly {
   display : none;
 }
+
+.modal-ul > .selected {
+    background-color: #40f218
+}
+
+
