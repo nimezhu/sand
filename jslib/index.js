@@ -22,3 +22,6 @@ export{default as factory} from "./src/utils/factory"
 
 export{default as gsheetQuery} from "./src/utils/gsheet"
 export{default as chan} from "./src/utils/chan"
+
+
+export{default as waitForWebfonts} from "./src/tools/waitForWebfonts"

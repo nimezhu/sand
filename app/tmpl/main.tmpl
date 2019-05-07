@@ -24,7 +24,11 @@
 <body style="height:100%">
   {{template "menu"}} 
     <div id="notify" class="hide">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
-  {{template "wrapper"}} {{ template "modal"}} {{ template "modalLoad"}} {{ template "modalSave"}} {{ template "modalPrompt"}}
+  {{template "wrapper"}} 
+  {{ template "modal"}} 
+  {{ template "modalLoad"}} 
+  {{ template "modalSave"}} 
+  {{ template "modalPrompt"}}
 </body>
 <script>
   var eventHub;
@@ -44,74 +48,8 @@
   var fixedLayout
   var initedLayout
   var lite = 0
- /*
-  window.addEventListener("dragover", function(e) {
-    e = e || event;
-    e.preventDefault();
-  }, false);
-  window.addEventListener("drop", function(e) {
-    e = e || event;
-    e.preventDefault();
-  }, false);
- $(window).bind('storage', function (e) {
-     console.log(e.originalEvent.key, e.originalEvent.newValue);
- });
- */
-
- function waitForWebfonts(fonts, callback) {
-    var loadedFonts = 0;
-    for(var i = 0, l = fonts.length; i < l; ++i) {
-        (function(font) {
-            var node = document.createElement('span');
-            // Characters that vary significantly among different fonts
-            node.innerHTML = 'giItT1WQy@!-/#';
-            // Visible - so we can measure it - but not on the screen
-            node.style.position      = 'absolute';
-            node.style.left          = '-10000px';
-            node.style.top           = '-10000px';
-            // Large font size makes even subtle changes obvious
-            node.style.fontSize      = '300px';
-            // Reset any font properties
-            node.style.fontFamily    = 'sans-serif';
-            node.style.fontVariant   = 'normal';
-            node.style.fontStyle     = 'normal';
-            node.style.fontWeight    = 'normal';
-            node.style.letterSpacing = '0';
-            document.body.appendChild(node);
-
-            // Remember width with no applied web font
-            var width = node.offsetWidth;
-
-            node.style.fontFamily = font;
-
-            var interval;
-            function checkFont() {
-                // Compare current width with original width
-                if(node && node.offsetWidth != width) {
-                    ++loadedFonts;
-                    node.parentNode.removeChild(node);
-                    node = null;
-                }
-
-                // If all fonts have been loaded
-                if(loadedFonts >= fonts.length) {
-                    if(interval) {
-                        clearInterval(interval);
-                    }
-                    if(loadedFonts == fonts.length) {
-                        callback();
-                        return true;
-                    }
-                }
-            };
-
-            if(!checkFont()) {
-                interval = setInterval(checkFont, 50);
-            }
-        })(fonts[i]);
-    }
-};
-waitForWebfonts(["Roboto Mono"],function(){
+ 
+  sand.waitForWebfonts(["Roboto Mono"],function(){
   (function($, d3, S) {
     /* init theme */
     mode = S.toolsGetUrlPara("mode") || "web"
