@@ -148,20 +148,27 @@ export default function() {
 
         }
         $("#space").on("click", function() {
-            //TODO layout container togglea
-            console.log("space click", spaceOn)
+            //TODO layout container toggl
             if (spaceOn) {
                 $("#menuContainer").width("0%").hide()
                 $("#layoutContainer").width("100%").css("left", "0%")
                 dispatch.call("resize", this, {})
             } else {
-                $("#menuContainer").width("20%").show()
-                $("#layoutContainer").width("80%").css("left", "20%")
+                $("#menuContainer").width(200).show()
+                $("#layoutContainer").css('width',"100%").css("width","-=200px").css("left", "200px")
+                //$("#menuContainer").width("20%").show()
+                //$("#layoutContainer").css('width',"80%").css("left", "20%")
                 dispatch.call("resize", this, {})
                 renderSpaceList()
             }
             spaceOn = !spaceOn
+            if (spaceOn) {
+                $("#space").css("background-color","rgba(71,132,73,0.5)")
+            } else {
+                $("#space").css("background-color","")
+            }
         })
+    
         dispatch.on("refreshWorkSpace", function() {
             renderSpaceList()
         })
