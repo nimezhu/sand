@@ -148,7 +148,6 @@ export default function() {
 
         }
         $("#space").on("click", function() {
-            //TODO layout container toggl
             if (spaceOn) {
                 $("#menuContainer").width("0%").hide()
                 $("#layoutContainer").width("100%").css("left", "0%")
@@ -156,8 +155,6 @@ export default function() {
             } else {
                 $("#menuContainer").width(200).show()
                 $("#layoutContainer").css('width',"100%").css("width","-=200px").css("left", "200px")
-                //$("#menuContainer").width("20%").show()
-                //$("#layoutContainer").css('width',"80%").css("left", "20%")
                 dispatch.call("resize", this, {})
                 renderSpaceList()
             }

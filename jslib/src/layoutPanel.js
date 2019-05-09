@@ -76,6 +76,7 @@ export default function() {
             var panels = d3.select(this)
             var head = panels.append("div")
                 .classed("panel-heading", true)
+                .style("height","40px")
             head.append("h2")
                 .classed("panel-title", true)
                 .text(function(d) {
@@ -94,7 +95,9 @@ export default function() {
                 .on("mouseout", function() {
                     d3.select(this).style("background-color", "#F5F5F5")
                 })
+                .style("float","left")
             var bodys = panels.append("div").classed("panel-body",true)
+            /*
             bodys.append("div").append("h4").text("Description")
             bodys.append("div").style("overflow-wrap", "break-word")
                 .style("background-color", "#fffbea")
@@ -116,15 +119,68 @@ export default function() {
                     return "null"
                 }
             })
+            */
 
 
-            bodys.append("div").append("h4").text("Layout")
+            //bodys.append("div").append("h4").text("Layout")
             var svgdiv = bodys.append("div").style("padding-bottom", "10px")
-            var btnGrp = bodys.append("div").append("span").style("float", "right").style("padding-right", "25px")
+
+            var infodiv = bodys.append("div").style("padding-bottom", "10px").style("display","none")
+            
+            infodiv.append("div").style("overflow-wrap", "break-word")
+                .style("padding", "5px")
+                .style("height", "100px")
+                .style("overflow-y", "auto")
+                .text(function(d) {
+                    return d[1]
+                })
+            var regions = infodiv.append("div")
+            var regionsDiv = regions.append("div")
+                .style("height", "50px")
+                .style("overflow-y", "auto")
+            regionsDiv.text(function(d) {
+                var k = JSON.parse(JSON.parse(d[2])[-2])
+                if (k.regions) {
+                    return regionsNiceText(k.regions)
+                } else {
+                    return "null"
+                }
+            })
+
+
+
+
+            var btnGrp = head.append("div").append("span").style("float", "right").style("padding-right", "0px")
+             btnGrp.append("button")
+                .classed("btn", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
+                .on("click", function() {
+                    //Toggle Information Sign
+                    var el = d3.select(this)
+                    if (el.classed("btn-default")) {
+                        el.classed("btn-default",false)
+                        el.classed("btn-success",true)
+                        svgdiv.style("display","none")
+                        infodiv.style("display",null)
+                    } else {
+                        el.classed("btn-default",true)
+                        el.classed("btn-success",false)
+                        svgdiv.style("display",null)
+                        infodiv.style("display","none")
+                    }
+
+                })
+                .classed("glyphicon",true)
+                .classed("glyphicon-info-sign",true)
+                .attr("title","information")
+
+
+            
             btnGrp.append("button")
                 .classed("btn", true)
-                .classed("btn-success", true)
-                .classed("btn-sm", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
                 .on("click", function(d) {
                     if (sheetId) {
                         window.open("/v1/main.html?config=gsheet:" + sheetId + ":" + d[0].replace(" ", "%20"))
@@ -132,15 +188,22 @@ export default function() {
                         window.open(d[3] || "/v1/main.html?config=/sheet?idx=" + (i + 1))
                     }
                 })
-                .text("open")
+                .classed("glyphicon",true)
+                .classed("glyphicon-open",true)
+                .attr("title","open")
+
+
             btnGrp.append("button")
                 .classed("btn", true)
-                .classed("btn-primary", true)
-                .classed("btn-sm", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
                 .on("click", function(d) {
                    download("nb_session.json",d[2])
                 })
-                .text("download")
+                .classed("glyphicon",true)
+                .classed("glyphicon-download",true)
+                .attr("title","download")
+
 
 
             svgdiv.call(_render)

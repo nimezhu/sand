@@ -24,7 +24,7 @@ var trans = function(d) {
 export default function() {
     var xscale = 2.70
     var yscale = 1.68
-    var sheetId
+    var db
     var chart = function(selection) {
         var iconRender = layoutIcon().xscale(xscale).yscale(yscale)
         var _render = function(el) {
@@ -78,25 +78,28 @@ export default function() {
             var panels = d3.select(this)
             var head = panels.append("div")
                 .classed("panel-heading", true)
-            head.append("h2")
+                .style("height","40px")
+            head.append("h3")
                 .classed("panel-title", true)
+                .style("float","left")
                 .text(function(d) {
                     return d.id
                 })
             var bodys = panels.append("div").classed("panel-body",true)
-            bodys.append("div").append("h4").text("Description")
-            bodys.append("div").style("overflow-wrap", "break-word")
-                .style("background-color", "#fffbea")
+            var svgdiv = bodys.append("div").style("padding-bottom", "10px")
+            var infodiv = bodys.append("div").style("padding-bottom", "10px").style("display","none")
+            
+            infodiv.append("div").style("overflow-wrap", "break-word")
                 .style("padding", "5px")
                 .style("height", "100px")
                 .style("overflow-y", "auto")
                 .text(function(d) {
                     return d.note
-
                 })
-            var regions = bodys.append("div")
-            regions.append("h4").text("Regions")
-            var regionsDiv = regions.append("div").style("height", "50px").style("overflow-y", "auto")
+            var regions = infodiv.append("div")
+            var regionsDiv = regions.append("div")
+                .style("height", "50px")
+                .style("overflow-y", "auto")
             regionsDiv.text(function(d) {
                 var k = JSON.parse(JSON.parse(d.data)[-2])
                 if (k.regions) {
@@ -106,29 +109,70 @@ export default function() {
                 }
             })
 
+            
+            var btnGrp = head.append("div").append("span").style("float", "right").style("padding-right", "0px")
+             btnGrp.append("button")
+                .classed("btn", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
+                .on("click", function() {
+                    //Toggle Information Sign
+                    var el = d3.select(this)
+                    if (el.classed("btn-default")) {
+                        el.classed("btn-default",false)
+                        el.classed("btn-success",true)
+                        svgdiv.style("display","none")
+                        infodiv.style("display",null)
+                    } else {
+                        el.classed("btn-default",true)
+                        el.classed("btn-success",false)
+                        svgdiv.style("display",null)
+                        infodiv.style("display","none")
+                    }
+                })
+                .classed("glyphicon",true)
+                .classed("glyphicon-info-sign",true)
+                .attr("title","information")
 
-            bodys.append("div").append("h4").text("Layout")
-            var svgdiv = bodys.append("div").style("padding-bottom", "10px")
-            var btnGrp = bodys.append("div").append("span").style("float", "right").style("padding-right", "25px")
+
             btnGrp.append("button")
                 .classed("btn", true)
-                .classed("btn-success", true)
-                .classed("btn-sm", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
                 .on("click", function() {
                     window.open("/v1/main.html?config=localstorage:"+d.id)
                 })
-                .text("open")
+                .classed("glyphicon",true)
+                .classed("glyphicon-open",true)
+                .attr("title","open")
 
             btnGrp.append("button")
                 .classed("btn", true)
-                .classed("btn-primary", true)
-                .classed("btn-sm", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
                 .on("click", function(d) {
                    download("nb_session.json",d.data)
                 })
-                .text("download")
+                .classed("glyphicon",true)
+                .classed("glyphicon-download",true)
+                .attr("title","download")
+             btnGrp.append("button")
+                .classed("btn", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
+                .on("click", function() {
+                   var a = window.confirm("Delete "+d.id+" ?")
+                    if (a) {
+                        db.removeItem(d.id)
+                        panels.remove();
+                    }
+                })
+                .classed("glyphicon",true)
+                .classed("glyphicon-remove",true)
+                .attr("title","delete")
 
-
+            
+            
             svgdiv.call(_render)
         })
 
@@ -139,8 +183,8 @@ export default function() {
     chart.yscale = function(_) {
         return arguments.length ? (yscale = _, chart) : yscale;
     }
-    chart.sheetId = function(_) {
-        return arguments.length ? (sheetId = _, chart) : sheetId;
+    chart.db = function(_) {
+        return arguments.length ? (db = _, chart) : db;
     }
     return chart
 }

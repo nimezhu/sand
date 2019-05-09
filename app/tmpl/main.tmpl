@@ -52,25 +52,24 @@
   sand.waitForWebfonts(["Roboto Mono"],function(){
   (function($, d3, S) {
     /* init theme */
-    mode = S.toolsGetUrlPara("mode") || "web"
+    mode = "web" //other modes obsoleted
     win = S.toolsGetUrlPara("win") || "main"
     winid = S.toolsGetUrlPara("winid") || -1
     fixedLayout = S.toolsGetUrlPara("fixedLayout") || 0 //0 is false
-    initedLayout = S.toolsGetUrlPara("initedLayout") || undefined //0 is false
-    lite = S.toolsGetUrlPara("lite") || 0 //rm google user system is lite is 1
+    initedLayout = S.toolsGetUrlPara("initedLayout") || undefined // hub,gsheet et al.
+    lite = S.toolsGetUrlPara("lite") || 0 //remove google user system is lite is 1
     if (win == "ext") {
       d3.select("body").classed("extWin",true)
       $("#myNavRight").hide() //hide session ctrl
       $("#openExt").hide()
       $("#home").hide()
-      $("#title").text("Extend Window " + winid) //TODO Set Id
-      //TODO Add Main Window Link
+      $("#title").text("Extend Window " + winid) 
     } else {
       d3.select("body").classed("mainWin",true)
     }
     var theme = S.initTheme();
 
-    var renders = eval({{.Renders}});
+    var renders = eval({{.Renders}}); //TODO ADD Interface
     var renderList = Object.keys(renders).sort()
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
       "openExt","closeExt","renderExtWinNav", "loadPanel",
@@ -79,11 +78,11 @@
     var app = {}
     d3.json("/userinfo",{credentials:"same-origin"}).then(function(d){
       sandUser=d
-      sandHeaders = new Headers({"Authorization":"Basic "+btoa(sandUser.email)})
+      sandHeaders = new Headers({"Authorization":"Basic "+btoa(sandUser.email)}) //Authorization for future data server 
       sandInits["headers"] = sandHeaders
     })
     d3.select("#logo")
-      .attr("title","Click to open introduction")
+      .attr("title","Back to Login Page")
       .on("click",function(){
         window.open("/static/")
       })
@@ -169,6 +168,8 @@
         } else { // one window format
           dispatch.call("initPanels", this, config)
         }
+      }).catch(function(){
+
       })
    }  else if (!cfg) {
       if (win == "main") {

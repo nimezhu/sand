@@ -101,7 +101,7 @@ export default function() {
         var rect = e.append("rect")
             .attr("width", width)
             .attr("height", height)
-            .attr("fill", color[d.title] || "grey")
+            .attr("fill", color[d.title] || "grey") //TODO note d.title but d.type ...
             .attr("opacity", 0.5)
         var maxrows = Math.floor((h * yscale - 45) / 20)
         e.append("rect")
