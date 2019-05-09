@@ -1,5 +1,7 @@
 //import toolsDownload from "../tools/download"
 import toolsUpload from "../tools/upload"
+import chan from "../vendor/chan";
+
 var isEmpty = function(layout) {
     if (layout.content[0].content.length == 0) {
         return true
@@ -48,8 +50,8 @@ export default function() {
         "loadSession",
         "shareSession",
         "saveToSheet",
-        "loadPanel",
-    )
+        "loadPanel"
+    );
     var win = "main" //default main
 
     /* external message processing */
@@ -133,6 +135,7 @@ export default function() {
             $("#openExt").hide()
 
         }
+        /*
         var channel = "cnbChan01"
         var connectChan = function() {
             try {
@@ -192,6 +195,23 @@ export default function() {
         /* Add Channel Here Test*/
         /* TODO Make Channel as A Not Ext Found Alternative */
         /* TEST Channel */
+        var c = chan("update","brush")
+        c.connect(function(status){
+            if (status.connection!="Extension"){
+                d3.select("#extension").style("display", null)
+            }
+        })
+        c.on("receiveMessage.apps",function(d){
+            dispatch.call("receiveMessage", this, d)
+        })
+        dispatch.on("sendMessage.apps",function(d){
+            c.call("sendMessage",this,d)
+        })
+        /*
+        c.on("sendMessage.apps",function(){
+
+        })
+        */
 
         dispatch.on("loadPanel", function(d) {
             var layout = P.layout()

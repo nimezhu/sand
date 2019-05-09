@@ -4,13 +4,13 @@
   "description": "Data Browser library",
   "main": "index.js",
   "scripts": {
-    "build": "rm -f ../app/web/lib/sand.min.js && rollup  -f umd -n sand -o ../app/web/lib/sand.js -- index.js && minify ../app/web/lib/sand.js > ../app/web/lib/sand.min.js && rm -f ../app/web/lib/sand.js"
+    "build": "rm -f ../app/web/lib/sand.min.js && rollup -f umd -n sand -o ../app/web/lib/sand.js -- index.js && minify ../app/web/lib/sand.js > ../app/web/lib/sand.min.js && rm -f ../app/web/lib/sand.js"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "author": "zhuxp",
   "license": "GPL",
   "dependencies": {
+    "@nbrowser/nb-chan": "0.0.2"
   },
   "devDependencies": {
     "rollup": "0.36"
