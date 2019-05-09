@@ -1,6 +1,6 @@
 //import toolsDownload from "../tools/download"
 import toolsUpload from "../tools/upload"
-import chan from "../vendor/chan";
+import {chan} from "@nbrowser/nb-chan";
 
 var isEmpty = function(layout) {
     if (layout.content[0].content.length == 0) {
@@ -135,66 +135,10 @@ export default function() {
             $("#openExt").hide()
 
         }
-        /*
-        var channel = "cnbChan01"
-        var connectChan = function() {
-            try {
-                console.log("connect to channel " + channel)
-                var chan = new BroadcastChannel(channel)
-                dispatch.on("sendMessage.chan", function(d) {
-                    chan.postMessage(d)
-                })
-                chan.onmessage = function(e) {
-                    var d = e.data
-                    dispatch.call("receiveMessage", this, d)
-
-                };
-
-            } catch (e) {
-                console.log("Your browser doesn't support BroadcastChannel.")
-            }
-        }
-        if (typeof chrome !== "undefined") {
-            var hasExtension = false;
-            if (chrome.runtime && chromeExtID) {
-                var connectExt = function() {
-                    chromeExtPort = chrome.runtime.connect(chromeExtID)
-                    dispatch.on("sendMessage.apps", function(d) {
-                        chromeExtPort.postMessage(d)
-                    })
-                    chromeExtPort.onMessage.addListener(function(d) {
-                        dispatch.call("receiveMessage", this, {
-                            code: d.code,
-                            data: JSON.stringify(d.data)
-                        });
-                    })
-                }
-                chrome.runtime.sendMessage(chromeExtID, {
-                        message: "version"
-                    },
-                    function(reply) {
-                        if (reply) {
-                            d3.select("#extension").style("display", "none")
-                            if (reply.version) {
-                                hasExtension = true;
-                                connectExt();
-                            }
-                        } else {
-                            hasExtension = false;
-                            d3.select("#extension").style("display", null)
-                            console.log("not connect to ext", reply)
-                            connectChan()
-                        }
-                    });
-            } else {
-                connectChan()
-            }
-        } else {
-            connectChan()
-        }
-        /* Add Channel Here Test*/
-        /* TODO Make Channel as A Not Ext Found Alternative */
-        /* TEST Channel */
+        /* Bridge nb-chan with local dispatch 
+         * TODO: Official Using Npm External Lib 
+         *       Wrap to Bundle.js
+         * */
         var c = chan("update","brush")
         c.connect(function(status){
             if (status.connection!="Extension"){
