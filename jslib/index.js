@@ -25,3 +25,6 @@ export{default as chan} from "./src/utils/chan"
 
 
 export{default as waitForWebfonts} from "./src/tools/waitForWebfonts"
+
+
+export{default as panelIcons} from "./src/panel/icons.js"

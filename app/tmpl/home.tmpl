@@ -365,14 +365,37 @@
     var nbPanel = localforage.createInstance({
             "name": "nbPanel"
     })
+      var _r = function(el){
+          var d = el.datum()
+          el.each(function(d){
+              var el0 = d3.select(this)
+            nbPanel.getItem(d).then(function(d0){
+              var d = JSON.parse(d0)
+              if (d.render in S.panelIcons){
+              var r = S.panelIcons[d.render]()
+            
+              var e = el0.selectAll("svg").data([d])
+                  e.enter()
+                  .append("svg")
+                  .merge(e)
+                  .call(r)
+              } else {
+                  el0.text(d.name+" "+":TODO render")
+              }
+            
+            })
+
+
+      })
+    }     
     nbPanel.keys().then(function(d) {
       var a = spacePanelRow.selectAll("div").data(d);
-      var idx = 1;
+      console.log("array",d)
       a.enter()
-            .append("div").text(function(d){
-                return "TODO render panel "+d
-            })
-                a.exit().remove()
+      .append("div")
+      .merge(a)
+      .call(_r)
+      a.exit().remove()
    })
 
 
