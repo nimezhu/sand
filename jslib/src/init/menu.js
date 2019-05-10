@@ -80,19 +80,9 @@ export default function() {
 
             })
 
-            /*
-            for (var i = 0, len = localStorage.length; i < len; i++) {
-                var key = localStorage.key(i);
-                if (key.match(/^cnb-panel-/)) {
-                    var name = key.replace("cnb-panel-", "")
-                    list.push(name)
-                }
-
-            }
-            */
-            var _chart = function(selection) {
+           var _chart = function(selection) {
                 selection.each(function(d) {
-                    var el = d3.select(this).style("height", "45px")
+                    var el = d3.select(this).style("height", "37px")
                     el.style("cursor", "default").style("background-color", "#333")
                     el.on("mouseover", function() {
                         d3.select(this).style("background-color", "#555")
@@ -100,9 +90,10 @@ export default function() {
                         d3.select(this).style("background-color", "#333")
                     })
                     el.selectAll("*").remove()
-                    el.append("div").style("float", "left").style("font-size", "18px").text(d)
+                    el.append("div").style("float", "left").style("font-size", "12px").text(d)
                     var elR = el.append("div")
                         .style("float", "right")
+                        .style("top","-5px")
                         .classed("btn-group", true)
 
                     elR.append("button")
@@ -114,7 +105,6 @@ export default function() {
                         .classed("glyphicon-open", true)
                         .on("click", function() {
                             panelDb.getItem(d).then(function(v) {
-                                console.log("get panel", v, d)
                                 var state = JSON.parse(v)
                                 var a = {
                                     title: state.name,
@@ -187,7 +177,7 @@ export default function() {
             if (d.email) {
                 $("#logout").show();
                 $("#login").hide();
-                $("#picture").show()
+                $("#menuUser1").show()
                 var name = d.name
                 if (name == "") {
                     name = d.email
@@ -196,12 +186,12 @@ export default function() {
             } else {
                 $("#logout").hide();
                 $("#login").show();
-                $("#picture").hide();
+                $("#menuUser1").hide();
             }
         }).fail(function() {
             $("#logout").hide();
             $("#login").hide();
-            $("#picture").hide();
+            $("#menuUser1").hide();
 
         })
         $("#share").on("click", function(_) {
@@ -224,19 +214,19 @@ export default function() {
                     d3.select("#setSheetId").style("color", null)
                     d3.select("#createSheetId").style("display", "none")
                     $("#sheetUi").show()
-                    $("#fileUi").hide()
-                    d3.select("#sessionUi").classed("glyphicon-hdd", false).classed("glyphicon-cloud", true)
+                    //$("#fileUi").hide()
+                    //d3.select("#sessionUi").classed("glyphicon-hdd", false).classed("glyphicon-cloud", true)
                 } else {
                     d3.select("#setSheetId").style("color", "#A20")
                     d3.select("#createSheetId").style("display", null)
                     $("#sheetUi").hide()
-                    $("#fileUi").show()
-                    d3.select("#sessionUi").classed("glyphicon-hdd", true).classed("glyphicon-cloud", false)
+                    //$("#fileUi").show()
+                    //d3.select("#sessionUi").classed("glyphicon-hdd", true).classed("glyphicon-cloud", false)
                 }
             }).catch(function(d) {
                 $("#sheetUi").hide()
-                $("#fileUi").show()
-                d3.select("#sessionUi").classed("glyphicon-hdd", true).classed("glyphicon-cloud", false)
+                //$("#fileUi").show()
+                //d3.select("#sessionUi").classed("glyphicon-hdd", true).classed("glyphicon-cloud", false)
             })
         }
         //setTimeout(checkSheetId, null, 200)

@@ -1,6 +1,8 @@
 //import toolsDownload from "../tools/download"
 import toolsUpload from "../tools/upload"
-import {chan} from "@nbrowser/nb-chan";
+import {
+    chan
+} from "@nbrowser/nb-chan";
 
 var isEmpty = function(layout) {
     if (layout.content[0].content.length == 0) {
@@ -21,8 +23,9 @@ var emptyCfg = {
 }
 
 export default function() {
-    var chromeExtID //= "gedcoafficobgcagmjpplpnmempkcpfp"
-    var chromeExtPort //port to chromeExt
+    //var chromeExtID //= "gedcoafficobgcagmjpplpnmempkcpfp"
+    //var chromeExtPort //port to chromeExtID
+    var extId
     var user
     var sessionId = "_cnb_"
     var ws = {} //window handler
@@ -50,7 +53,9 @@ export default function() {
         "loadSession",
         "shareSession",
         "saveToSheet",
-        "loadPanel"
+        "loadPanel",
+        "sendMessage",
+        "receiveMessage"
     );
     var win = "main" //default main
 
@@ -94,11 +99,6 @@ export default function() {
             }
 
         }
-        /*
-        if (d.code=="refreshWorkSpace"){
-            dispatch.call("refreshWorkSpace",this,{})
-        }
-        */
     }
     var chart = function(el) {
         window.addEventListener("message", getmessage, false);
@@ -133,23 +133,21 @@ export default function() {
             })
         } else {
             $("#openExt").hide()
-
         }
         /* Bridge nb-chan with local dispatch 
-         * TODO: Official Using Npm External Lib 
-         *       Wrap to Bundle.js
          * */
-        var c = chan("update","brush")
-        c.connect(function(status){
-            if (status.connection!="Extension"){
+        var c = chan("update", "brush").extId(extId)
+
+        c.connect(function(status) {
+            if (status.connection != "Extension") {
                 d3.select("#extension").style("display", null)
             }
         })
-        c.on("receiveMessage.apps",function(d){
+        c.on("receiveMessage.apps", function(d) {
             dispatch.call("receiveMessage", this, d)
         })
-        dispatch.on("sendMessage.apps",function(d){
-            c.call("sendMessage",this,d)
+        dispatch.on("sendMessage.apps", function(d) {
+            c.call("sendMessage", this, d)
         })
         /*
         c.on("sendMessage.apps",function(){
@@ -185,11 +183,9 @@ export default function() {
             idx += 1
             if (typeof d.code != undefined) { //TODO setState code
                 ws[id].addEventListener("inited", function() {
-                    //console.log("addPanel message")
                     ws[id].postMessage(d, domain)
                 })
             }
-
             dispatch.call("renderExtWinNav", this, {})
         })
 
@@ -267,8 +263,6 @@ export default function() {
                     from: window.name
                 }, domain)
             }
-            /* TODO Connect Plugin */
-
         })
         var _getStates = function() {
             var data = {};
@@ -427,8 +421,6 @@ export default function() {
             })
         })
 
-        //TODO Change Export States to LocalForage
-        //
         var sessionDb = localforage.createInstance({
             "name": "nbSession"
         })
@@ -456,7 +448,7 @@ export default function() {
         var fileUpload = toolsUpload().callback(function(d) { //TODO: Replace with dbget
             dispatch.call("initWindows", this, d)
         })
-        
+
         dispatch.on("importStates", function(_) {
             sessionDb.keys().then(function(d) {
                 var a = d3.select("#sheetList").selectAll("li").data(d);
@@ -523,6 +515,9 @@ export default function() {
             }
         })
     }
+    chart.extId = function(_) {
+        return arguments.length ? (extId = _, chart) : extId;
+    }
     chart.domain = function(_) {
         return arguments.length ? (domain = _, chart) : domain;
     }
@@ -547,9 +542,11 @@ export default function() {
     chart.config = function(_) {
         return arguments.length ? (config = _, chart) : config;
     }
+    /*
     chart.chromeExtID = function(_) {
         return arguments.length ? (chromeExtID = _, chart) : chromeExtID;
     }
+    */
     chart.user = function(_) {
         return arguments.length ? (user = _, chart) : user;
     }

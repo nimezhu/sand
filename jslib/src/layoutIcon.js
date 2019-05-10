@@ -44,11 +44,21 @@ var trackIcon = function(selection) {
 }
 
 export default function() {
+    /*
     var color = {
         "Genome Browser": "#226a98",
         "Google Sheet": "#0f9d58",
         "DNA 3d Structure Viewer": "#ce5146"
     }
+    */
+   var color = {
+        "hubs": "#226a98",
+        "gsheet": "#0f9d58",
+        "dna3d": "#ce5146",
+        "weblink": "#89c8d3",
+        "dna":"#af9ca4"
+    }
+
     var wh = function(d) {
         if (d.width) {
             console.log("width", d.width)
@@ -101,7 +111,7 @@ export default function() {
         var rect = e.append("rect")
             .attr("width", width)
             .attr("height", height)
-            .attr("fill", color[d.title] || "grey") //TODO note d.title but d.type ...
+            .attr("fill", color[d.componentState.render] || "grey") //TODO note d.title but d.type ...
             .attr("opacity", 0.5)
         var maxrows = Math.floor((h * yscale - 45) / 20)
         e.append("rect")

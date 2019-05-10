@@ -21,9 +21,9 @@ export default function (config, el, dispatch, renders, app) {
   });
   layout.on('stackCreated', function (stack) {
     var toggle = $("<li class='lm_cfgbtn' title='config'></li>")
-    var duplicate = $("<li class='lm_dupbtn' title='clone'></li>") //TODO
+    var duplicate = $("<li class='lm_dupbtn' title='duplicate'></li>") //TODO
     var rename = $("<li class='lm_renamebtn' title='rename'></li>") //TODO
-    var save = $("<li class='lm_savebtn' title='save to workspace'></li>") //TODO
+    var save = $("<li class='lm_savebtn' title='save to space'></li>") //TODO
     var popout = $("<li class='lm_outbtn' title='pop out'></li>") //TODO
     var popin = $("<li class='lm_inbtn' title='pop in'></li>") //TODO
     stack.header.controlsContainer.prepend(popout);
@@ -35,7 +35,7 @@ export default function (config, el, dispatch, renders, app) {
       rename.on("click", function(){
         var container = stack.getActiveContentItem().container;
         var state = container.getState()
-        var newname = prompt("Set Tab Title", state.name);
+        var newname = prompt("Set a new title for this panel", state.name);
         if (newname == null || newname == "") {
         } else {
             container.setTitle(newname)
@@ -79,8 +79,8 @@ export default function (config, el, dispatch, renders, app) {
       var state = container.getState();
       var result = window.prompt("Panel Name:", state.name||"")
       if (result && result!=""){
-         //localStorage.setItem("cnb-panel-"+result,JSON.stringify(state))
           state.name = result
+          //TODO Check Item Duplicated Name, and can override it.
           panelDb.setItem(result,JSON.stringify(state)).then(function(){
             dispatch.call("refreshWorkSpace",this,{})
             layout.eventHub.emit("sendMessage",{"code":"refreshWorkSpace","data":JSON.stringify({})}) //TODO
@@ -122,12 +122,6 @@ export default function (config, el, dispatch, renders, app) {
         componentName: 'canvas',
         componentState: JSON.parse(JSON.stringify(state))
       };
-      /*
-      dispatch.call("openExt", this, {
-        code: "addPanel",
-        data: JSON.stringify(d)
-      })
-      */
       window.opener.postMessage({code:"addPanel",data:JSON.stringify(d)},window.location.origin)
       container.close()
       if (layout.root.contentItems.length==0) {

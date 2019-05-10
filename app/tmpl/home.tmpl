@@ -4,20 +4,12 @@
 {{define "homemenu"}}
 <div class="menu fn-clear">
   <ul id="myNavLeft">
-    <li id="home" title="user home"><span class="glyphicon glyphicon-home"></span>Home</li>
+    <li id="home" title="Home"><span class="glyphicon glyphicon-home"></span></li>
     <span class="split"></span>
-    <li id="play" title="start application"><span class="glyphicon glyphicon-play"></span>Start</li>
-    <li style="padding-right:0px" title="Login with google" id="menuUser"><span id="login" class="glyphicon glyphicon-log-in"></li>
-    <li style="padding-right:0px"><image id="picture" style="height:18px;width:18px;margin:7px 4px"></image>
-      <div class="frame">
-       <ul>
-       <li id="logout" title="Logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
-       </ul>
-      </div>
-   </li>
-</ul>
+    <li id="play" title="Start"><span class="glyphicon glyphicon-play"></span></li>
+ </ul>
 <ul id="myNavRight" style="float:right">
-  <li id="logo">
+ <li id="logo">
     <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="appinfo" style="color:#777"></span>
   </li>
 </ul>
@@ -131,25 +123,7 @@
     </div>
     <div id="layoutContainer" style="left:200px;width:100%">
       <div class="row" id="firstRow">
-        <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Sessions Manager</h3>
-        </div>
-        <div class="panel-body">
-          <form>
-            <div class="form-group">
-              <label for="sheetIdInput">Google SheetID to Host Sessions</label>
-              <input type="text" class="form-control" id="sheetIdInput" placeholder="">
-            </div>
-            <button id="edit" class="btn btn-success">Edit</button>
-            <button id="load" class="btn btn-primary">Load</button>
-            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
-          </form>
-          <div id="loader" class="loader" style="display:none;position:absolute;left:100px">
-          </div>
-          </div>
-
-      </div>
+             </div>
     </div>
 </div>
 </body>
@@ -182,15 +156,43 @@
     var localPanelListDiv = localPanelRow.append("div")
     var localPanelRenderDiv = localPanelRow.append("div")
     
-    var panelsdiv = container.append("div").classed("row",true).style("display","none")
+
+    var cloudPanelRow = container.append("div").classed("row",true).style("display","none") //Google Sheet Div
+    var _c = `
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Sessions Manager</h3>
+        </div>
+        <div class="panel-body">
+          <form>
+            <div class="form-group">
+              <label for="sheetIdInput">Google SheetID to Host Sessions</label>
+              <input type="text" class="form-control" id="sheetIdInput" placeholder="">
+            </div>
+            <button id="edit" class="btn btn-success">Edit</button>
+            <button id="load" class="btn btn-primary">Load</button>
+            <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <div id="loader" class="loader" style="display:none;position:absolute;left:100px">
+          </div>
+          </div>
+    `
+    cloudPanelRow.html(_c)
+    var pubCloudPanelRow = container.append("div").classed("row",true).style("display","none").text("Coming Soon...") //Google Sheet Div
+    var panelsdiv = cloudPanelRow.append("div")
+
+    var spacePanelRow = container.append("div").classed("row",true).style("display","none").text("Coming Soon...")
+
     var navs = [
-              {label:"current",el:d3.select("#firstRow")},
-              {label:"local",el:localPanelRow},
-              {label:"cloud",el:panelsdiv}
+              {icon:"play",label:"Current",el:d3.select("#firstRow")},
+              {icon:"hdd",label:"Local Storage",el:localPanelRow},
+             {icon:"cloud",label:"Cloud",el:cloudPanelRow},
+             {icon:"cloud-download",label:"Public Cloud",el:pubCloudPanelRow},
+              {icon:"th-large",label:"Panel Space",el:spacePanelRow}
              ]
     //container.selectAll(".row").style("display","none")
     
-    menuNav.selectAll("li").data(navs)
+    var lis = menuNav.selectAll("li").data(navs)
           .enter().append("li")
           .on("click",function(d,i){
               menuNav.selectAll(".selected").classed("selected",false)
@@ -198,11 +200,18 @@
               container.selectAll(".row").style("display","none")
               d.el.style("display",null)
           })
-          .text(function(d,i){
+
+          lis.append("span")
+          .attr("class",function(d){
+              return "glyphicon glyphicon-"+d.icon
+          })
+          
+         lis.html(function(d,i){
               if(i==0){
                   d3.select(this).classed("selected",true)
               }
-              return d.label
+             var icon = "<span class='glyphicon glyphicon-"+d.icon+"'></span><span style='padding-left:10px;font-size:14px'>"+d.label+"<span>"
+              return icon
           })
      //menuNav.selectAll("li:first-child").on("click")()
     //ctrldiv.append("span").text("SheetID:").style("padding-right","10px")
@@ -352,6 +361,21 @@
     $("#play").click(function() {
       window.location = "/v1/main.html?config=continue"
     })
+
+    var nbPanel = localforage.createInstance({
+            "name": "nbPanel"
+    })
+    nbPanel.keys().then(function(d) {
+      var a = spacePanelRow.selectAll("div").data(d);
+      var idx = 1;
+      a.enter()
+            .append("div").text(function(d){
+                return "TODO render panel "+d
+            })
+                a.exit().remove()
+   })
+
+
   }(jQuery, d3, sand))
 </script>
 

@@ -132,13 +132,9 @@
         }
       })
     }
-    if (win == "main") { //any other condition
-      var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).chromeExtID({{.ExtID}}) //app(app) //init windows manager
-      W();
-    } else if (win == "ext") {
-        var W1 = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).chromeExtID({{.ExtID}}) //app(app) //init windows manager
-      W1();
-    }
+    var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).extId({{.ExtID}}) //app(app) //init windows manager
+    W();
+      
     /* TO USE PUBLIC GSHEET */
     window._renderGsheet = function(d) {
       var config = JSON.parse(d.table.rows[0].c[2].v)

@@ -97,32 +97,6 @@ export default function() {
                 })
                 .style("float","left")
             var bodys = panels.append("div").classed("panel-body",true)
-            /*
-            bodys.append("div").append("h4").text("Description")
-            bodys.append("div").style("overflow-wrap", "break-word")
-                .style("background-color", "#fffbea")
-                .style("padding", "5px")
-                .style("height", "100px")
-                .style("overflow-y", "auto")
-                .text(function(d) {
-                    return d[1]
-
-                })
-            var regions = bodys.append("div")
-            regions.append("h4").text("Regions")
-            var regionsDiv = regions.append("div").style("height", "50px").style("overflow-y", "auto")
-            regionsDiv.text(function(d) {
-                var k = JSON.parse(JSON.parse(d[2])[-2])
-                if (k.regions) {
-                    return regionsNiceText(k.regions)
-                } else {
-                    return "null"
-                }
-            })
-            */
-
-
-            //bodys.append("div").append("h4").text("Layout")
             var svgdiv = bodys.append("div").style("padding-bottom", "10px")
 
             var infodiv = bodys.append("div").style("padding-bottom", "10px").style("display","none")
@@ -146,9 +120,6 @@ export default function() {
                     return "null"
                 }
             })
-
-
-
 
             var btnGrp = head.append("div").append("span").style("float", "right").style("padding-right", "0px")
              btnGrp.append("button")
@@ -203,9 +174,6 @@ export default function() {
                 .classed("glyphicon",true)
                 .classed("glyphicon-download",true)
                 .attr("title","download")
-
-
-
             svgdiv.call(_render)
         })
 
