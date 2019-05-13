@@ -1,15 +1,15 @@
 {{define "menu"}}
 <div class="menu fn-clear">
   <ul id="myNavLeft">
-    <li id="home"  title="Home" class="mainWinOnly"><span class="glyphicon glyphicon-home"></span></li>
+    <li id="home"  title="Home" class="mainWinOnly" data-toggle="tooltip" data-placement="right"><span class="glyphicon glyphicon-home"></span></li>
     <span class="split"></span>
-      <li title="Add Panel"id="addPanel">
+      <li title="Add Panel"id="addPanel" data-toggle="tooltip" data-placement="right" >
       <span class="glyphicon glyphicon-plus"></span>
       <div class="frame">
         <ul id="renders">
         </ul>
         <ul>
-          <li id="openExt" title="Extended Window"><span class="glyphicon glyphicon-plus-sign"></span> Extend Window</li>
+          <li id="openExt" title="Extended Window" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-plus-sign"></span> Extended Window</li>
         </ul>
       </div>
       <!--
@@ -18,7 +18,7 @@
       </div>
     -->
     </li>
-     <li id="space" title="Panel Space">
+     <li id="space" title="Panel Space" data-toggle="tooltip" data-placement="right">
       <span class='glyphicon glyphicon-th-large'></span>
     </li>
     
@@ -27,43 +27,46 @@
 
   <ul id="myNavLeft2">
         <span class="split"></span>
-        <li id="sessions"  title="Session in Local" class="mainWinOnly">
+        <li id="sessions"  title="Session in Local" data-toggle="tooltip" data-placement="right" class="mainWinOnly">
         <span class="glyphicon glyphicon-hdd" id="sessionUi"></span>
         <div class="frame" id="sessionFrame">
           <ul>
-            <li id="share" title="Share session by generated URL"><span class="glyphicon glyphicon-share-alt" title="share session"></span> Share Session </li>
+            <li id="share" title="Share session by generated URL" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-share-alt" title="share session"></span> Share Session </li>
           </ul>
           <ul id="fileUi">
-            <li id="import" title="Load session"><span class="glyphicon glyphicon-open"></span> Load Session</li>
-            <li id="export" title="Save session"><span class="glyphicon glyphicon-save"></span> Save Session</li>
+            <li id="import" title="Load session" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-open"></span> Load Session</li>
+            <li id="export" title="Save session" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-save"></span> Save Session</li>
           </u1>
         </div>
       </li>
 
 
-    <li style="padding-right:0px" title="Login with Google" id="menuUser" class="mainWinOnly"><span id="login" class="glyphicon glyphicon-log-in" ></li>
-    <li style="padding-right:0px" class="mainWinOnly" id="menuUser1" title="Session in Google Sheet"><image id="picture" style="height:18px;width:18px;margin:7px 4px"></image>
+    <li style="padding-right:0px" title="Login with Google" data-toggle="tooltip" data-placement="right" id="menuUser" class="mainWinOnly">
+        <span id="login" class="glyphicon glyphicon-log-in" >
+    </li>
+    <li style="padding-right:0px" class="mainWinOnly" data-toggle="tooltip" data-placement="right" id="menuUser1" title="Session in Google Sheet">
+        <image id="picture" class="mainWinOnly" style="height:18px;width:18px;margin:7px 4px"></image>
     <div class="frame">
       <ul>
-      <li id="setSheetId" title="Set a google sheet id to host sessions"><span class="glyphicon glyphicon-cog"></span> Set Session Sheet Id</li>
-      <li id="createSheetId" title="Create a google sheet id to host sessions"><span class="glyphicon glyphicon-file"></span> Create a New Session Sheet</li>
+      <li id="setSheetId" title="Set a google sheet id to host sessions" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-cog"></span> Set Session Sheet Id</li>
+      <li id="createSheetId" title="Create a google sheet id to host sessions" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-file"></span> Create a New Session Sheet</li>
       <ul id="sheetUi" style="display:none">
-      <li id="loadFromSheet" title="Load session from google sheet"><span class="glyphicon glyphicon-open"></span> Load Session</li>
-      <li id="saveToSheet" title="Save session to google sheet"><span class="glyphicon glyphicon-save"></span> Save Session</li>
+      <li id="loadFromSheet" title="Load session from google sheet" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-open"></span> Load Session</li>
+      <li id="saveToSheet" title="Save session to google sheet" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-save"></span> Save Session</li>
       </ul>
-      <li id="logout" title="Logout"><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
+      <li id="logout" title="Logout" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
       </ul>
     </div>
 </li>
 </ul>
 <ul id="extWinNav">
 </ul>
-<ul id="myNavRight" style="float:right">
+<ul id="myNavRight" class="mainWinOnly" style="float:right">
   <li id="extension" style="display: none">
     <a href="https://chrome.google.com/webstore/detail/nbrowser-plugin/djcdicpaejhpgncicoglfckiappkoeof" target="_blank"><img src="/static/image/extension_install.png"  style="height:18px;width:18px;margin:7px 4px" title="install chrome extension"></img></a>
   </li>
-  <li id="logo">
-      <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="appinfo" style="color:#777"></span>
+  <li id="logo" data-toggle="tooltip" data-placement="left">
+      <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="version" style="color:#777"></span>
   </li>
 </ul>
 </div>

@@ -23,7 +23,7 @@
 
 <body style="height:100%">
   {{template "menu"}} 
-    <div id="notify" class="hide">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
+    <div id="notify" class="hide" style="font-size:18px;height:30px">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
   {{template "wrapper"}} 
   {{ template "modal"}} 
   {{ template "modalLoad"}} 
@@ -32,7 +32,7 @@
 </body>
 <script>
   var eventHub;
-  var isAstilectron = false;
+  //var isAstilectron = false;
   var url = window.location.href
   var arr = url.split("/");
   var domain = arr[0] + "//" + arr[2];
@@ -60,14 +60,13 @@
     lite = S.toolsGetUrlPara("lite") || 0 //remove google user system is lite is 1
     if (win == "ext") {
       d3.select("body").classed("extWin",true)
-      $("#myNavRight").hide() //hide session ctrl
-      $("#openExt").hide()
-      $("#home").hide()
+      $(".mainWinOnly").hide()
       $("#title").text("Extend Window " + winid) 
     } else {
       d3.select("body").classed("mainWin",true)
     }
     var theme = S.initTheme();
+    
 
     var renders = eval({{.Renders}}); //TODO ADD Interface
     var renderList = Object.keys(renders).sort()
@@ -82,11 +81,10 @@
       sandInits["headers"] = sandHeaders
     })
     d3.select("#logo")
-      .attr("title","Back to Login Page")
+      .attr("title","{{.Appname}}")
       .on("click",function(){
         window.open("/static/")
       })
-    d3.select("#appinfo").text("{{.Appname}}")
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
@@ -98,6 +96,7 @@
 
     PanelManager();
 
+    $('[data-toggle="tooltip"]').tooltip()
     if (fixedLayout) {
       document.body.className += ' ' + 'fixedLayout';
     }
@@ -180,6 +179,23 @@
         }
         dispatch.call("resize", this, {})
     }
+   if (navigator.serviceWorker) {
+        if (navigator.serviceWorker.controller) {
+                var messageChannel = new MessageChannel();
+                messageChannel.port1.onmessage = function(event) {
+                        if (event.data.version) {
+                            d3.select("#version").text(event.data.version)
+                        }
+                    
+                }
+                navigator.serviceWorker.controller.postMessage({
+                    "command": "version",
+                }, [messageChannel.port2]);
+        } else {
+                console.log("No ServiceWorker");
+        }
+    }
+
     history.pushState({},"main","/v1/main.html")
   })(jQuery, d3, sand)
 });

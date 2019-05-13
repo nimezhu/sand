@@ -304,6 +304,8 @@ export default function() {
                     return d
                 }
             })
+            .attr("data-toggle","tooltip")
+            .attr("data-placement","bottom")
             .on("click", function(d) {
                 console.log("click", d)
                 $(".menu .frame").hide();

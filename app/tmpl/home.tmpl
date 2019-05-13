@@ -4,13 +4,13 @@
 {{define "homemenu"}}
 <div class="menu fn-clear">
   <ul id="myNavLeft">
-    <li id="home" title="Home"><span class="glyphicon glyphicon-home"></span></li>
+    <li id="home" title="Home" data-toggle="tooltip" data-placement="right"><span class="glyphicon glyphicon-home"></span></li>
     <span class="split"></span>
-    <li id="play" title="Start"><span class="glyphicon glyphicon-play"></span></li>
+    <li id="play" title="Start" data-toggle="tooltip" data-placement="right"><span class="glyphicon glyphicon-play"></span></li>
  </ul>
 <ul id="myNavRight" style="float:right">
- <li id="logo">
-    <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="appinfo" style="color:#777"></span>
+ <li id="logo" data-toggle="tooltip" data-placement="left">
+    <image src="/static/image/icon.png" style="height:18px;width:18px;margin:7px 4px"></image><span id="appinfo" style="color:#777"></span><span id="version" style="color:#777"></span>
   </li>
 </ul>
 </div>
@@ -181,7 +181,7 @@
     var pubCloudPanelRow = container.append("div").classed("row",true).style("display","none").text("Coming Soon...") //Google Sheet Div
     var panelsdiv = cloudPanelRow.append("div")
 
-    var spacePanelRow = container.append("div").classed("row",true).style("display","none").text("Coming Soon...")
+    var spacePanelRow = container.append("div").classed("row",true).style("display","none")
 
     var navs = [
               {icon:"play",label:"Current",el:d3.select("#firstRow")},
@@ -213,9 +213,6 @@
              var icon = "<span class='glyphicon glyphicon-"+d.icon+"'></span><span style='padding-left:10px;font-size:14px'>"+d.label+"<span>"
               return icon
           })
-     //menuNav.selectAll("li:first-child").on("click")()
-    //ctrldiv.append("span").text("SheetID:").style("padding-right","10px")
-      
     /* Google Sheet */   
     var sheetIdInput = d3.select("#sheetIdInput")
     var currentId = ""
@@ -257,7 +254,6 @@
       .on("click", function() {
         window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
       })
-    
       
     var pchart=S.layoutPanel();//TODO
 
@@ -328,11 +324,11 @@
     })
 
     d3.select("#logo")
-      .attr("title", "Back to Login Page")
+          .attr("title", "{{.Appname}}")
       .on("click", function() {
         window.open("/static/")
       })
-    d3.select("#appinfo").text("{{.Appname}} v{{.Version}}")
+    //d3.select("#appinfo").text("{{.Appname}}")
 
     $(".menu > ul > li").mouseover(function(event) {
       $(this).addClass("selected");
@@ -390,15 +386,38 @@
     }     
     nbPanel.keys().then(function(d) {
       var a = spacePanelRow.selectAll("div").data(d);
-      console.log("array",d)
+      console.log("TODO array",d)
       a.enter()
       .append("div")
+      .classed("panel",true)
+      .classed("panel-default",true)
       .merge(a)
       .call(_r)
       a.exit().remove()
    })
 
-
+   $('[data-toggle="tooltip"]').tooltip()
+   if (navigator.serviceWorker) {
+        if (navigator.serviceWorker.controller) {
+                var messageChannel = new MessageChannel();
+                messageChannel.port1.onmessage = function(event) {
+                    /*
+                    self.setState({
+                        version: event.data.version
+                    })
+                    */
+                        if (event.data.version) {
+                            d3.select("#version").text(event.data.version)
+                        }
+                    
+                }
+                navigator.serviceWorker.controller.postMessage({
+                    "command": "version",
+                }, [messageChannel.port2]);
+        } else {
+                console.log("No ServiceWorker");
+        }
+     }
   }(jQuery, d3, sand))
 </script>
 
