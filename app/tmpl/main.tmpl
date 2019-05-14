@@ -179,23 +179,6 @@
         }
         dispatch.call("resize", this, {})
     }
-   if (navigator.serviceWorker) {
-        if (navigator.serviceWorker.controller) {
-                var messageChannel = new MessageChannel();
-                messageChannel.port1.onmessage = function(event) {
-                        if (event.data.version) {
-                            d3.select("#version").text(event.data.version)
-                        }
-                    
-                }
-                navigator.serviceWorker.controller.postMessage({
-                    "command": "version",
-                }, [messageChannel.port2]);
-        } else {
-                console.log("No ServiceWorker");
-        }
-    }
-
     history.pushState({},"main","/v1/main.html")
   })(jQuery, d3, sand)
 });

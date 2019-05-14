@@ -60,22 +60,27 @@ func randToken() string {
  *   and adminirator to access admin pages.
  */
 func InitCred(fn string) {
+	//TODO Here
 	file, err := ioutil.ReadFile(fn) //TODO
 	if err != nil {
 		log.Printf("File error: %v\n", err)
 		os.Exit(1)
 	}
 	json.Unmarshal(file, &cred)
-	conf = &oauth2.Config{
-		ClientID:     cred.Cid,
-		ClientSecret: cred.Csecret,
-		RedirectURL:  cred.RedirectURL,
-		Scopes: []string{
-			"https://www.googleapis.com/auth/userinfo.email",
-			"https://www.googleapis.com/auth/spreadsheets",
-		},
-		Endpoint: google.Endpoint,
-	}
+
+	//TODO Adapt to Different URL
+	/*
+		conf = &oauth2.Config{
+			ClientID:     cred.Cid,
+			ClientSecret: cred.Csecret,
+			RedirectURL:  cred.RedirectURL,
+			Scopes: []string{
+				"https://www.googleapis.com/auth/userinfo.email",
+				"https://www.googleapis.com/auth/spreadsheets",
+			},
+			Endpoint: google.Endpoint,
+		}
+	*/
 	for _, v := range strings.Split(cred.Admin, ";") {
 		admins[v] = true
 	}
@@ -92,34 +97,28 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("%s", v)))
 }
 
-func getLoginURL(state string, host string) string {
-	if v, ok := redirectMap[host]; ok {
-		newconf := &oauth2.Config{
-			ClientID:     cred.Cid,
-			ClientSecret: cred.Csecret,
-			RedirectURL:  v,
-			Scopes: []string{
-				"https://www.googleapis.com/auth/userinfo.email",
-				"https://www.googleapis.com/auth/spreadsheets",
-			},
-			Endpoint: google.Endpoint,
-		}
-		return newconf.AuthCodeURL(state, oauth2.AccessTypeOffline)
-	} else {
-		return conf.AuthCodeURL(state, oauth2.AccessTypeOffline)
+func getLoginURL(state string, referer string) string {
+	a := strings.Split(referer, "/")
+	v := a[0] + "//" + a[2] + cred.RedirectURL
+	newconf := &oauth2.Config{
+		ClientID:     cred.Cid,
+		ClientSecret: cred.Csecret,
+		RedirectURL:  v,
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.email",
+			"https://www.googleapis.com/auth/spreadsheets",
+		},
+		Endpoint: google.Endpoint,
 	}
+	return newconf.AuthCodeURL(state, oauth2.AccessTypeOffline)
 }
 
 /* TODO RedirectURL override HARD CODE???*/
-var redirectMap = map[string]string{
-	"genome.compbio.cs.cmu.edu":      "https://genome.compbio.cs.cmu.edu/auth/google/callback",
-	"genome.compbio.cs.cmu.edu:8080": "http://genome.compbio.cs.cmu.edu:8080/auth/google/callback",
-	"x7.andrew.cmu.edu:8080":         "http://x7.andrew.cmu.edu:8080/auth/google/callback",
-}
 
 func authHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, sessionID)
 	state0 := r.FormValue("state")
+	//TODO Redirect to OLD
 	if state != state0 {
 		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", state, state0)
 		http.Redirect(w, r, "/v1/main.html?config=continue", http.StatusTemporaryRedirect)
@@ -128,10 +127,13 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 
 	code := r.FormValue("code")
 	//add New Conf Here
-	redirect := cred.RedirectURL
-	if v, ok := redirectMap[r.Host]; ok {
-		redirect = v
-	}
+	/*
+		redirect := cred.RedirectURL
+		if v, ok := redirectMap[r.Host]; ok {
+			redirect = v
+		}
+	*/
+	redirect := strings.Replace(r.Referer(), "/login", cred.RedirectURL, 1)
 	newconf := &oauth2.Config{
 		ClientID:     cred.Cid,
 		ClientSecret: cred.Csecret,
@@ -259,7 +261,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, sessionID)
 	session.Values["state"] = state
 	session.Save(r, w)
-	w.Write([]byte("<html><title>Golang Google</title> <body style='display:none'><a href='" + getLoginURL(state, r.Host) + "'><button id='myCheck'>Login with Google!</button> </a> </body><script>(function(){document.getElementById('myCheck').click();}())</script></html>"))
+	w.Write([]byte("<html><title>Golang Google</title> <body style='display:none'><a href='" + getLoginURL(state, r.Referer()) + "'><button id='myCheck'>Login with Google!</button> </a> </body><script>(function(){document.getElementById('myCheck').click();}())</script></html>"))
 	//TODO  LOGIN BUTTON
 }
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
