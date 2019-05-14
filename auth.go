@@ -67,20 +67,16 @@ func InitCred(fn string) {
 		os.Exit(1)
 	}
 	json.Unmarshal(file, &cred)
-
-	//TODO Adapt to Different URL
-	/*
-		conf = &oauth2.Config{
-			ClientID:     cred.Cid,
-			ClientSecret: cred.Csecret,
-			RedirectURL:  cred.RedirectURL,
-			Scopes: []string{
-				"https://www.googleapis.com/auth/userinfo.email",
-				"https://www.googleapis.com/auth/spreadsheets",
-			},
-			Endpoint: google.Endpoint,
-		}
-	*/
+	conf = &oauth2.Config{
+		ClientID:     cred.Cid,
+		ClientSecret: cred.Csecret,
+		RedirectURL:  "https://genome.compbio.cs.cmu.edu" + cred.RedirectURL, //TODO Here?
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.email",
+			"https://www.googleapis.com/auth/spreadsheets",
+		},
+		Endpoint: google.Endpoint,
+	}
 	for _, v := range strings.Split(cred.Admin, ";") {
 		admins[v] = true
 	}
