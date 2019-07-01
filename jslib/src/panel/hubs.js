@@ -1,8 +1,8 @@
 import trackIcon from "./trackIcon"
 export default function() {
+    var width = 296
+    var height = 200
     var chart = function(selection) {
-        var width = 336
-        var height = 200
         var color = "#226a98"
         selection.each(function(d) {
             var el = d3.select(this)

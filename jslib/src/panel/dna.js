@@ -1,5 +1,5 @@
 export default function() {
-    var width = 336
+    var width = 296
     var color = "#af9ca4"
     var height = 200
     var chart = function(selection) {

@@ -381,12 +381,19 @@
           var d = el.datum()
           el.each(function(d){
               var el0 = d3.select(this)
+            var h = el0.append("div").classed("panel-heading",true)
+            h.append("h3").classed("panel-title",true).text(d)
+            //TODO
+            var b = el0.append("div").classed("panel-body",true)
             nbPanel.getItem(d).then(function(d0){
-              var d = JSON.parse(d0)
+                var d = JSON.parse(d0) 
+            //Add Delete Button nbPanel.removeItem(d).then(fucntion(){
+
+              //})
+        
               if (d.render in S.panelIcons){
-              var r = S.panelIcons[d.render]()
-            
-              var e = el0.selectAll("svg").data([d])
+              var r = S.panelIcons[d.render]().width(270)
+              var e = b.selectAll("svg").data([d])
                   e.enter()
                   .append("svg")
                   .merge(e)
