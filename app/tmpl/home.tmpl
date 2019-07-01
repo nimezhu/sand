@@ -129,7 +129,7 @@
 </body>
 <script>
   (function($, d3, S) {
-    var niceFormat = d3.format(",")
+        var niceFormat = d3.format(",")
     var regionNiceText = function(d){
         return d.chr + ":" + niceFormat(d.start) + "-" + niceFormat(d.end)
     } 
@@ -155,9 +155,11 @@
     var localPanelRow = container.append("div").classed("row",true).style("display","none")
     var localPanelListDiv = localPanelRow.append("div")
     var localPanelRenderDiv = localPanelRow.append("div")
-    
 
-    var cloudPanelRow = container.append("div").classed("row",true).style("display","none") //Google Sheet Div
+    var cloudPanelRow  
+    var pchart=S.layoutPanel();
+    if (location.protocol == "https:") {
+    cloudPanelRow = container.append("div").classed("row",true).style("display","none") //Google Sheet Div
     var _c = `
         <div class="panel panel-primary">
         <div class="panel-heading">
@@ -178,41 +180,7 @@
           </div>
     `
     cloudPanelRow.html(_c)
-    var pubCloudPanelRow = container.append("div").classed("row",true).style("display","none").text("Coming Soon...") //Google Sheet Div
     var panelsdiv = cloudPanelRow.append("div")
-
-    var spacePanelRow = container.append("div").classed("row",true).style("display","none")
-
-    var navs = [
-              {icon:"play",label:"Current",el:d3.select("#firstRow")},
-              {icon:"hdd",label:"Local Storage",el:localPanelRow},
-             {icon:"cloud",label:"Cloud",el:cloudPanelRow},
-             {icon:"cloud-download",label:"Public Cloud",el:pubCloudPanelRow},
-              {icon:"th-large",label:"Panel Space",el:spacePanelRow}
-             ]
-    //container.selectAll(".row").style("display","none")
-    
-    var lis = menuNav.selectAll("li").data(navs)
-          .enter().append("li")
-          .on("click",function(d,i){
-              menuNav.selectAll(".selected").classed("selected",false)
-              d3.select(this).classed("selected",true)
-              container.selectAll(".row").style("display","none")
-              d.el.style("display",null)
-          })
-
-          lis.append("span")
-          .attr("class",function(d){
-              return "glyphicon glyphicon-"+d.icon
-          })
-          
-         lis.html(function(d,i){
-              if(i==0){
-                  d3.select(this).classed("selected",true)
-              }
-             var icon = "<span class='glyphicon glyphicon-"+d.icon+"'></span><span style='padding-left:10px;font-size:14px'>"+d.label+"<span>"
-              return icon
-          })
     /* Google Sheet */   
     var sheetIdInput = d3.select("#sheetIdInput")
     var currentId = ""
@@ -255,7 +223,6 @@
         window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
       })
       
-    var pchart=S.layoutPanel();//TODO
 
     var renderSessions = function() {
       d3.json("/sheetlist", sandInits).then(function(d) { //TODO sheets
@@ -273,6 +240,48 @@
     }
 
 
+    }
+    //var pubCloudPanelRow = container.append("div").classed("row",true).style("display","none")
+    //      .text("Coming Soon...") //Google Sheet Div
+
+    var spacePanelRow = container.append("div").classed("row",true).style("display","none")
+
+
+    var navs = [
+              {icon:"play",label:"Current",el:d3.select("#firstRow")},
+              {icon:"hdd",label:"Local Storage",el:localPanelRow},
+             //{icon:"cloud-download",label:"Public Cloud",el:pubCloudPanelRow},
+              {icon:"th-large",label:"Panel Space",el:spacePanelRow}
+             ]
+      if (cloudPanelRow) {
+          navs.push(
+             {icon:"cloud",label:"Cloud",el:cloudPanelRow}
+          )
+      }
+    //container.selectAll(".row").style("display","none")
+    
+    var lis = menuNav.selectAll("li").data(navs)
+          .enter().append("li")
+          .on("click",function(d,i){
+              menuNav.selectAll(".selected").classed("selected",false)
+              d3.select(this).classed("selected",true)
+              container.selectAll(".row").style("display","none")
+              d.el.style("display",null)
+          })
+
+          lis.append("span")
+          .attr("class",function(d){
+              return "glyphicon glyphicon-"+d.icon
+          })
+          
+         lis.html(function(d,i){
+              if(i==0){
+                  d3.select(this).classed("selected",true)
+              }
+             var icon = "<span class='glyphicon glyphicon-"+d.icon+"'></span><span style='padding-left:10px;font-size:14px'>"+d.label+"<span>"
+              return icon
+          })
+   
     /* Local Sheet */
     var sessionDb = localforage.createInstance({
             "name": "nbSession"
@@ -294,7 +303,11 @@
 
     })
     }
+
     sessionDb.keys().then(function(d) {
+        if (d.length==0) {
+            localPanelListDiv.html(`<div class="paneld panel-default">No sessions in local storage yet.</div>`)
+        } else {
                 var a = localPanelListDiv.selectAll("div").data(d);
                 var idx = 1;
                 a.enter()
@@ -302,8 +315,10 @@
                     .merge(a)
                     .call(itemRender)
                 a.exit().remove()
-   })
 
+        }
+    })
+/*
     $.get("/profile", function(d) {
       d = JSON.parse(d);
       //TODO Handle
@@ -322,7 +337,7 @@
         $("#picture").hide();
       }
     })
-
+*/
     d3.select("#logo")
           .attr("title", "{{.Appname}}")
       .on("click", function() {
@@ -385,8 +400,11 @@
       })
     }     
     nbPanel.keys().then(function(d) {
+        if (d.length==0) {
+            spacePanelRow.html(`<div class="panel panel-default">No Panel in panel space yet</div>`)
+
+        } else {
       var a = spacePanelRow.selectAll("div").data(d);
-      console.log("TODO array",d)
       a.enter()
       .append("div")
       .classed("panel",true)
@@ -394,21 +412,17 @@
       .merge(a)
       .call(_r)
       a.exit().remove()
-   })
+    }
+    })
 
    $('[data-toggle="tooltip"]').tooltip()
    if (navigator.serviceWorker) {
         if (navigator.serviceWorker.controller) {
                 var messageChannel = new MessageChannel();
                 messageChannel.port1.onmessage = function(event) {
-                    /*
-                    self.setState({
-                        version: event.data.version
-                    })
-                    */
-                        if (event.data.version) {
-                            d3.select("#version").text(event.data.version)
-                        }
+                    if (event.data.version) {
+                        d3.select("#version").text(event.data.version)
+                    }
                     
                 }
                 navigator.serviceWorker.controller.postMessage({

@@ -48,6 +48,9 @@
   var fixedLayout
   var initedLayout
   var lite = 0
+  if (location.protocol != "https:") {
+      d3.selectAll(".httpsOnly").style("display","none")
+  }
  
   sand.waitForWebfonts(["Roboto Mono"],function(){
   (function($, d3, S) {
