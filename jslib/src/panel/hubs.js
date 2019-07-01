@@ -13,7 +13,7 @@ export default function() {
                 .attr("height", height)
                 .attr("fill", color) //TODO note d.title but d.type ...
                 .attr("opacity", 0.5)
-            var maxrows = Math.floor((height - 45) / 20)
+            var maxrows = Math.floor((height - 85) / 20)
             e.append("rect")
                 .attr("x", 0)
                 .attr("y", 0)
@@ -26,9 +26,14 @@ export default function() {
                 .attr("pointer-events", "none")
 
             e.append("text").attr("x", 5).attr("y", 27).text(d.genome)
+            if (d.regions) {
+                d.regions.forEach(function(r,i){
+                    e.append("text").attr("x",80).attr("y",27+i*20).text(r.chr+":"+r.start+"-"+r.end)
+                })
+            }
             var l = d.trackViews.length
             if (l > maxrows) {
-                e.append("text").attr("x", 5).attr("y", height - 20).style("font-size", "10px")
+                e.append("text").attr("x", 5).attr("y", height - 70).style("font-size", "10px")
                     .text("... " + (l - maxrows + 1) + " more tracks")
                 l = maxrows - 1
             }

@@ -223,6 +223,7 @@
         window.open("https://docs.google.com/spreadsheets/d/" + currentId + "/edit")
       })
       
+    // TODO Improve PChart.
 
     var renderSessions = function() {
       d3.json("/sheetlist", sandInits).then(function(d) { //TODO sheets
@@ -306,7 +307,7 @@
 
     sessionDb.keys().then(function(d) {
         if (d.length==0) {
-            localPanelListDiv.html(`<div class="paneld panel-default">No sessions in local storage yet.</div>`)
+            localPanelListDiv.html(`<div class="panel panel-default">No sessions in local storage yet.</div>`)
         } else {
                 var a = localPanelListDiv.selectAll("div").data(d);
                 var idx = 1;
