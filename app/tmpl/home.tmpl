@@ -382,14 +382,28 @@
           el.each(function(d){
               var el0 = d3.select(this)
             var h = el0.append("div").classed("panel-heading",true)
-            h.append("h3").classed("panel-title",true).text(d)
-            //TODO
+            var title = h.append("h3").classed("panel-title",true).html(d)
+        var btnGrp = title.append("span").style("float", "right").style("padding-right", "0px")
+             btnGrp.append("button")
+                .classed("btn", true)
+                .classed("btn-default", true)
+                .classed("btn-xs", true)
+                .on("click", function() {
+                   var a = window.confirm("Delete "+d+" ?")
+                    if (a) {
+                        var v = nbPanel.removeItem(d).then(function() {
+                            el0.remove()
+                        })
+                    }
+                })
+                .classed("glyphicon",true)
+                .classed("glyphicon-remove",true)
+                .attr("title","delete")
+
+
             var b = el0.append("div").classed("panel-body",true)
             nbPanel.getItem(d).then(function(d0){
                 var d = JSON.parse(d0) 
-            //Add Delete Button nbPanel.removeItem(d).then(fucntion(){
-
-              //})
         
               if (d.render in S.panelIcons){
               var r = S.panelIcons[d.render]().width(270)

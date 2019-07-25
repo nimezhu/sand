@@ -60,7 +60,7 @@ func (s *Sand) InitRouter(router *mux.Router) {
 		if userStr != nil {
 			http.Redirect(w, r, "/v1/main.html?"+modesText(s.Mode), http.StatusTemporaryRedirect)
 		} else {
-			http.Redirect(w, r, "/static/main.html", http.StatusTemporaryRedirect) //Static Main TODO
+			http.Redirect(w, r, "/entry/", http.StatusTemporaryRedirect) //Static Main TODO
 		}
 	})
 	/********************/
