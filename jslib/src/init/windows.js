@@ -31,7 +31,8 @@ export default function() {
     var ws = {} //window handler
     var message = {}
     var idx = 1
-    var config
+    var config 
+    var initedLayout = undefined
     var domain = ""
     var theme = "light"
     //var app = {}  //application variables; sync between windows;
@@ -116,7 +117,7 @@ export default function() {
                     dispatch.call("initWindows", this, JSON.parse(d))
                     $(".menu .note").hide()
                 }
-                if (d && !config) { //TODO add config
+                if (d && !config && typeof initedLayout == "undefined") { 
                     $("#myModal").modal("show");
                     d3.select("#loadSession").on("click", function() {
                         $("#myModal").modal("hide")
@@ -515,6 +516,7 @@ export default function() {
             }
         })
     }
+    chart.initedLayout=function(_) {return arguments.length ? (initedLayout= _, chart) : initedLayout; }
     chart.extId = function(_) {
         return arguments.length ? (extId = _, chart) : extId;
     }
