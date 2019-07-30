@@ -60,7 +60,7 @@ export default function() {
         })
 
         $("#home").on("click", function() {
-            window.location = "/v1/home.html"
+            window.location = "/entry/"
         })
 
         var spaceOn = false
