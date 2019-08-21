@@ -72,7 +72,9 @@
     
 
     var renders = eval({{.Renders}}); //TODO ADD Interface
-    var renderList = Object.keys(renders).sort()
+      var renderList = Object.keys(renders).sort(function(a,b){
+            return renders[a].idx - renders[b].idx 
+      })
     var dispatch = d3.dispatch("sendMessage", "receiveMessage", "initWindows", "initPanels", "input", "resize", "sendState", "saveState", "add", "exportState", "exportStates", "exportStatesToFile", "setState", "importState", "importStates",
       "openExt","closeExt","renderExtWinNav", "loadPanel",
       "saveSession", "loadSession", "shareSession", "saveToSheet", "loadFromSheet", "saveToGSheet", "refreshWorkSpace")
@@ -85,9 +87,11 @@
     })
     d3.select("#logo")
       .attr("title","{{.Appname}}")
+      /*
       .on("click",function(){
         window.open("/entry/")
       })
+      */
 
     var M = S.initMenu().renders(renders).renderList(renderList).dispatch(dispatch);
     M();
