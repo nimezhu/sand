@@ -110,7 +110,9 @@
     if (lite) {
       document.body.className += ' ' + 'liteVersion';
     }
-    /* TODO add functions to Init Some Renders */
+    var cfg = S.toolsGetUrlPara("config")
+    var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).extId({{.ExtID}}).initedLayout(initedLayout) //app(app) //init windows manager
+    W();
     var emptyCfg = {
       "settings": {
         "showPopoutIcon": false
@@ -123,9 +125,7 @@
         "content": []
       }]
     }
-    var cfg = S.toolsGetUrlPara("config")
-    if (!cfg && initedLayout) { //config override the initedLayout
-      initedLayout.split(",").forEach(function(d) {
+    var _get = async function(d) {
         if (renders[d]) {
           emptyCfg.content[0].content.push({
             "type": "component",
@@ -135,12 +135,46 @@
               "render": d,
             }
           })
+        } else if (d.match(/space:\S+/)) {
+          var nbPanel = localforage.createInstance({
+            "name": "nbPanel"
+          })
+         await nbPanel.getItem(d.split(":")[1]).then(function(d){
+           var d = JSON.parse(d)
+            emptyCfg.content[0].content.push({
+             "type": "component",
+            "componentName": "canvas",
+            "title": d.title || renders[d.render].label,
+             "componentState":d,
+            })
+         }).catch(function(e){
+
+         })
+        } else if (d.match(/tracks:\S+/)) { //localforage load composed tracks 
+
         }
-      })
     }
-    var W = S.NewWindowManager().dispatch(dispatch).theme(theme).domain(domain).P(PanelManager).win(win).config(cfg).extId({{.ExtID}}).initedLayout(initedLayout) //app(app) //init windows manager
-    W();
-      
+    if (!cfg && initedLayout) { //config override the initedLayout
+    　var _p = []
+      var ds = initedLayout.split(",")
+      /*
+      .forEach(function(d) {
+        _get(d)
+      })
+      */
+      var _init = async function(){
+        for (var i=0;i<ds.length;i++) {
+          await _get(ds[i])         
+        } 
+        console.log("inited???",emptyCfg)
+        dispatch.call("initPanels", this, emptyCfg)
+      }
+      _init()
+  
+    } else if (cfg) {
+  
+     /* init with config */ 
+     
     /* TO USE PUBLIC GSHEET */
     window._renderGsheet = function(d) {
       var config = JSON.parse(d.table.rows[0].c[2].v)
@@ -173,13 +207,19 @@
       }).catch(function(){
 
       })
-   }  else if (!cfg) {
+   　} else if (cfg && cfg == "continue") {
+
+     }  
+   } 　else if (!cfg) {
       if (win == "main") {
         $(".menu .note").show()
       }
-      dispatch.call("initPanels", this, emptyCfg)
-   }
-
+      if (emptyCfg.content[0].content.length > 0) {
+        dispatch.call("initPanels", this, emptyCfg)
+      } else {
+        console.log("not inited panel")
+      }
+    }
     window.onresize = function() {
         if ($("#menuContainer").css("display")=="block") {
             $("#layoutContainer").css('width',"100%").css("width","-=200px").css("left", "200px")
@@ -187,6 +227,7 @@
         dispatch.call("resize", this, {})
     }
     history.pushState({},"main","/v1/main.html")
+
   })(jQuery, d3, sand)
 });
 </script>
