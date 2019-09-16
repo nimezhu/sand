@@ -139,12 +139,13 @@
           var nbPanel = localforage.createInstance({
             "name": "nbPanel"
           })
-         await nbPanel.getItem(d.split(":")[1]).then(function(d){
+          var _id = d.split(":")[1]
+         await nbPanel.getItem(_id).then(function(d){
            var d = JSON.parse(d)
             emptyCfg.content[0].content.push({
              "type": "component",
             "componentName": "canvas",
-            "title": d.title || renders[d.render].label,
+            "title": _id,
              "componentState":d,
             })
          }).catch(function(e){
