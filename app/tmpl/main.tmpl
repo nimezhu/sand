@@ -125,6 +125,8 @@
         "content": []
       }]
     }
+    
+
     var _get = async function(d) {
         if (renders[d]) {
           emptyCfg.content[0].content.push({
@@ -155,72 +157,69 @@
 
         }
     }
+
+
+
     if (!cfg && initedLayout) { //config override the initedLayout
-    　var _p = []
       var ds = initedLayout.split(",")
-      /*
-      .forEach(function(d) {
-        _get(d)
-      })
-      */
       var _init = async function(){
         for (var i=0;i<ds.length;i++) {
           await _get(ds[i])         
         } 
-        console.log("inited???",emptyCfg)
         dispatch.call("initPanels", this, emptyCfg)
       }
       _init()
-  
-    } else if (cfg) {
-  
-     /* init with config */ 
-     
-    /* TO USE PUBLIC GSHEET */
-    window._renderGsheet = function(d) {
-      var config = JSON.parse(d.table.rows[0].c[2].v)
-      if (config[-1] || config["states"]) { //windows format
-        dispatch.call("initWindows", this, config)
-      } else { // one window format
-        dispatch.call("initPanels", this, config)
-      }
     }
-
-    if (cfg && cfg.match(/gsheet:\S+:\S+/)) {
-      var a = cfg.split(":")
-      S.gsheetQuery("select * where A='" + a[2] + "'", a[1], "_renderGsheet")
-    } else if (cfg && cfg.match(/localstorage:\S+/) ){
-        var a = cfg.split(":")
-        var sessionDb = localforage.createInstance({
-            "name": "nbSession"
-        })
-        sessionDb.getItem(a[1]).then(function(d){
-          dispatch.call("initWindows", this, JSON.parse(d.data))
-        })
-    } else if (cfg && cfg != "continue") {
-      $(".menu .note").hide()
-      d3.json(server + cfg, sandInits).then(function(config) {
-        if (config[-1] || config["states"]) { //windows format
-          dispatch.call("initWindows", this, config)
-        } else { // one window format
-          dispatch.call("initPanels", this, config)
+    if (cfg) {
+        if (cfg.match(/gsheet:\S+:\S+/)) {
+            window._renderGsheet = function(d) {
+                var config = JSON.parse(d.table.rows[0].c[2].v)
+                if (config[-1] || config["states"]) { //windows format
+                    dispatch.call("initWindows", this, config)
+                } else { // one window format
+                    dispatch.call("initPanels", this, config)
+                }
+            }
+            var a = cfg.split(":")
+            S.gsheetQuery("select * where A='" + a[2] + "'", a[1], "_renderGsheet")
         }
-      }).catch(function(){
+        if (cfg.match(/localstorage:\S+/) ){
+            var a = cfg.split(":")
+            var sessionDb = localforage.createInstance({
+                "name": "nbSession"
+            })
+            sessionDb.getItem(a[1]).then(function(d){
+                dispatch.call("initWindows", this, JSON.parse(d.data))
+             })
+        }
+        
+        if (cfg != "continue" && !cfg.match(/localstorage:\S+/) && !cfg.match(/gsheet:\S+:\S+/)) {
+            $(".menu .note").hide()
+            fetch(server + cfg, sandInits)
+                .then(function(d){
+                    return d.json()
+                })
+                .then(function(config) {
+                if (config[-1] || config["states"]) { //windows format
+                    dispatch.call("initWindows", this, config)
+                } else { // one window format
+                    dispatch.call("initPanels", this, config)
+                }
+            }).catch(function(e){
+                console.log(e)
+                dispatch.call("initPanels", this, emptyCfg)
+            })
+        }
+    } 
 
-      })
-   　} else if (cfg && cfg == "continue") {
-
-     }  
-   } 　else if (!cfg) {
+    if (!cfg && !initedLayout) {
       if (win == "main") {
         $(".menu .note").show()
       }
-      if (emptyCfg.content[0].content.length > 0) {
-        dispatch.call("initPanels", this, emptyCfg)
-      } else {
-        console.log("not inited panel")
-      }
+      dispatch.call("initPanels", this, emptyCfg)
     }
+    
+
     window.onresize = function() {
         if ($("#menuContainer").css("display")=="block") {
             $("#layoutContainer").css('width',"100%").css("width","-=200px").css("left", "200px")
