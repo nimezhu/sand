@@ -1,8 +1,8 @@
 //import toolsDownload from "../tools/download"
 import toolsUpload from "../tools/upload"
 import {
-    chan
-} from "@nbrowser/nb-chan";
+   dispatch as chan 
+} from "@nucleome/nb-dispatch";
 
 var isEmpty = function(layout) {
     if (layout.content[0].content.length == 0) {

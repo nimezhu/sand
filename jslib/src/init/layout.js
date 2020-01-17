@@ -1,3 +1,4 @@
+import * as GoldenLayout from "golden-layout"
 import render from "../render"
 export default function (config, el, dispatch, renders, app) {
   var layout = new GoldenLayout(config, el);
