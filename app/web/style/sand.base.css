@@ -127,7 +127,7 @@ body {
 .frame {
     position: absolute;
     width: 320px;
-    z-index: 921;
+    z-index: 10921;
     display: none;
 }
 

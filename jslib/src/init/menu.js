@@ -166,6 +166,10 @@ export default function() {
             dispatch.call("importStates", this, function(d) {
             })
         })
+        $("#manage").on("click", function(d) {
+            window.open("/entry/session")
+        })
+
         $("#login").on("click", function(d) {
             window.location = "/login"
         })
