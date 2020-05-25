@@ -20,6 +20,7 @@ func addType(uri string, w http.ResponseWriter) {
 		w.Header().Add("Content-Type", "text/css")
 	}
 }
+
 func bindataServer(root string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Our middleware logic goes here...

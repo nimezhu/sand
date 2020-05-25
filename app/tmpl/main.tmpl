@@ -5,8 +5,8 @@
   <title id="title">{{.Appname}}</title>
   <link rel="manifest" href="/manifest.json"> <!-- For Progressive Web App -->
   {{template "lib"}}
-  <script type="text/javascript" src="/static/lib/sand.min.js"></script>
   {{range .Libs}}
+  <script type="text/javascript" src="/static/lib/sand.min.js"></script>
   <script type="text/javascript" src="{{.}}"></script>
   {{end}} {{template "css"}}
   <link rel="stylesheet" href="/static/css/sand.base.css">
@@ -150,7 +150,7 @@
              "componentState":d,
             })
          }).catch(function(e){
-
+             console.log(e)
          })
         } else if (d.match(/tracks:\S+/)) { //localforage load composed tracks 
 

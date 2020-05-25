@@ -43,7 +43,7 @@ func (s *Sand) upload(w http.ResponseWriter, req *http.Request) { //should be sh
 		io.WriteString(w, n)
 	}
 	go func() {
-		time.Sleep(time.Second * 60 * 60 * 24 * 7)
+		time.Sleep(time.Second * 60 * 60 * 24 * 180)
 		os.Remove(fn)
 		log.Println("remove session" + n)
 	}()
