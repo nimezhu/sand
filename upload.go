@@ -42,11 +42,13 @@ func (s *Sand) upload(w http.ResponseWriter, req *http.Request) { //should be sh
 		log.Println("create session " + n)
 		io.WriteString(w, n)
 	}
+	/* NO MORE REMOVE SESSION, REMOVE SESSION BY OTHER PROGRAM
 	go func() {
 		time.Sleep(time.Second * 60 * 60 * 24 * 180)
 		os.Remove(fn)
 		log.Println("remove session" + n)
 	}()
+	*/
 }
 
 func (s *Sand) setUserSession(w http.ResponseWriter, req *http.Request) { //should be share session.
