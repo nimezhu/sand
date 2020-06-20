@@ -83,6 +83,7 @@
       sandUser=d
       sandHeaders = new Headers({"Authorization":"Basic "+btoa(sandUser.email)}) //Authorization for future data server 
       sandInits["headers"] = sandHeaders
+    }).catch(function(e){
     })
     d3.select("#logo")
       .attr("title","{{.Appname}}")
