@@ -41,13 +41,16 @@
         </div>
       </li>
     <div id="devMode" style="display:none"> 
-    <li style="padding-right:0px"  title="Login with Google" data-toggle="tooltip" data-placement="right" id="menuUser" class="mainWinOnly httpsOnly">
+    <li style="padding-right:0px"  title="Login with Google" data-toggle="tooltip" data-placement="right" id="menuUser" class="mainWinOnly">
         <span id="login" class="glyphicon glyphicon-log-in" >
     </li>
-    <li style="padding-right:0px" class="mainWinOnly httpsOnly" data-toggle="tooltip" data-placement="right" id="menuUser1" title="Session in Google Sheet">
+    <div id="menuUser1">
+    <li style="padding-right:0px" class="mainWinOnly" data-toggle="tooltip" data-placement="right" title="Session in Google Sheet">
     <image id="picture" class="mainWinOnly" style="height:18px;width:18px;margin:7px 4px"></image>
+    </li>
+    <!--
     <div class="frame">
-      <ul>
+    -->
       <li id="setSheetId" title="Set a google sheet id to host sessions" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-cog"></span> Set Session Sheet Id</li>
       <li id="createSheetId" title="Create a google sheet id to host sessions" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-file"></span> Create a New Session Sheet</li>
       <ul id="sheetUi" style="display:none">
@@ -55,9 +58,10 @@
       <li id="saveToSheet" title="Save session to google sheet" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-save"></span> Save Session</li>
       </ul>
       <li id="logout" title="Logout" data-toggle="tooltip" data-placement="bottom" ><span class="glyphicon glyphicon-log-out" title="logout"></span> Log Out</li>
-      </ul>
+    <!--
     </div>
-    </li>
+    -->
+    </div>
     </div>
 </ul>
 <ul id="extWinNav">
