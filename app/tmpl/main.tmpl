@@ -47,6 +47,7 @@
   var fixedLayout
   var initedLayout
   var lite = 0
+  var dev = 0
   if (location.protocol != "https:") {
       d3.selectAll(".httpsOnly").style("display","none")
   }
@@ -55,6 +56,10 @@
   (function($, d3, S) {
     /* init theme */
     mode = "web" //other modes obsoleted
+    dev = S.toolsGetUrlPara("dev") || 0
+      if (dev == 1) {
+          d3.select("#devMode").style("display","")
+      }
     win = S.toolsGetUrlPara("win") || "main"
     winid = S.toolsGetUrlPara("winid") || -1
     fixedLayout = S.toolsGetUrlPara("fixedLayout") || 0 //0 is false
